@@ -1,127 +1,197 @@
 <!doctype html>
 <html lang="vi">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Prompt Studio V5 — AI Local</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI Image Studio V6</title>
 <style>
-:root{--bg:#10131a;--panel:#191e29;--panel2:#222938;--text:#edf1f8;--muted:#aab4c6;--line:#30394b;--accent:#9bc4ff;--accent2:#c6e1ff;--danger:#ff9898}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#202a3b 0,#10131a 55%);color:var(--text);font:15px/1.5 system-ui,-apple-system,Segoe UI,sans-serif}main{max-width:1120px;margin:auto;padding:24px 16px 56px}.hero{padding:22px 0 18px}.eyebrow{color:var(--accent);font-weight:700;letter-spacing:.12em;font-size:12px;text-transform:uppercase}h1{font-size:clamp(28px,5vw,42px);line-height:1.1;margin:8px 0}h2{font-size:19px;margin:0 0 12px}p{margin:6px 0;color:var(--muted)}.layout{display:grid;grid-template-columns:1fr 1fr;gap:16px}.panel{background:rgba(25,30,41,.96);border:1px solid var(--line);border-radius:16px;padding:18px;min-width:0}.full{grid-column:1/-1}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}label,.label{font-size:13px;color:#dce5f4;font-weight:650}input,select,textarea{width:100%;background:#10151f;border:1px solid #39455b;border-radius:9px;padding:10px 11px;color:var(--text);font:inherit}textarea{min-height:80px;resize:vertical}input[type=checkbox]{width:auto;accent-color:#8abaff}.checks{display:grid;grid-template-columns:1fr 1fr;gap:8px}.purpose-menu{border:1px solid #39455b;border-radius:9px;background:#10151f;overflow:hidden}.purpose-menu summary{cursor:pointer;list-style:none;padding:11px 12px;color:var(--text);font-size:14px}.purpose-menu summary::-webkit-details-marker{display:none}.purpose-menu summary:after{content:"▾";float:right;color:var(--accent)}.purpose-options{padding:8px;display:grid;gap:7px;border-top:1px solid var(--line)}.purpose-options .check{margin:0}.check{display:flex;align-items:flex-start;gap:8px;padding:9px;background:#141a24;border:1px solid var(--line);border-radius:9px;font-size:13px}.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}button,.filebutton{cursor:pointer;border:1px solid #52617b;border-radius:9px;padding:10px 13px;background:#263247;color:var(--text);font:600 14px system-ui}.primary{background:#c6e1ff;color:#101722;border-color:#c6e1ff}.danger{color:#ffd1d1;border-color:#70444b;background:#302027}.small{font-size:12px;color:var(--muted)}.uploadbox{border:1px dashed #64738c;border-radius:12px;padding:16px;text-align:center;background:#131a25}.preview{display:none;gap:14px;align-items:flex-start;margin-top:14px}.preview img{max-width:min(100%,250px);max-height:280px;object-fit:contain;border-radius:10px;border:1px solid var(--line);background:#0c1017}.previewmeta{flex:1;min-width:0}.refhead{display:flex;align-items:center;justify-content:space-between;gap:10px}.pill{display:inline-block;padding:3px 8px;border:1px solid var(--line);border-radius:999px;color:var(--muted);font-size:11px}.notice{padding:11px 12px;border-radius:10px;background:#17263a;border:1px solid #304966;color:#dcecff;font-size:13px}.warning{background:#2b2519;border-color:#66552c;color:#f9e9bd}.output{min-height:170px;font:13px/1.55 ui-monospace,SFMono-Regular,Consolas,monospace}.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}.tab{background:#121823}.tab.active{background:#c6e1ff;color:#101722}.hide{display:none}.footer{margin-top:18px;text-align:center;color:var(--muted);font-size:12px}@media(max-width:760px){.layout,.grid2{grid-template-columns:1fr}.full{grid-column:auto}.checks{grid-template-columns:1fr}.preview{flex-direction:column}}
-</style></head>
-<body><main>
-<header class="hero"><div class="eyebrow">AI Local · Offline Prompt Builder</div><h1>Prompt Studio <span style="color:var(--accent)">V5</span></h1><p>Tạo prompt ảnh/video có cấu trúc, kèm ảnh tham chiếu nhân vật và hướng dẫn dùng với ChatGPT, Gemini hoặc ComfyUI.</p></header>
-<div class="notice warning"><strong>Lưu ý về ảnh tham chiếu:</strong> Không cần tải ảnh vào Prompt Studio. Hãy tải ảnh tham chiếu trực tiếp lên ChatGPT/Gemini, hoặc vào node tương thích trong ComfyUI; ứng dụng này chỉ tạo prompt và hướng dẫn.</div>
-<div class="layout" style="margin-top:16px">
-<section class="panel"><h2>1. Mục đích tham chiếu (Reference Purpose)</h2>
-<p>Chọn thuộc tính muốn model tham khảo từ ảnh mà bạn sẽ tải trực tiếp lên ChatGPT hoặc Gemini. Ảnh không cần đưa vào Prompt Studio.</p>
-<div class="field">
-<label for="refPurposeMenu">Chọn mục đích tham chiếu (Reference Purpose)</label>
-<details class="purpose-menu" id="purposeMenu">
-<summary id="purposeSummary">Giữ nhận dạng (Identity), Giữ trang phục (Outfit)</summary>
-<div class="purpose-options">
-<label class="check"><input type="checkbox" name="refPurpose" value="identity" checked> Giữ gương mặt và nhận dạng (Identity)</label>
-<label class="check"><input type="checkbox" name="refPurpose" value="outfit" checked> Giữ trang phục (Outfit)</label>
-<label class="check"><input type="checkbox" name="refPurpose" value="hair"> Giữ kiểu tóc (Hairstyle)</label>
-<label class="check"><input type="checkbox" name="refPurpose" value="pose"> Tham khảo tư thế (Pose)</label>
-<label class="check"><input type="checkbox" name="refPurpose" value="style"> Tham khảo phong cách hình ảnh (Style)</label>
-<label class="check"><input type="checkbox" name="refPurpose" value="composition"> Tham khảo bố cục (Composition)</label>
-</div>
-</details>
-<p class="small">Có thể chọn nhiều mục đích. Bấm vào menu để mở danh sách, rồi đánh dấu các mục cần dùng.</p>
-</div>
-<div class="field"><label for="refNotes">Ghi chú cho ảnh tham chiếu (Reference Notes)</label><textarea id="refNotes" placeholder="Ví dụ: giữ nguyên gương mặt, nhưng thay trang phục; hoặc chỉ tham khảo ánh sáng và bố cục."></textarea></div>
-<div class="notice warning"><strong>Cách dùng:</strong> Khi tạo prompt xong, mở ChatGPT/Gemini và tải ảnh tham chiếu trực tiếp vào cuộc trò chuyện đó, rồi dán prompt. Prompt Studio chỉ tạo văn bản hướng dẫn; nó không cần nhận ảnh và không tự gửi ảnh đi đâu.</div>
+:root{color-scheme:dark;--bg:#10131a;--panel:#191e29;--line:#303849;--text:#edf1f8;--muted:#a8b2c4;--accent:#8ab4ff;--accent2:#b4f0cf;--danger:#ffb4ab}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 10% 0%,#1b2940 0,transparent 35%),var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,Segoe UI,sans-serif}
+header{padding:26px max(20px,calc((100vw - 1200px)/2));border-bottom:1px solid var(--line);background:#111722d9}
+h1{margin:0;font-size:clamp(25px,4vw,38px);letter-spacing:-.04em}header p{margin:8px 0 0;color:var(--muted);max-width:800px}
+main{max-width:1200px;margin:24px auto;padding:0 18px 48px;display:grid;grid-template-columns:minmax(0,1.08fr) minmax(320px,.92fr);gap:18px}
+.panel{background:linear-gradient(180deg,#1a202c,#171c26);border:1px solid var(--line);border-radius:18px;padding:20px;min-width:0}
+h2{font-size:18px;margin:0 0 14px}h3{font-size:15px;margin:20px 0 8px}.hint,.muted{color:var(--muted);font-size:13px}
+label{display:block;font-weight:650;font-size:13px;margin:12px 0 6px}
+input,select,textarea{width:100%;border:1px solid #3a4559;border-radius:10px;background:#10151f;color:var(--text);padding:11px 12px;font:inherit}
+textarea{min-height:84px;resize:vertical}input:focus,select:focus,textarea:focus{outline:2px solid #628fdb;border-color:transparent}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.checks{display:grid;grid-template-columns:1fr 1fr;gap:8px}.check{display:flex;gap:8px;align-items:flex-start;padding:10px;border:1px solid var(--line);border-radius:10px;background:#111722;font-size:13px}.check input{width:auto;margin-top:4px;accent-color:var(--accent)}
+.drop{border:1px dashed #56647c;border-radius:12px;padding:16px;text-align:center;background:#111722}.drop input{padding:8px;border:0;background:transparent}.preview{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}.thumb{width:104px;height:104px;object-fit:cover;border-radius:10px;border:1px solid var(--line)}
+button,.button{border:0;border-radius:10px;background:var(--accent);color:#101724;padding:11px 15px;font-weight:750;cursor:pointer;font:inherit}.secondary{background:#293449;color:var(--text);border:1px solid #3a4559}.danger{background:#44262a;color:#ffd9d5;border:1px solid #754148}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.actions button{flex:1}.primary{width:100%;margin-top:16px;padding:14px;font-weight:800}
+.status{margin-top:12px;padding:11px 12px;border-radius:10px;background:#111722;border:1px solid var(--line);font-size:13px;white-space:pre-wrap;overflow-wrap:anywhere}.status.ok{border-color:#347858;color:var(--accent2)}.status.err{border-color:#804b4b;color:var(--danger)}
+#resultImage{display:block;width:100%;max-height:720px;object-fit:contain;background:#0b0e13;border:1px solid var(--line);border-radius:12px;margin-top:14px}#resultMeta{margin-top:8px}
+.pill{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:4px 9px;color:var(--muted);font-size:12px;margin:4px 4px 0 0}
+small{color:var(--muted)}.sectionline{border:0;border-top:1px solid var(--line);margin:20px 0}
+footer{max-width:1200px;margin:-28px auto 30px;padding:0 18px;color:var(--muted);font-size:12px}
+@media(max-width:850px){main{grid-template-columns:1fr}.grid3{grid-template-columns:1fr 1fr}}@media(max-width:480px){.grid2,.checks,.grid3{grid-template-columns:1fr}.panel{padding:15px}}
+</style>
+</head>
+<body>
+<header>
+  <h1>AI Image Studio <span style="color:var(--accent)">V6</span></h1>
+  <p>Tạo prompt, gửi ảnh tham chiếu đến OpenAI hoặc Gemini API, xem kết quả và tải ảnh gốc. Giao diện tiếng Việt kèm thuật ngữ tiếng Anh trong ngoặc.</p>
+  <div><span class="pill">GitHub Pages (giao diện)</span><span class="pill">Backend riêng (máy chủ trung gian)</span><span class="pill">Không lưu API key trong trình duyệt</span></div>
+</header>
+<main>
+<section class="panel">
+  <h2>1. Kết nối dịch vụ (Provider Setup)</h2>
+  <p class="hint">Địa chỉ backend được công khai; API key chỉ được lưu trong file .env trên backend, tuyệt đối không nhập API key vào ô này.</p>
+  <label for="backendUrl">Địa chỉ backend (Backend URL)</label>
+  <input id="backendUrl" placeholder="https://ten-backend-cua-ban.onrender.com" autocomplete="url">
+  <div class="grid2">
+    <div><label for="provider">Nhà cung cấp (Provider)</label><select id="provider"><option value="gemini">Gemini API (Google)</option><option value="openai">OpenAI API</option></select></div>
+    <div><label for="ratio">Tỷ lệ khung hình (Aspect Ratio)</label><select id="ratio"><option value="16:9">Ngang 16:9 (landscape widescreen)</option><option value="3:2">Ngang 3:2 (landscape)</option><option value="4:3">Ngang 4:3 (standard landscape)</option><option value="1:1">Vuông 1:1 (square)</option><option value="3:4">Dọc 3:4 (portrait)</option><option value="2:3">Dọc 2:3 (portrait)</option><option value="9:16">Dọc 9:16 (vertical video)</option><option value="21:9">Siêu rộng 21:9 (ultrawide)</option></select></div>
+  </div>
+  <div class="grid2">
+    <div id="geminiModelWrap"><label for="geminiModel">Model Gemini (Gemini Model)</label><select id="geminiModel"><option value="gemini-nano-banana-2.1">Nano Banana 2.1 — chất lượng cao, 4K (recommended)</option><option value="gemini-3.1-flash-image">Gemini 3.1 Flash Image (4K)</option><option value="gemini-3-pro-image">Gemini 3 Pro Image (premium)</option></select></div>
+    <div id="openaiModelWrap" hidden><label for="openaiModel">Model OpenAI (OpenAI Image Model)</label><select id="openaiModel"><option value="gpt-image-2.5-sunburst">GPT Image 2.5 Sunburst — chất lượng tối đa (max)</option><option value="gpt-image-2.5-flare">GPT Image 2.5 Flare (max)</option><option value="gpt-image-2">GPT Image 2 (high)</option></select></div>
+    <div><label for="resolution">Độ phân giải (Resolution)</label><select id="resolution"><option value="max">Cao nhất model hỗ trợ (maximum supported)</option><option value="4K">4K (nếu model hỗ trợ)</option><option value="2K">2K (nếu model hỗ trợ)</option><option value="1K">1K (nhanh hơn)</option></select></div>
+  </div>
+  <label for="promptLanguage">Ngôn ngữ prompt (Prompt Language)</label>
+  <select id="promptLanguage"><option value="en">Tiếng Anh (English)</option><option value="vi">Tiếng Việt (Vietnamese)</option><option value="both">Tiếng Anh kèm bản dịch tiếng Việt (English + Vietnamese)</option></select>
+
+  <hr class="sectionline">
+  <h2>2. Nội dung ảnh (Image Brief)</h2>
+  <label for="subject">Chủ thể (Subject)</label><textarea id="subject" placeholder="Ví dụ: Nữ sinh Việt Nam mặc áo dài trắng ngồi trên ghế đá sân trường."></textarea>
+  <label for="appearance">Nhận dạng và ngoại hình (Identity & Appearance)</label><textarea id="appearance" placeholder="Trang phục, tóc, khuôn mặt, đặc điểm cần giữ..."></textarea>
+  <label for="action">Hành động và tương tác vật lý (Action & Physical Interaction)</label><textarea id="action" placeholder="Tư thế, hành động, tay chạm vào đồ vật ra sao..."></textarea>
+  <label for="environment">Bối cảnh (Environment)</label><textarea id="environment" placeholder="Địa điểm, thời tiết, vật thể xung quanh..."></textarea>
+  <label for="story">Khoảnh khắc kể chuyện (Narrative Moment)</label><textarea id="story" placeholder="Cảm xúc hoặc khoảnh khắc cần bắt được..."></textarea>
+  <h3>Bố cục và máy ảnh (Composition & Camera)</h3>
+  <div class="grid2">
+    <div><label for="shot">Cỡ cảnh (Shot Size)</label><select id="shot"><option value="Wide shot (toàn cảnh)">Toàn cảnh (Wide shot)</option><option value="Medium shot (trung cảnh)">Trung cảnh (Medium shot)</option><option value="Close-up (cận cảnh)">Cận cảnh (Close-up)</option><option value="Extreme close-up (đặc tả)">Đặc tả (Extreme close-up)</option><option value="Full-body shot (toàn thân)">Toàn thân (Full-body shot)</option></select></div>
+    <div><label for="angle">Góc máy (Camera Angle)</label><select id="angle"><option value="Eye-level angle (ngang tầm mắt)">Ngang tầm mắt (Eye-level)</option><option value="Low angle (góc thấp)">Góc thấp (Low angle)</option><option value="High angle (góc cao)">Góc cao (High angle)</option><option value="Top-down view (từ trên xuống)">Từ trên xuống (Top-down)</option><option value="Dutch angle (góc nghiêng)">Góc nghiêng (Dutch angle)</option></select></div>
+  </div>
+  <div class="grid2">
+    <div><label for="lens">Ống kính (Lens)</label><select id="lens"><option value="35mm lens (ống kính 35mm)">35mm — tự nhiên (35mm, natural)</option><option value="24mm lens (ống kính 24mm)">24mm — góc rộng (24mm, wide)</option><option value="50mm lens (ống kính 50mm)">50mm — góc nhìn tự nhiên (50mm, normal)</option><option value="85mm lens (ống kính 85mm)">85mm — chân dung (85mm, portrait)</option><option value="telephoto lens (ống kính tele)">Tele — nén phối cảnh (telephoto)</option><option value="macro lens (ống kính macro)">Macro — cận chi tiết (macro)</option></select></div>
+    <div><label for="dof">Độ sâu trường ảnh (Depth of Field)</label><select id="dof"><option value="Moderate depth of field (độ sâu trường ảnh trung bình)">Trung bình (moderate)</option><option value="Shallow depth of field, soft background bokeh (trường ảnh nông, hậu cảnh mờ)">Nông, hậu cảnh mờ (shallow)</option><option value="Deep depth of field, foreground to background in focus (trường ảnh sâu)">Sâu, nhiều lớp rõ (deep)</option></select></div>
+  </div>
+  <label for="layers">Các lớp không gian (Spatial Layers)</label><textarea id="layers" placeholder="Tiền cảnh, trung cảnh, hậu cảnh; vật thể nào được phép che khuất..."></textarea>
+  <div class="grid2">
+    <div><label for="lighting">Ánh sáng (Lighting)</label><select id="lighting"><option value="Cinematic natural daylight (ánh sáng tự nhiên điện ảnh)">Ánh sáng tự nhiên điện ảnh (cinematic daylight)</option><option value="Soft diffused light (ánh sáng tán xạ mềm)">Tán xạ mềm (soft diffused)</option><option value="Cinematic low-key lighting (ánh sáng điện ảnh thiên tối)">Điện ảnh thiên tối (low-key)</option><option value="Golden hour sunlight (nắng giờ vàng)">Nắng giờ vàng (golden hour)</option><option value="Studio lighting with soft key light (ánh sáng studio mềm)">Studio mềm (soft studio)</option><option value="Hard directional sunlight (nắng chiếu hướng rõ)">Nắng hướng mạnh (hard directional)</option></select></div>
+    <div><label for="style">Phong cách hình ảnh (Visual Style)</label><select id="style"><option value="Photorealistic cinematic 35mm film still (khung hình phim 35mm chân thực)">Phim 35mm chân thực (photorealistic film still)</option><option value="Documentary photography (nhiếp ảnh tài liệu)">Tài liệu (documentary)</option><option value="Editorial fashion photography (ảnh thời trang biên tập)">Thời trang (editorial fashion)</option><option value="Anime illustration (minh họa anime)">Anime (anime illustration)</option><option value="Oil painting (tranh sơn dầu)">Sơn dầu (oil painting)</option><option value="3D stylized render (hình dựng 3D cách điệu)">Dựng 3D (3D render)</option><option value="Watercolor illustration (minh họa màu nước)">Màu nước (watercolor)</option></select></div>
+  </div>
+  <div class="grid2">
+    <div><label for="palette">Màu sắc (Color Palette)</label><select id="palette"><option value="Neutral realistic colors (màu trung tính chân thực)">Trung tính chân thực (neutral realistic)</option><option value="Warm cinematic color grading (tông điện ảnh ấm)">Điện ảnh ấm (warm cinematic)</option><option value="Cool muted colors (màu lạnh trầm)">Lạnh trầm (cool muted)</option><option value="Rich saturated colors (màu đậm bão hòa)">Đậm bão hòa (rich saturated)</option><option value="Black and white monochrome (đen trắng đơn sắc)">Đen trắng (monochrome)</option><option value="Pastel colors (màu pastel)">Pastel (pastel colors)</option></select></div>
+    <div><label for="mood">Cảm xúc (Mood)</label><select id="mood"><option value="Natural, optimistic, lively (tự nhiên, lạc quan, sống động)">Tự nhiên, lạc quan (natural, optimistic)</option><option value="Dreamlike and mysterious (mơ màng, bí ẩn)">Mơ màng, bí ẩn (dreamlike)</option><option value="Melancholic and contemplative (man mác buồn, suy tư)">Man mác buồn (melancholic)</option><option value="Tense and dramatic (căng thẳng, kịch tính)">Kịch tính (dramatic)</option><option value="Calm and intimate (bình yên, gần gũi)">Bình yên (calm, intimate)</option></select></div>
+  </div>
+  <label for="realism">Chất liệu và tính chân thực vật lý (Material & Physical Realism)</label><textarea id="realism">Anatomically correct proportions, natural hand-object contact, believable weight and movement, realistic materials, natural fabric folds, consistent perspective and physically plausible shadows.</textarea>
+  <label for="negative">Điều cần tránh (Negative Constraints)</label><textarea id="negative" placeholder="Ví dụ: distorted fingers, extra limbs, unrealistic fabric, overly dark exposure..."></textarea>
+  <label for="extra">Ghi chú bổ sung (Additional Notes)</label><textarea id="extra" placeholder="Chi tiết quan trọng khác..."></textarea>
+
+  <hr class="sectionline">
+  <h2>3. Ảnh tham chiếu (Reference Images)</h2>
+  <p class="hint">Ảnh sẽ được gửi qua backend đến API đã chọn. Chỉ tải ảnh bạn có quyền sử dụng. Ảnh không được lưu vào GitHub Pages.</p>
+  <div class="drop"><label for="references">Chọn ảnh tham chiếu (Upload Reference Images)</label><input id="references" type="file" accept="image/png,image/jpeg,image/webp" multiple><small>PNG, JPEG, WebP. Giới hạn mặc định 4 ảnh, mỗi ảnh tối đa 10 MB.</small></div>
+  <div id="referencePreview" class="preview"></div>
+  <h3>Mục đích tham chiếu (Reference Purpose)</h3>
+  <div class="checks">
+    <label class="check"><input type="checkbox" name="refPurpose" value="Identity (giữ gương mặt và nhận dạng)" checked><span>Giữ gương mặt và nhận dạng (Identity)</span></label>
+    <label class="check"><input type="checkbox" name="refPurpose" value="Outfit (giữ trang phục)" checked><span>Giữ trang phục (Outfit)</span></label>
+    <label class="check"><input type="checkbox" name="refPurpose" value="Hairstyle (giữ kiểu tóc)"><span>Giữ kiểu tóc (Hairstyle)</span></label>
+    <label class="check"><input type="checkbox" name="refPurpose" value="Pose (tham khảo tư thế)"><span>Tham khảo tư thế (Pose)</span></label>
+    <label class="check"><input type="checkbox" name="refPurpose" value="Style (tham khảo phong cách hình ảnh)"><span>Phong cách hình ảnh (Style)</span></label>
+    <label class="check"><input type="checkbox" name="refPurpose" value="Composition (tham khảo bố cục)"><span>Tham khảo bố cục (Composition)</span></label>
+  </div>
+  <label for="refNotes">Ghi chú ảnh tham chiếu (Reference Notes)</label><textarea id="refNotes" placeholder="Ví dụ: ảnh 1 dùng nhận dạng; ảnh 2 chỉ tham khảo tư thế..."></textarea>
+
+  <button id="generate" class="primary">✨ Tạo ảnh (Generate Image)</button>
+  <div class="actions"><button id="buildPrompt" class="secondary">Tạo prompt xem trước (Build Prompt)</button><button id="copyPrompt" class="secondary">Sao chép prompt (Copy Prompt)</button></div>
+  <label for="promptOutput">Prompt cuối cùng (Final Prompt)</label><textarea id="promptOutput" placeholder="Prompt được tạo sẽ hiện ở đây..." style="min-height:170px"></textarea>
+  <div id="status" class="status">Chưa kết nối backend. Hãy triển khai backend, cấu hình API key trong .env và nhập địa chỉ backend ở phía trên.</div>
 </section>
-<section class="panel"><h2>2. Ý tưởng và chủ thể (Brief)</h2>
-<div class="field"><label>Ý tưởng chính (Main Subject)</label><textarea id="subject" placeholder="Ví dụ: nữ sinh Việt Nam mặc áo dài trắng chạy trong sân trường">Nữ sinh Việt Nam mặc áo dài trắng đang chạy trên sân trường</textarea></div>
-<div class="field"><label>Đặc điểm nhận dạng (Identity & Appearance)</label><textarea id="appearance" placeholder="Ngoại hình, độ tuổi phù hợp, trang phục, tóc...">Áo dài trắng, quần đen, tóc dài qua vai, cầm nón lá và cặp xách đen kiểu học sinh ngày xưa</textarea></div>
-<div class="field"><label>Hành động và tương tác vật lý (Action & Physical Interaction)</label><textarea id="action" placeholder="Đang làm gì? Tay giữ vật thế nào?">Đang chạy tự nhiên; một tay giữ nón lá, tay còn lại xách chiếc cặp đen nhỏ có vẻ đã qua sử dụng</textarea></div>
-<div class="field"><label>Bối cảnh (Environment)</label><input id="environment" value="Sân trường cấp 3 Việt Nam"></div>
-<div class="field"><label>Khoảnh khắc/câu chuyện (Narrative Moment)</label><input id="narrative" value="Khoảnh khắc học sinh đời thường, chân thật và đầy sức sống"></div>
+
+<section class="panel">
+  <h2>4. Kết quả (Generated Result)</h2>
+  <p class="hint">Ảnh hiển thị bên dưới là kết quả trả về từ API. Nút tải về lưu dữ liệu ảnh gốc nhận được, không phải ảnh chụp màn hình hay ảnh thu nhỏ.</p>
+  <div id="empty" class="drop" style="padding:45px 15px"><strong>Chưa có ảnh</strong><p class="hint">Sau khi tạo ảnh thành công, ảnh sẽ xuất hiện ở đây.</p></div>
+  <img id="resultImage" alt="Ảnh AI đã tạo" hidden>
+  <div id="resultMeta" class="muted"></div>
+  <div class="actions"><button id="download" disabled>⬇ Tải ảnh gốc (Download Original)</button><button id="openOriginal" class="secondary" disabled>Mở ảnh gốc (Open Original)</button></div>
+  <hr class="sectionline">
+  <h2>5. Thiết lập backend (Backend Setup)</h2>
+  <ol class="hint" style="padding-left:20px;line-height:1.8">
+    <li>Triển khai thư mục <code>backend</code> lên dịch vụ Node.js riêng như Render.</li>
+    <li>Đặt <code>OPENAI_API_KEY</code> và/hoặc <code>GEMINI_API_KEY</code> trong phần Environment Variables của backend.</li>
+    <li>Đặt <code>ALLOWED_ORIGINS</code> thành URL GitHub Pages của thím.</li>
+    <li>Copy URL backend vào ô ở đầu trang, sau đó bấm kiểm tra bằng nút tạo ảnh.</li>
+  </ol>
+  <div class="status">Bảo mật: Không commit file .env. Không đặt API key trong index.html, GitHub Pages, localStorage hoặc mã JavaScript phía trình duyệt.</div>
+  <p class="hint">Lưu ý chi phí: API tính phí riêng theo nhà cung cấp/model. “Cao nhất” được ánh xạ sang chế độ chất lượng tối đa mà model được cấu hình hỗ trợ; kích thước thực tế tùy model và tỷ lệ ảnh.</p>
 </section>
-<section class="panel"><h2>3. Bố cục và máy ảnh (Composition & Camera)</h2>
-<div class="grid2">
-<div class="field"><label>Cỡ cảnh (Shot Size)</label><select id="shot"><option value="wide shot">Toàn cảnh (wide shot)</option><option value="medium shot" selected>Trung cảnh (medium shot)</option><option value="medium close-up">Trung cận (medium close-up)</option><option value="close-up">Cận cảnh (close-up)</option><option value="extreme close-up">Đặc tả (extreme close-up)</option><option value="full-body shot">Toàn thân (full-body shot)</option></select></div>
-<div class="field"><label>Tỷ lệ khung hình (Aspect Ratio)</label><select id="ratio"><option>16:9 (landscape widescreen)</option><option>2.39:1 (cinematic widescreen)</option><option>3:2 (classic photo ratio)</option><option>4:3 (standard frame)</option><option>1:1 (square)</option><option>9:16 (vertical portrait)</option></select></div>
-<div class="field"><label>Góc máy (Camera Angle)</label><select id="angle"><option value="eye-level angle">Ngang tầm mắt (eye-level)</option><option value="low angle">Góc thấp (low angle)</option><option value="high angle">Góc cao (high angle)</option><option value="overhead angle">Từ trên xuống (overhead)</option><option value="three-quarter angle">Góc 3/4 (three-quarter angle)</option></select></div>
-<div class="field"><label>Ống kính (Lens)</label><select id="lens"><option value="35mm lens">Ống kính 35mm — tự nhiên, linh hoạt (35mm lens — natural and versatile)</option><option value="24mm lens">Ống kính 24mm — góc rộng, nhấn không gian (24mm wide-angle lens)</option><option value="50mm lens">Ống kính 50mm — góc nhìn tự nhiên (50mm standard lens)</option><option value="85mm lens">Ống kính 85mm — chân dung, nén phối cảnh (85mm portrait lens, perspective compression)</option><option value="no specific lens">Không chỉ định ống kính (no specific lens)</option></select></div>
-<div class="field"><label>Độ sâu trường ảnh (Depth of Field)</label><select id="dof"><option value="moderate depth of field">Độ sâu vừa phải (moderate depth of field)</option><option value="shallow depth of field">Trường ảnh nông, hậu cảnh mờ (shallow depth of field)</option><option value="deep depth of field">Trường ảnh sâu, nhiều lớp rõ (deep depth of field)</option><option value="natural depth of field">Tự nhiên, tùy cảnh (natural depth of field)</option></select></div>
-<div class="field"><label>Lớp không gian (Spatial Layers)</label><select id="layers"><option value="clear foreground, subject in the middle ground, and a readable background">Tiền cảnh – chủ thể – hậu cảnh (foreground, subject, background)</option><option value="minimal foreground obstruction and clear subject separation">Ít vật cản, chủ thể nổi bật (minimal foreground obstruction, clear subject)</option><option value="layered foreground framing the subject">Dùng tiền cảnh tạo khung (foreground framing)</option><option value="deep environment visible around the subject">Thấy rõ không gian xung quanh (deep environment visible)</option></select></div>
-</div>
-<div class="field"><label>Chi tiết bố cục bắt buộc (Required Composition)</label><input id="composition" value="Một góc băng ghế đá xuất hiện ở tiền cảnh, không che khuất chủ thể"></div>
-</section>
-<section class="panel"><h2>4. Ánh sáng, phong cách và cảm xúc (Look & Feel)</h2>
-<div class="grid2">
-<div class="field"><label>Ánh sáng (Lighting)</label><select id="lighting"><option value="soft natural daylight">Ánh sáng tự nhiên dịu (soft natural daylight)</option><option value="overcast diffused daylight">Ánh sáng trời âm u tán xạ (overcast diffused daylight)</option><option value="warm late-afternoon sunlight">Nắng chiều ấm (warm late-afternoon sunlight)</option><option value="hard directional sunlight">Nắng xiên, bóng đổ rõ (hard directional sunlight)</option><option value="soft window light">Ánh sáng cửa sổ (soft window light)</option><option value="cinematic low-key lighting">Ánh sáng điện ảnh tương phản tối (cinematic low-key lighting)</option><option value="balanced studio lighting">Ánh sáng studio cân bằng (balanced studio lighting)</option></select></div>
-<div class="field"><label>Phong cách (Visual Style)</label><select id="style"><option value="cinematic 35mm film still">Khung hình phim 35mm (cinematic 35mm film still)</option><option value="natural documentary photography">Ảnh tư liệu tự nhiên (documentary photography)</option><option value="nostalgic analog film photography">Ảnh phim analog hoài niệm (nostalgic analog film photography)</option><option value="realistic editorial photography">Ảnh biên tập chân thực (realistic editorial photography)</option><option value="commercial beauty photography">Ảnh quảng cáo làm đẹp (commercial beauty photography)</option><option value="painterly fantasy illustration">Minh họa kỳ ảo (fantasy illustration)</option><option value="anime illustration">Minh họa phong cách anime (anime illustration)</option><option value="photorealistic cinematic still">Khung hình điện ảnh chân thực (photorealistic)</option></select></div>
-<div class="field"><label>Bảng màu (Color Palette)</label><select id="palette"><option value="natural warm earth tones">Tông đất ấm tự nhiên (warm earth tones)</option><option value="muted cool tones">Tông lạnh dịu (muted cool tones)</option><option value="neutral realistic colors">Màu trung tính chân thực (neutral colors)</option><option value="soft pastel colors">Màu pastel nhẹ (soft pastel)</option><option value="rich saturated colors">Màu đậm, độ bão hòa cao (rich saturated colors)</option><option value="black and white film tones">Đen trắng phim (black and white)</option></select></div>
-<div class="field"><label>Cảm xúc (Mood)</label><select id="mood"><option value="simple, familiar, optimistic, lively">Mộc mạc, gần gũi, lạc quan (simple, familiar, optimistic, lively)</option><option value="melancholic and nostalgic">Man mác, hoài niệm (melancholic and nostalgic)</option><option value="quiet and contemplative">Tĩnh lặng, suy tư (quiet and contemplative)</option><option value="energetic and playful">Năng động, vui tươi (energetic and playful)</option><option value="tense and dramatic">Căng thẳng, kịch tính (tense and dramatic)</option><option value="dreamlike and mysterious">Mơ màng, bí ẩn (dreamlike and mysterious)</option></select></div>
-</div>
-<div class="field"><label>Chi tiết chân thực cần có (Physical Realism)</label><textarea id="realism">Tư thế và giải phẫu hợp lý; tay tiếp xúc tự nhiên với đồ vật; trọng lượng và chuyển động có sức nặng; chất liệu thật; nếp vải tự nhiên; phối cảnh nhất quán.</textarea></div>
-<div class="field"><label>Chi tiết cần tránh (Avoid)</label><textarea id="avoid">Da nhựa, làm đẹp quá mức, tạo dáng thời trang, bàn tay biến dạng, ngón tay thừa, chi thừa, vật thể lơ lửng, cách cầm vô lý, bóng đổ mâu thuẫn, phối cảnh méo, hậu cảnh giả, chữ ngẫu nhiên, watermark, logo.</textarea></div>
-</section>
-<section class="panel"><h2>5. Model và đầu ra (Target & Output)</h2>
-<div class="grid2">
-<div class="field"><label>Model/dịch vụ đích (Target)</label><select id="target"><option value="general">Prompt dùng chung (general-purpose prompt)</option><option value="chatgpt">ChatGPT (OpenAI image generation)</option><option value="gemini">Gemini (Google image generation)</option><option value="qwen">Qwen Image 2 (image generation model)</option><option value="flux">FLUX.1 Schnell FP8 (fast image generation model)</option><option value="wan">Wan 2.2 video (video generation model)</option><option value="comfyui">ComfyUI — chuẩn bị tích hợp (ComfyUI integration-ready)</option></select></div>
-<div class="field"><label>Loại đầu ra (Output Type)</label><select id="outputType"><option value="image">Ảnh tĩnh (Still Image)</option><option value="video">Video (Video Generation)</option></select></div>
-<div class="field"><label>Ngôn ngữ prompt (Prompt Language)</label><select id="promptLanguage"><option value="en" selected>Tiếng Anh — dịch nội dung sang tiếng Anh (English)</option><option value="vi">Tiếng Việt (Vietnamese)</option><option value="both">Tiếng Anh + bản dịch tiếng Việt (English + Vietnamese)</option></select></div>
-</div>
-<div class="field"><label>Thông số chuyển động (chỉ dùng cho video)</label><textarea id="motion" placeholder="Ví dụ: chạy từ trái sang phải, tà áo chuyển động theo đà, máy quay tracking nhẹ..."></textarea></div>
-<div class="notice">Ảnh tham chiếu được tải trực tiếp lên ChatGPT/Gemini hoặc vào node phù hợp trong ComfyUI; Prompt Studio chỉ quản lý lựa chọn mục đích và tạo prompt.</div>
-</section>
-<section class="panel full"><div class="refhead"><h2>6. Prompt kết quả (Generated Prompt)</h2><span class="pill">Tạo tại máy · Không cần API</span></div>
-<div class="tabs"><button class="tab active" data-tab="main">Prompt chính</button><button class="tab" data-tab="negative">Negative prompt</button><button class="tab" data-tab="instructions">Hướng dẫn dùng ảnh</button></div>
-<textarea id="result" class="output" spellcheck="false" aria-label="Prompt kết quả"></textarea>
-<div class="btns"><button class="primary" id="generate">Tạo prompt</button><button id="translatePrompt">Tạo lệnh dịch sang tiếng Anh</button><button id="copy">Sao chép nội dung</button><button id="download">Tải prompt TXT</button><button id="downloadGuide">Tải hướng dẫn dùng ảnh tham chiếu</button><button id="reset">Đặt lại</button></div>
-<p class="small">Lưu ý: app chạy offline, không gọi API. Nút “Tạo lệnh dịch sang tiếng Anh” tạo chỉ dẫn để thím sao chép sang ChatGPT/Gemini; app không tự dịch máy khi không có mô hình dịch.</p></section>
-</div><div class="footer">Prompt Studio V5.2 · Offline-first · Chuẩn bị mở rộng workflow ComfyUI</div></main>
+</main>
+<footer>AI Image Studio V6 · GitHub Pages + backend riêng · API key chỉ ở backend · UI tiếng Việt (Vietnamese) + thuật ngữ tiếng Anh (English).</footer>
 <script>
-(()=> {
-const $=id=>document.getElementById(id); let activeTab='main', outputs={main:'',negative:'',instructions:''};
-const purposeNames={identity:'giữ gương mặt và nhận dạng nhân vật (identity)',outfit:'giữ trang phục (outfit)',hair:'giữ kiểu tóc (hairstyle)',pose:'tham khảo tư thế (pose)',style:'tham khảo phong cách hình ảnh (style)',composition:'tham khảo bố cục (composition)'};
-function selectedPurposes(){return [...document.querySelectorAll('input[name="refPurpose"]:checked')].map(x=>x.value)}
-function updatePurposeSummary(){
-const chosen=[...document.querySelectorAll('input[name="refPurpose"]:checked')];
-$('purposeSummary').textContent=chosen.length?chosen.map(x=>({identity:'Giữ nhận dạng (Identity)',outfit:'Giữ trang phục (Outfit)',hair:'Giữ kiểu tóc (Hairstyle)',pose:'Tham khảo tư thế (Pose)',style:'Tham khảo phong cách (Style)',composition:'Tham khảo bố cục (Composition)'}[x.value])).join(', '):'Chưa chọn mục đích tham chiếu';
+const $ = id => document.getElementById(id);
+let referenceFiles = [];
+let currentBlob = null, currentMime = "image/png", currentFilename = "ai-image.png";
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function updateProvider(){
+  const gemini = $("provider").value === "gemini";
+  $("geminiModelWrap").hidden = !gemini;
+  $("openaiModelWrap").hidden = gemini;
 }
-document.querySelectorAll('input[name="refPurpose"]').forEach(x=>x.addEventListener('change',updatePurposeSummary));
-updatePurposeSummary();
-function val(id){return $(id).value.trim()}
-function generate(){
-const target=val('target'),type=val('outputType'),purpose=selectedPurposes();
-const subject=val('subject'),appearance=val('appearance'),action=val('action'),env=val('environment'),narr=val('narrative');
-const camera=val('shot')+', '+val('angle')+', '+val('ratio')+' aspect ratio'+(val('lens')==='no specific lens'?'':', shot on a '+val('lens'))+', '+val('dof');
-let sections=[];
-if(subject)sections.push('SUBJECT: '+subject+'.');
-if(appearance)sections.push('IDENTITY & APPEARANCE: '+appearance+'.');
-if(action)sections.push('ACTION & PHYSICAL INTERACTION: '+action+'.');
-if(env)sections.push('ENVIRONMENT: '+env+'.');
-if(narr)sections.push('NARRATIVE MOMENT: '+narr+'.');
-sections.push('COMPOSITION & SPATIAL LAYERS: '+camera+'. '+val('layers')+'. '+val('composition')+'.');
-sections.push('LIGHTING: '+val('lighting')+'.');
-if(type==='video'&&val('motion'))sections.push('MOTION & CAMERA MOVEMENT: '+val('motion')+'.');
-sections.push('VISUAL STYLE: '+val('style')+'.');
-sections.push('MATERIAL & PHYSICAL REALISM: '+val('realism')+'.');
-sections.push('COLOR & MOOD: '+val('palette')+'; '+val('mood')+'.');
-if(purpose.length){sections.push('REFERENCE IMAGE INSTRUCTION: In the same ChatGPT/Gemini conversation, upload the reference image separately and use it as visual guidance for '+purpose.map(p=>purposeNames[p]).join(', ')+'. Preserve only the selected attributes; keep the new scene and action described in this prompt. Do not blindly copy unrelated details. Reference notes: '+(val('refNotes')||'none')+'. IMPORTANT: Prompt Studio does not contain or transmit the image. Attach the image directly in ChatGPT/Gemini before or alongside this prompt.')}
-const targetNotes={general:'Write a clear natural-language prompt. Preserve the brief and avoid contradictory camera instructions.',chatgpt:'Use the reference image uploaded in this ChatGPT conversation. Follow the selected reference purposes and preserve the specified scene.',gemini:'Use the reference image uploaded with this prompt in Gemini. Follow the selected reference purposes and preserve the specified scene.',qwen:'Prefer explicit natural-language descriptions of spatial relationships, object contact, material texture, and the attributes to preserve from the separately supplied reference image.',flux:'Keep the prompt concise and concrete. Prioritize subject, action, composition, lighting, and the most important reference attributes; avoid redundant adjectives.',wan:'For video, describe visible motion over time, subject movement, camera movement, and physical continuity. A reference image must be connected through a compatible image-to-video workflow.',comfyui:'COMFYUI PREPARATION: This prompt does not create a workflow connection by itself. Supply the reference image to a compatible image-reference, IP-Adapter, PuLID, pose, style, or image-to-video node according to the selected purpose and model compatibility.'};
-const language=val('promptLanguage')||'en';
-const languageGuidance={en:'LANGUAGE REQUIREMENT: Translate all Vietnamese scene descriptions into fluent, natural English while preserving every concrete detail and the original meaning. Keep standard technical terms in English. Return the final image/video prompt in English only.',vi:'YÊU CẦU NGÔN NGỮ: Giữ prompt bằng tiếng Việt tự nhiên, rõ ràng; không tự ý thay đổi ý tưởng, hành động, bối cảnh hoặc chi tiết bắt buộc.',both:'LANGUAGE REQUIREMENT: Provide the complete English prompt first, followed by a faithful Vietnamese translation. Preserve all scene details and do not add unsupported information.'};
-outputs.main=sections.join('\n\n')+'\n\n'+languageGuidance[language]+'\n\nTARGET GUIDANCE: '+targetNotes[target];
-outputs.negative=val('avoid').split(/[,;\n]/).map(s=>s.trim()).filter(Boolean).join(', ');
-{
-const purposeVi=purpose.length?purpose.map(p=>purposeNames[p]).join('; '):'chưa chọn mục đích cụ thể';
-outputs.instructions=`HƯỚNG DẪN DÙNG ẢNH THAM CHIẾU\n\nMục đích đã chọn: ${purposeVi}\nGhi chú: ${val('refNotes')||'không có'}\n\n1. Mở ChatGPT hoặc Gemini.\n2. Tải ảnh tham chiếu trực tiếp vào cuộc trò chuyện đó. Ảnh không cần và không nên tải vào Prompt Studio.\n3. Dán Prompt chính được tạo ở đây. Prompt Studio chỉ tạo văn bản, không tự đính kèm ảnh sang ứng dụng khác.\n4. Nếu dùng ComfyUI, tải ảnh vào node phù hợp trong workflow hỗ trợ mục đích đã chọn.\n5. Nếu ảnh có người thật, cân nhắc quyền riêng tư trước khi tải lên dịch vụ trực tuyến.\n\nPrompt chính:\n${outputs.main}\n\nNegative prompt:\n${outputs.negative}`;
+$("provider").addEventListener("change", updateProvider); updateProvider();
+$("references").addEventListener("change", e => {
+  const chosen = Array.from(e.target.files || []);
+  const valid = chosen.filter(f => ["image/png","image/jpeg","image/webp"].includes(f.type) && f.size <= 10*1024*1024);
+  if(chosen.length > 4) setStatus("Chỉ hỗ trợ tối đa 4 ảnh tham chiếu trong một lần.", true);
+  if(valid.length !== chosen.length) setStatus("Một số ảnh bị bỏ qua: chỉ nhận PNG/JPEG/WebP và mỗi ảnh tối đa 10 MB.", true);
+  referenceFiles = valid.slice(0,4);
+  $("referencePreview").innerHTML = "";
+  referenceFiles.forEach((f,i) => {
+    const img = document.createElement("img"); img.className="thumb"; img.alt=`Ảnh tham chiếu ${i+1}`; img.src=URL.createObjectURL(f); img.title=f.name;
+    $("referencePreview").appendChild(img);
+  });
+});
+function selectedPurposes(){return Array.from(document.querySelectorAll('input[name="refPurpose"]:checked')).map(x=>x.value)}
+function makePrompt(){
+  const get = id => $(id).value.trim();
+  const sections = [];
+  const add = (title,id) => { const v=get(id); if(v) sections.push(`${title}: ${v}`); };
+  add("SUBJECT (CHỦ THỂ)","subject"); add("IDENTITY & APPEARANCE (NHẬN DẠNG VÀ NGOẠI HÌNH)","appearance");
+  add("ACTION & PHYSICAL INTERACTION (HÀNH ĐỘNG VÀ TƯƠNG TÁC VẬT LÝ)","action"); add("ENVIRONMENT (BỐI CẢNH)","environment");
+  add("NARRATIVE MOMENT (KHOẢNH KHẮC KỂ CHUYỆN)","story");
+  sections.push(`COMPOSITION & CAMERA (BỐ CỤC VÀ MÁY ẢNH): ${get("shot")}; ${get("angle")}; ${$("ratio").value} aspect ratio (tỷ lệ khung hình); ${get("lens")}; ${get("dof")}. ${get("layers")}`);
+  sections.push(`LIGHTING (ÁNH SÁNG): ${get("lighting")}`);
+  sections.push(`VISUAL STYLE (PHONG CÁCH HÌNH ẢNH): ${get("style")}`);
+  add("COLOR & MOOD (MÀU SẮC VÀ TÂM TRẠNG)","palette"); add("COLOR & MOOD (MÀU SẮC VÀ TÂM TRẠNG)","mood");
+  add("MATERIAL & PHYSICAL REALISM (CHẤT LIỆU VÀ TÍNH CHÂN THỰC VẬT LÝ)","realism");
+  add("IMPORTANT CONSTRAINTS (RÀNG BUỘC QUAN TRỌNG)","negative"); add("ADDITIONAL NOTES (GHI CHÚ BỔ SUNG)","extra");
+  const purposes=selectedPurposes();
+  if(referenceFiles.length) sections.push(`REFERENCE IMAGE INSTRUCTION (HƯỚNG DẪN ẢNH THAM CHIẾU): Use the uploaded reference image(s) as visual guidance only for these selected attributes: ${purposes.join(", ") || "general visual guidance"}. Preserve selected attributes and follow the new scene described above. Do not blindly copy unrelated details. ${get("refNotes") ? "Reference notes: "+get("refNotes") : ""}`);
+  const lang=$("promptLanguage").value;
+  if(lang==="vi") return "Tạo một ảnh theo mô tả sau. Giữ đúng chủ thể, hành động, bố cục và các ràng buộc đã nêu.\n\n"+sections.join("\n\n");
+  if(lang==="both") return sections.join("\n\n")+"\n\nBẢN DIỄN GIẢI TIẾNG VIỆT (VIETNAMESE INTERPRETATION):\n"+sections.map(s=>s.replace(/^[A-Z &()]+:\s*/,"")).join("\n\n");
+  return "Generate a single image following this brief. Preserve the subject, action, composition, and constraints exactly as specified.\n\n"+sections.join("\n\n");
 }
-showTab(activeTab); }
-function showTab(tab){activeTab=tab;document.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));$('result').value=outputs[tab]||''}
-document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>showTab(b.dataset.tab));
-$('generate').onclick=()=>{generate();$('result').scrollIntoView({behavior:'smooth',block:'center'})};
-$('translatePrompt').onclick=()=>{if(!outputs.main)generate();const source=outputs.main;outputs.main='Hãy dịch và biên tập prompt dưới đây sang tiếng Anh tự nhiên, chính xác, phù hợp cho model tạo ảnh/video. Giữ nguyên toàn bộ ý tưởng, chủ thể, hành động, bối cảnh, bố cục, ánh sáng, phong cách và các ràng buộc. Không thêm chi tiết mới, không lược bỏ chi tiết. Chỉ trả về prompt tiếng Anh hoàn chỉnh.\n\nPROMPT CẦN DỊCH (SOURCE PROMPT):\n\n'+source;showTab('main');$('result').scrollIntoView({behavior:'smooth',block:'center'});};
-$('copy').onclick=async()=>{if(!$('result').value)generate();try{await navigator.clipboard.writeText($('result').value);$('copy').textContent='Đã sao chép!';setTimeout(()=>$('copy').textContent='Sao chép nội dung',1400)}catch(e){$('result').select();alert('Trình duyệt không cho sao chép tự động. Hãy nhấn Ctrl+C.')}};
-function saveText(name,text){const blob=new Blob([text],{type:'text/plain;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
-$('download').onclick=()=>{if(!$('result').value)generate();saveText('prompt-studio-v5-'+activeTab+'.txt',$('result').value)};
-$('downloadGuide').onclick=()=>{if(!outputs.instructions)generate();saveText('huong-dan-anh-tham-chieu-v5.txt',outputs.instructions)};
-$('reset').onclick=()=>{if(!confirm('Đặt lại biểu mẫu về mặc định?'))return;document.querySelectorAll('input,textarea').forEach(el=>{if(el.type==='checkbox')el.checked=el.name==='refPurpose'&&['identity','outfit'].includes(el.value);else if(el.tagName==='TEXTAREA')el.value='';});$('subject').value='Nữ sinh Việt Nam mặc áo dài trắng đang chạy trên sân trường';$('appearance').value='Áo dài trắng, quần đen, tóc dài qua vai, cầm nón lá và cặp xách đen kiểu học sinh ngày xưa';$('action').value='Đang chạy tự nhiên; một tay giữ nón lá, tay còn lại xách chiếc cặp đen nhỏ có vẻ đã qua sử dụng';$('environment').value='Sân trường cấp 3 Việt Nam';$('narrative').value='Khoảnh khắc học sinh đời thường, chân thật và đầy sức sống';$('composition').value='Một góc băng ghế đá xuất hiện ở tiền cảnh, không che khuất chủ thể';$('realism').value='Tư thế và giải phẫu hợp lý; tay tiếp xúc tự nhiên với đồ vật; trọng lượng và chuyển động có sức nặng; chất liệu thật; nếp vải tự nhiên; phối cảnh nhất quán.';$('avoid').value='Da nhựa, làm đẹp quá mức, tạo dáng thời trang, bàn tay biến dạng, ngón tay thừa, chi thừa, vật thể lơ lửng, cách cầm vô lý, bóng đổ mâu thuẫn, phối cảnh méo, hậu cảnh giả, chữ ngẫu nhiên, watermark, logo.';$('refNotes').value='';$('motion').value='';updatePurposeSummary();outputs={main:'',negative:'',instructions:''};$('result').value='';showTab('main')};
-generate();
-})();
-</script></body></html>
+function setStatus(msg,err=false,ok=false){const el=$("status");el.textContent=msg;el.className="status"+(err?" err":ok?" ok":"")}
+$("buildPrompt").addEventListener("click",()=>{$("promptOutput").value=makePrompt();setStatus("Đã tạo prompt xem trước. (Prompt preview ready.)",false,true)});
+$("copyPrompt").addEventListener("click",async()=>{if(!$("promptOutput").value)$("promptOutput").value=makePrompt();try{await navigator.clipboard.writeText($("promptOutput").value);setStatus("Đã sao chép prompt. (Prompt copied.)",false,true)}catch{setStatus("Không thể truy cập clipboard tự động. Hãy chọn và sao chép prompt thủ công.",true)}});
+function dataUrlToBlob(url){const [head,data]=url.split(",");const mime=(head.match(/data:(.*?);base64/)||[])[1]||"image/png";const bin=atob(data);const arr=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)arr[i]=bin.charCodeAt(i);return {blob:new Blob([arr],{type:mime}),mime};}
+$("generate").addEventListener("click",async()=>{
+  const base=$("backendUrl").value.trim().replace(/\/+$/,"");
+  if(!base){setStatus("Hãy nhập địa chỉ backend trước. (Enter the backend URL first.)",true);return}
+  if(!$("subject").value.trim() && !$("promptOutput").value.trim()){setStatus("Hãy nhập chủ thể hoặc prompt trước khi tạo ảnh.",true);return}
+  const prompt=$("promptOutput").value.trim()||makePrompt();$("promptOutput").value=prompt;
+  $("generate").disabled=true;$("generate").textContent="Đang tạo ảnh… (Generating…)";setStatus("Đang gửi yêu cầu đến API. Thời gian có thể từ vài giây đến vài phút…");
+  try{
+    const fd=new FormData();fd.append("provider",$("provider").value);fd.append("prompt",prompt);fd.append("aspectRatio",$("ratio").value);fd.append("resolution",$("resolution").value);
+    fd.append("model",$("provider").value==="gemini"?$("geminiModel").value:$("openaiModel").value);
+    fd.append("referencePurposes",JSON.stringify(selectedPurposes()));fd.append("referenceNotes",$("refNotes").value);
+    referenceFiles.forEach(f=>fd.append("references",f,f.name));
+    const resp=await fetch(base+"/api/generate",{method:"POST",body:fd});
+    const data=await resp.json().catch(()=>({error:"Backend trả về dữ liệu không hợp lệ."}));
+    if(!resp.ok) throw new Error(data.error||`HTTP ${resp.status}`);
+    const decoded=dataUrlToBlob(data.imageDataUrl);currentBlob=decoded.blob;currentMime=decoded.mime;currentFilename=data.filename||"ai-image.png";
+    $("resultImage").src=URL.createObjectURL(currentBlob);$("resultImage").hidden=false;$("empty").hidden=true;
+    $("resultMeta").textContent=`Nhà cung cấp: ${data.provider} · Model: ${data.model} · Định dạng: ${currentMime} · ${Math.round(currentBlob.size/1024)} KB · ${data.resolutionNote||"Kích thước do model trả về"}`;
+    $("download").disabled=false;$("openOriginal").disabled=false;setStatus("Tạo ảnh thành công. (Image generated successfully.)",false,true);
+  }catch(e){setStatus("Tạo ảnh thất bại: "+(e.message||e)+ "\nKiểm tra URL backend, CORS, API key, hạn mức và model.",true)}
+  finally{$("generate").disabled=false;$("generate").textContent="✨ Tạo ảnh (Generate Image)"}
+});
+$("download").addEventListener("click",()=>{if(!currentBlob)return;const url=URL.createObjectURL(currentBlob);const a=document.createElement("a");a.href=url;a.download=currentFilename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2000)});
+$("openOriginal").addEventListener("click",()=>{if(currentBlob)window.open(URL.createObjectURL(currentBlob),"_blank","noopener")});
+</script>
+</body></html>
