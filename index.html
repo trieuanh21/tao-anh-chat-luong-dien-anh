@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>AI Image Studio V6.4</title>
+<title>AI Image Studio V6.4.1</title>
 <style>
 :root{color-scheme:dark;--bg:#10131a;--panel:#191e29;--line:#303849;--text:#edf1f8;--muted:#a8b2c4;--accent:#8ab4ff;--accent2:#b4f0cf;--danger:#ffb4ab}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 10% 0%,#1b2940 0,transparent 35%),var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,Segoe UI,sans-serif}
@@ -38,7 +38,7 @@ footer{max-width:1200px;margin:-28px auto 30px;padding:0 18px;color:var(--muted)
   <h2>1. Kết nối dịch vụ (Provider Setup)</h2>
   <p class="hint">Địa chỉ backend được công khai; API key chỉ được lưu trong file .env trên backend, tuyệt đối không nhập API key vào ô này.</p>
   <label for="backendUrl">Địa chỉ backend (Backend URL)</label>
-  <input id="backendUrl" placeholder="https://ten-backend-cua-ban.onrender.com" autocomplete="url">
+  <input id="backendUrl" value="http://localhost:8787" placeholder="https://ten-backend-cua-ban.onrender.com" autocomplete="url">
   <label for="studioPassword">Mật khẩu sử dụng API (AI Studio Password)</label>
   <div class="grid2">
     <input id="studioPassword" type="password" placeholder="Nhập mật khẩu do bạn đặt" autocomplete="current-password">
@@ -106,7 +106,7 @@ footer{max-width:1200px;margin:-28px auto 30px;padding:0 18px;color:var(--muted)
   <button id="generate" class="primary">✨ Tạo ảnh (Generate Image)</button>
   <div class="actions"><button id="buildPrompt" class="secondary">Tạo prompt xem trước (Build Prompt)</button><button id="copyPrompt" class="secondary">Sao chép prompt (Copy Prompt)</button></div>
   <label for="promptOutput">Prompt cuối cùng (Final Prompt)</label><textarea id="promptOutput" placeholder="Prompt hoàn chỉnh theo ví dụ cô gái mặc áo dài trong sân trường sẽ xuất hiện ở đây..." style="min-height:170px"></textarea>
-  <div id="status" class="status">Chưa kết nối backend. Hãy triển khai backend, cấu hình API key trong .env và nhập địa chỉ backend ở phía trên.</div>
+  <div id="status" class="status">Backend mặc định: http://localhost:8787. Đảm bảo backend đang chạy trên máy này; nếu dùng backend online, hãy thay URL ở ô phía trên.</div>
 </section>
 
 <section class="panel">
@@ -128,7 +128,7 @@ footer{max-width:1200px;margin:-28px auto 30px;padding:0 18px;color:var(--muted)
   <p class="hint">Lưu ý chi phí: API tính phí riêng theo nhà cung cấp/model. “Cao nhất” được ánh xạ sang chế độ chất lượng tối đa mà model được cấu hình hỗ trợ; kích thước thực tế tùy model và tỷ lệ ảnh.</p>
 </section>
 </main>
-<footer>AI Image Studio V6.4 · GitHub Pages + backend riêng · API key chỉ ở backend · UI tiếng Việt (Vietnamese) + thuật ngữ tiếng Anh (English).</footer>
+<footer>AI Image Studio V6.4.1 · Backend URL mặc định localhost:8787 · GitHub Pages + backend riêng · API key chỉ ở backend · UI tiếng Việt (Vietnamese) + thuật ngữ tiếng Anh (English).</footer>
 <script>
 const $ = id => document.getElementById(id);
 let referenceFiles = [];
