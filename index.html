@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>AI Image Studio V6.4.1</title>
+<title>AI Image Studio V6.5 — Local, không mật khẩu</title>
 <style>
 :root{color-scheme:dark;--bg:#10131a;--panel:#191e29;--line:#303849;--text:#edf1f8;--muted:#a8b2c4;--accent:#8ab4ff;--accent2:#b4f0cf;--danger:#ffb4ab}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 10% 0%,#1b2940 0,transparent 35%),var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,Segoe UI,sans-serif}
@@ -29,23 +29,17 @@ footer{max-width:1200px;margin:-28px auto 30px;padding:0 18px;color:var(--muted)
 </head>
 <body>
 <header>
-  <h1>AI Image Studio <span style="color:var(--accent)">V6.4</span></h1>
+  <h1>AI Image Studio <span style="color:var(--accent)">V6.5</span></h1>
   <p>Tạo prompt, gửi ảnh tham chiếu đến OpenAI hoặc Gemini API, xem kết quả và tải ảnh gốc. Giao diện tiếng Việt kèm thuật ngữ tiếng Anh trong ngoặc.</p>
-  <div><span class="pill">GitHub Pages (giao diện)</span><span class="pill">Backend riêng (máy chủ trung gian)</span><span class="pill">Không lưu API key trong trình duyệt</span></div>
+  <div><span class="pill">Giao diện web</span><span class="pill">Backend chạy local</span><span class="pill">Không cần mật khẩu</span><span class="pill">API key vẫn nằm trong .env</span></div>
 </header>
 <main>
 <section class="panel">
   <h2>1. Kết nối dịch vụ (Provider Setup)</h2>
-  <p class="hint">Địa chỉ backend được công khai; API key chỉ được lưu trong file .env trên backend, tuyệt đối không nhập API key vào ô này.</p>
+  <p class="hint">Backend local của thím. Không cần đăng nhập bằng mật khẩu; API key vẫn được giữ trong file .env, không đưa vào trình duyệt.</p>
   <label for="backendUrl">Địa chỉ backend (Backend URL)</label>
-  <input id="backendUrl" value="http://localhost:8787" placeholder="https://ten-backend-cua-ban.onrender.com" autocomplete="url">
-  <label for="studioPassword">Mật khẩu sử dụng API (AI Studio Password)</label>
-  <div class="grid2">
-    <input id="studioPassword" type="password" placeholder="Nhập mật khẩu do bạn đặt" autocomplete="current-password">
-    <button id="unlock" type="button" class="secondary">Mở khóa (Unlock)</button>
-  </div>
-  <div class="actions"><button id="logout" type="button" class="secondary" disabled>Khóa phiên (Lock Session)</button></div>
-  <p class="hint">Mật khẩu được gửi đến backend để xác thực; app chỉ giữ mã phiên trong bộ nhớ của tab hiện tại, không lưu mật khẩu hoặc mã phiên vào localStorage.</p>
+  <input id="backendUrl" value="http://127.0.0.1:8787" placeholder="https://ten-backend-cua-ban.onrender.com" autocomplete="url">
+  <p class="hint">Chế độ local: backend chỉ lắng nghe trên máy này (127.0.0.1). Không chia sẻ backend ra mạng công cộng.</p>
   <div class="grid2">
     <div><label for="provider">Nhà cung cấp (Provider)</label><select id="provider"><option value="gemini">Gemini API (Google)</option><option value="openai">OpenAI API</option></select></div>
     <div><label for="ratio">Tỷ lệ khung hình (Aspect Ratio)</label><select id="ratio"><option value="16:9">Ngang 16:9 (landscape widescreen)</option><option value="3:2">Ngang 3:2 (landscape)</option><option value="4:3">Ngang 4:3 (standard landscape)</option><option value="1:1">Vuông 1:1 (square)</option><option value="3:4">Dọc 3:4 (portrait)</option><option value="2:3">Dọc 2:3 (portrait)</option><option value="9:16">Dọc 9:16 (vertical video)</option><option value="21:9">Siêu rộng 21:9 (ultrawide)</option></select></div>
@@ -198,39 +192,9 @@ $("buildPrompt").addEventListener("click",()=>{$("promptOutput").value=makePromp
 $("copyPrompt").addEventListener("click",async()=>{if(!$("promptOutput").value)$("promptOutput").value=makePrompt();try{await navigator.clipboard.writeText($("promptOutput").value);setStatus("Đã sao chép prompt. (Prompt copied.)",false,true)}catch{setStatus("Không thể truy cập clipboard tự động. Hãy chọn và sao chép prompt thủ công.",true)}});
 function dataUrlToBlob(url){const [head,data]=url.split(",");const mime=(head.match(/data:(.*?);base64/)||[])[1]||"image/png";const bin=atob(data);const arr=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)arr[i]=bin.charCodeAt(i);return {blob:new Blob([arr],{type:mime}),mime};}
 
-let studioToken = null;
-$("unlock").addEventListener("click", async () => {
-  const base=$("backendUrl").value.trim().replace(/\/+$/,"");
-  const password=$("studioPassword").value;
-  if(!base){setStatus("Hãy nhập địa chỉ backend trước. (Enter the backend URL first.)",true);return}
-  if(!password){setStatus("Hãy nhập mật khẩu AI Studio. (Enter the AI Studio password.)",true);$("studioPassword").focus();return}
-  $("unlock").disabled=true;
-  try {
-    const resp=await fetch(base+"/api/auth/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({password})});
-    const data=await resp.json().catch(()=>({error:"Backend trả về dữ liệu không hợp lệ."}));
-    if(!resp.ok) {
-      if(resp.status===401){studioToken=null;$("logout").disabled=true;}
-      throw new Error(data.error||`HTTP ${resp.status}`);
-    }
-    studioToken=data.token;
-    $("studioPassword").value="";
-    $("logout").disabled=false;
-    setStatus("Đã mở khóa. Phiên tự hết hạn sau 8 giờ hoặc khi thím khóa phiên/đóng tab. (Session unlocked.)",false,true);
-  } catch(e) {
-    studioToken=null;$("logout").disabled=true;
-    setStatus("Không mở khóa được: "+(e.message||e),true);
-  } finally {$("unlock").disabled=false}
-});
-$("logout").addEventListener("click",async()=>{
-  const base=$("backendUrl").value.trim().replace(/\/+$/,"");
-  try{if(base&&studioToken)await fetch(base+"/api/auth/logout",{method:"POST",headers:{Authorization:"Bearer "+studioToken}})}catch{}
-  studioToken=null;$("logout").disabled=true;
-  setStatus("Đã khóa phiên trên trình duyệt. (Session locked.)",false,true);
-});
 $("generate").addEventListener("click",async()=>{
   const base=$("backendUrl").value.trim().replace(/\/+$/,"");
   if(!base){setStatus("Hãy nhập địa chỉ backend trước. (Enter the backend URL first.)",true);return}
-  if(!studioToken){setStatus("Trước tiên hãy nhập mật khẩu và bấm Mở khóa (Unlock).",true);$("studioPassword").focus();return}
   if(!$("subject").value.trim() && !$("promptOutput").value.trim()){setStatus("Hãy nhập chủ thể hoặc prompt trước khi tạo ảnh.",true);return}
   const prompt=$("promptOutput").value.trim()||makePrompt();$("promptOutput").value=prompt;
   $("generate").disabled=true;$("generate").textContent="Đang tạo ảnh… (Generating…)";setStatus("Đang gửi yêu cầu đến API. Thời gian có thể từ vài giây đến vài phút…");
@@ -239,7 +203,7 @@ $("generate").addEventListener("click",async()=>{
     fd.append("model",$("provider").value==="gemini"?$("geminiModel").value:$("openaiModel").value);
     fd.append("referencePurposes",JSON.stringify(selectedPurposes()));fd.append("referenceNotes",$("refNotes").value);
     referenceFiles.forEach(f=>fd.append("references",f,f.name));
-    const resp=await fetch(base+"/api/generate",{method:"POST",headers:{"Authorization":"Bearer "+studioToken},body:fd});
+    const resp=await fetch(base+"/api/generate",{method:"POST",body:fd});
     const data=await resp.json().catch(()=>({error:"Backend trả về dữ liệu không hợp lệ."}));
     if(!resp.ok) throw new Error(data.error||`HTTP ${resp.status}`);
     const decoded=dataUrlToBlob(data.imageDataUrl);currentBlob=decoded.blob;currentMime=decoded.mime;currentFilename=data.filename||"ai-image.png";
