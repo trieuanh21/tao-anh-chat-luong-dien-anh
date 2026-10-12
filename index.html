@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>AI Image Studio V6.1</title>
+<title>AI Image Studio V6.4</title>
 <style>
 :root{color-scheme:dark;--bg:#10131a;--panel:#191e29;--line:#303849;--text:#edf1f8;--muted:#a8b2c4;--accent:#8ab4ff;--accent2:#b4f0cf;--danger:#ffb4ab}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 10% 0%,#1b2940 0,transparent 35%),var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,Segoe UI,sans-serif}
@@ -29,7 +29,7 @@ footer{max-width:1200px;margin:-28px auto 30px;padding:0 18px;color:var(--muted)
 </head>
 <body>
 <header>
-  <h1>AI Image Studio <span style="color:var(--accent)">V6.1</span></h1>
+  <h1>AI Image Studio <span style="color:var(--accent)">V6.4</span></h1>
   <p>Tạo prompt, gửi ảnh tham chiếu đến OpenAI hoặc Gemini API, xem kết quả và tải ảnh gốc. Giao diện tiếng Việt kèm thuật ngữ tiếng Anh trong ngoặc.</p>
   <div><span class="pill">GitHub Pages (giao diện)</span><span class="pill">Backend riêng (máy chủ trung gian)</span><span class="pill">Không lưu API key trong trình duyệt</span></div>
 </header>
@@ -59,12 +59,12 @@ footer{max-width:1200px;margin:-28px auto 30px;padding:0 18px;color:var(--muted)
   <select id="promptLanguage"><option value="vi" selected>Tiếng Việt (Vietnamese)</option><option value="en">Tiếng Anh (English)</option><option value="both">Tiếng Anh kèm bản dịch tiếng Việt (English + Vietnamese)</option></select>
 
   <hr class="sectionline">
-  <h2>2. Nội dung ảnh (Image Brief)</h2><p class="hint">Các ô đã có nội dung mặc định để làm khung prompt. Thím có thể sửa hoặc xóa từng phần; phần để trống sẽ được bỏ qua khi tạo prompt.</p>
-  <label for="subject">Chủ thể (Subject)</label><textarea id="subject" placeholder="Ví dụ: Nữ sinh Việt Nam mặc áo dài trắng ngồi trên ghế đá sân trường.">Mô tả rõ chủ thể chính bằng các đặc điểm hình ảnh cụ thể.</textarea>
-  <label for="appearance">Nhận dạng và ngoại hình (Identity & Appearance)</label><textarea id="appearance" placeholder="Mô tả trang phục, kiểu tóc, khuôn mặt và đặc điểm cần giữ...">Ngoại hình tự nhiên, đáng tin cậy; mô tả trang phục, kiểu tóc, đặc điểm khuôn mặt, độ tuổi phù hợp và những dấu hiệu nhận dạng quan trọng.</textarea>
-  <label for="action">Hành động và tương tác vật lý (Action & Physical Interaction)</label><textarea id="action" placeholder="Mô tả tư thế, hành động và cách tay tiếp xúc với đồ vật...">Chủ thể thực hiện một hành động rõ ràng, hợp lý về mặt vật lý. Bàn tay và cơ thể tương tác tự nhiên với các vật thể xung quanh.</textarea>
-  <label for="environment">Bối cảnh (Environment)</label><textarea id="environment" placeholder="Mô tả địa điểm, thời tiết và các vật thể xung quanh...">Bối cảnh đời thực đáng tin cậy, có kiến trúc, đồ vật và chi tiết hậu cảnh phù hợp với cảnh.</textarea>
-  <label for="story">Khoảnh khắc kể chuyện (Narrative Moment)</label><textarea id="story" placeholder="Mô tả cảm xúc hoặc khoảnh khắc muốn ghi lại...">Một khoảnh khắc đời thường có ý nghĩa, tự nhiên, dễ cảm nhận cảm xúc và gần gũi với thực tế.</textarea>
+  <h2>2. Nội dung ảnh (Image Brief)</h2><p class="hint">Các ô đã được điền sẵn bằng một ví dụ hoàn chỉnh: cô gái Việt Nam mặc áo dài, cầm nón lá và bấm điện thoại trên ghế đá sân trường. Thím sửa theo ý mình hoặc xóa phần không cần; ô nào để trống sẽ được bỏ qua khi tạo prompt.</p>
+  <label for="subject">Chủ thể (Subject)</label><textarea id="subject" placeholder="Ví dụ: Một cô gái Việt Nam mặc áo dài trắng, tay cầm nón lá, ngồi trên ghế đá trong sân trường và bấm điện thoại.">Một cô gái Việt Nam mặc áo dài trắng, tay cầm nón lá và ngồi bấm điện thoại trên ghế đá trong sân trường.</textarea>
+  <label for="appearance">Nhận dạng và ngoại hình (Identity & Appearance)</label><textarea id="appearance" placeholder="Ví dụ: Tóc đen dài buộc nửa đầu, gương mặt tự nhiên, áo dài trắng tay dài, quần trắng, không trang điểm đậm.">Cô gái có mái tóc đen dài buộc nửa đầu, gương mặt tự nhiên, mặc áo dài trắng tay dài và quần trắng; vẻ ngoài giản dị như nữ sinh Việt Nam.</textarea>
+  <label for="action">Hành động và tương tác vật lý (Action & Physical Interaction)</label><textarea id="action" placeholder="Ví dụ: Cô gái ngồi thoải mái, tay phải bấm điện thoại, tay trái giữ chiếc nón lá đặt trên đùi.">Cô gái ngồi thoải mái trên ghế đá, cúi nhẹ nhìn màn hình và dùng tay phải bấm điện thoại; tay trái giữ chiếc nón lá đặt trên đùi. Tư thế và tiếp xúc giữa bàn tay với đồ vật tự nhiên.</textarea>
+  <label for="environment">Bối cảnh (Environment)</label><textarea id="environment" placeholder="Ví dụ: Sân trường Việt Nam có dãy phòng học, cây phượng, hành lang và vài ghế đá.">Sân trường Việt Nam vào ban ngày, phía sau là dãy phòng học, hành lang, cây phượng xanh và một vài ghế đá; không gian sạch sẽ, yên bình, có chiều sâu tự nhiên.</textarea>
+  <label for="story">Khoảnh khắc kể chuyện (Narrative Moment)</label><textarea id="story" placeholder="Ví dụ: Khoảnh khắc nghỉ giữa giờ, cô gái tranh thủ đọc tin nhắn trước khi vào lớp.">Khoảnh khắc nghỉ giữa giờ học, cô gái tranh thủ xem điện thoại; nét mặt tập trung nhẹ nhàng, tạo cảm giác đời thường, tự nhiên và gần gũi.</textarea>
   <h3>Bố cục và máy ảnh (Composition & Camera)</h3>
   <div class="grid2">
     <div><label for="shot">Cỡ cảnh (Shot Size)</label><select id="shot"><option value="Wide shot (toàn cảnh)">Toàn cảnh (Wide shot)</option><option value="Medium shot (trung cảnh)">Trung cảnh (Medium shot)</option><option value="Close-up (cận cảnh)">Cận cảnh (Close-up)</option><option value="Extreme close-up (đặc tả)">Đặc tả (Extreme close-up)</option><option value="Full-body shot (toàn thân)">Toàn thân (Full-body shot)</option></select></div>
@@ -74,7 +74,7 @@ footer{max-width:1200px;margin:-28px auto 30px;padding:0 18px;color:var(--muted)
     <div><label for="lens">Ống kính (Lens)</label><select id="lens"><option value="35mm lens (ống kính 35mm)">35mm — tự nhiên (35mm, natural)</option><option value="24mm lens (ống kính 24mm)">24mm — góc rộng (24mm, wide)</option><option value="50mm lens (ống kính 50mm)">50mm — góc nhìn tự nhiên (50mm, normal)</option><option value="85mm lens (ống kính 85mm)">85mm — chân dung (85mm, portrait)</option><option value="telephoto lens (ống kính tele)">Tele — nén phối cảnh (telephoto)</option><option value="macro lens (ống kính macro)">Macro — cận chi tiết (macro)</option></select></div>
     <div><label for="dof">Độ sâu trường ảnh (Depth of Field)</label><select id="dof"><option value="Moderate depth of field (độ sâu trường ảnh trung bình)">Trung bình (moderate)</option><option value="Shallow depth of field, soft background bokeh (trường ảnh nông, hậu cảnh mờ)">Nông, hậu cảnh mờ (shallow)</option><option value="Deep depth of field, foreground to background in focus (trường ảnh sâu)">Sâu, nhiều lớp rõ (deep)</option></select></div>
   </div>
-  <label for="layers">Các lớp không gian (Spatial Layers)</label><textarea id="layers" placeholder="Mô tả tiền cảnh, trung cảnh, hậu cảnh và vật thể được phép xuất hiện...">Phân lớp tiền cảnh, trung cảnh và hậu cảnh rõ ràng. Không để vật thể che khuất chủ thể chính; chỉ dùng chi tiết tiền cảnh khi giúp tăng chiều sâu và tạo khung hình.</textarea>
+  <label for="layers">Các lớp không gian (Spatial Layers)</label><textarea id="layers" placeholder="Ví dụ: Tiền cảnh là lối đi, trung cảnh là cô gái và ghế đá, hậu cảnh là cây xanh và dãy lớp học.">Tiền cảnh có một phần lối đi sân trường; trung cảnh tập trung vào cô gái, ghế đá, điện thoại và nón lá; hậu cảnh là cây phượng và dãy phòng học hơi mờ. Các lớp không gian rõ ràng, không có vật thể che khuất gương mặt hoặc bàn tay.</textarea>
   <div class="grid2">
     <div><label for="lighting">Ánh sáng (Lighting)</label><select id="lighting"><option value="Cinematic natural daylight (ánh sáng tự nhiên điện ảnh)">Ánh sáng tự nhiên điện ảnh (cinematic daylight)</option><option value="Soft diffused light (ánh sáng tán xạ mềm)">Tán xạ mềm (soft diffused)</option><option value="Cinematic low-key lighting (ánh sáng điện ảnh thiên tối)">Điện ảnh thiên tối (low-key)</option><option value="Golden hour sunlight (nắng giờ vàng)">Nắng giờ vàng (golden hour)</option><option value="Studio lighting with soft key light (ánh sáng studio mềm)">Studio mềm (soft studio)</option><option value="Hard directional sunlight (nắng chiếu hướng rõ)">Nắng hướng mạnh (hard directional)</option></select></div>
     <div><label for="style">Phong cách hình ảnh (Visual Style)</label><select id="style"><option value="Photorealistic cinematic 35mm film still (khung hình phim 35mm chân thực)">Phim 35mm chân thực (photorealistic film still)</option><option value="Documentary photography (nhiếp ảnh tài liệu)">Tài liệu (documentary)</option><option value="Editorial fashion photography (ảnh thời trang biên tập)">Thời trang (editorial fashion)</option><option value="Anime illustration (minh họa anime)">Anime (anime illustration)</option><option value="Oil painting (tranh sơn dầu)">Sơn dầu (oil painting)</option><option value="3D stylized render (hình dựng 3D cách điệu)">Dựng 3D (3D render)</option><option value="Watercolor illustration (minh họa màu nước)">Màu nước (watercolor)</option></select></div>
@@ -83,9 +83,9 @@ footer{max-width:1200px;margin:-28px auto 30px;padding:0 18px;color:var(--muted)
     <div><label for="palette">Màu sắc (Color Palette)</label><select id="palette"><option value="Neutral realistic colors (màu trung tính chân thực)">Trung tính chân thực (neutral realistic)</option><option value="Warm cinematic color grading (tông điện ảnh ấm)">Điện ảnh ấm (warm cinematic)</option><option value="Cool muted colors (màu lạnh trầm)">Lạnh trầm (cool muted)</option><option value="Rich saturated colors (màu đậm bão hòa)">Đậm bão hòa (rich saturated)</option><option value="Black and white monochrome (đen trắng đơn sắc)">Đen trắng (monochrome)</option><option value="Pastel colors (màu pastel)">Pastel (pastel colors)</option></select></div>
     <div><label for="mood">Cảm xúc (Mood)</label><select id="mood"><option value="Natural, optimistic, lively (tự nhiên, lạc quan, sống động)">Tự nhiên, lạc quan (natural, optimistic)</option><option value="Dreamlike and mysterious (mơ màng, bí ẩn)">Mơ màng, bí ẩn (dreamlike)</option><option value="Melancholic and contemplative (man mác buồn, suy tư)">Man mác buồn (melancholic)</option><option value="Tense and dramatic (căng thẳng, kịch tính)">Kịch tính (dramatic)</option><option value="Calm and intimate (bình yên, gần gũi)">Bình yên (calm, intimate)</option></select></div>
   </div>
-  <label for="realism">Chất liệu và tính chân thực vật lý (Material & Physical Realism)</label><textarea id="realism">Anatomically correct proportions, natural hand-object contact, believable weight and movement, realistic materials, natural fabric folds, consistent perspective and physically plausible shadows.</textarea>
-  <label for="negative">Điều cần tránh (Negative Constraints)</label><textarea id="negative" placeholder="Ví dụ: ngón tay méo, thừa chi, vải thiếu chân thực, ảnh quá tối...">Tránh giải phẫu méo mó, bàn tay dị dạng, thừa ngón hoặc chi, vật thể bị nhân đôi hoặc lơ lửng, phối cảnh thiếu nhất quán, bề mặt giả tạo, tăng nét quá mức, chữ hoặc hình mờ ngoài ý muốn.</textarea>
-  <label for="extra">Ghi chú bổ sung (Additional Notes)</label><textarea id="extra" placeholder="Nhập chi tiết quan trọng khác...">Giữ nguyên ý tưởng cốt lõi. Không tự thêm chủ thể hoặc đạo cụ không liên quan. Đảm bảo mọi chi tiết hình ảnh nhất quán với cảnh được yêu cầu.</textarea>
+  <label for="realism">Chất liệu và tính chân thực vật lý (Material & Physical Realism)</label><textarea id="realism" placeholder="Ví dụ: Nếp áo dài rủ tự nhiên, bàn tay cầm điện thoại đúng tư thế, bóng đổ phù hợp ánh nắng.">Tỷ lệ cơ thể và bàn tay tự nhiên; ngón tay tiếp xúc đúng với điện thoại và nón lá; nếp vải áo dài mềm, có trọng lượng; chất liệu tre đan của nón lá chân thực; phối cảnh và bóng đổ phù hợp với ánh sáng ban ngày.</textarea>
+  <label for="negative">Điều cần tránh (Negative Constraints)</label><textarea id="negative" placeholder="Ví dụ: Không méo bàn tay, không thừa ngón, không nhân đôi điện thoại, không làm biến dạng nón lá hoặc áo dài.">Không méo bàn tay, không thừa hoặc dính ngón tay, không nhân đôi điện thoại hay nón lá, không làm biến dạng khuôn mặt, cơ thể hoặc áo dài; không để vật thể lơ lửng, không tạo chữ ngẫu nhiên, watermark hay hiệu ứng da nhựa.</textarea>
+  <label for="extra">Ghi chú bổ sung (Additional Notes)</label><textarea id="extra" placeholder="Ví dụ: Giữ màu áo dài trắng tinh khôi, cảnh đời thường, không thêm người đứng sát nhân vật.">Ưu tiên cảm giác ảnh chụp đời thực, màu sắc tự nhiên, áo dài trắng rõ nếp vải; giữ cô gái là chủ thể chính và không thêm đạo cụ không liên quan.</textarea>
 
   <hr class="sectionline">
   <h2>3. Ảnh tham chiếu (Reference Images)</h2>
@@ -101,11 +101,11 @@ footer{max-width:1200px;margin:-28px auto 30px;padding:0 18px;color:var(--muted)
     <label class="check"><input type="checkbox" name="refPurpose" value="Style (tham khảo phong cách hình ảnh)"><span>Phong cách hình ảnh (Style)</span></label>
     <label class="check"><input type="checkbox" name="refPurpose" value="Composition (tham khảo bố cục)"><span>Tham khảo bố cục (Composition)</span></label>
   </div>
-  <label for="refNotes">Ghi chú ảnh tham chiếu (Reference Notes)</label><textarea id="refNotes" placeholder="Ví dụ: ảnh 1 dùng nhận dạng; ảnh 2 chỉ tham khảo tư thế..."></textarea>
+  <label for="refNotes">Ghi chú ảnh tham chiếu (Reference Notes)</label><textarea id="refNotes" placeholder="Ví dụ: Ảnh 1 dùng để giữ khuôn mặt; ảnh 2 chỉ tham khảo tư thế ngồi."></textarea>
 
   <button id="generate" class="primary">✨ Tạo ảnh (Generate Image)</button>
   <div class="actions"><button id="buildPrompt" class="secondary">Tạo prompt xem trước (Build Prompt)</button><button id="copyPrompt" class="secondary">Sao chép prompt (Copy Prompt)</button></div>
-  <label for="promptOutput">Prompt cuối cùng (Final Prompt)</label><textarea id="promptOutput" placeholder="Prompt hoàn chỉnh sẽ xuất hiện ở đây..." style="min-height:170px"></textarea>
+  <label for="promptOutput">Prompt cuối cùng (Final Prompt)</label><textarea id="promptOutput" placeholder="Prompt hoàn chỉnh theo ví dụ cô gái mặc áo dài trong sân trường sẽ xuất hiện ở đây..." style="min-height:170px"></textarea>
   <div id="status" class="status">Chưa kết nối backend. Hãy triển khai backend, cấu hình API key trong .env và nhập địa chỉ backend ở phía trên.</div>
 </section>
 
@@ -128,7 +128,7 @@ footer{max-width:1200px;margin:-28px auto 30px;padding:0 18px;color:var(--muted)
   <p class="hint">Lưu ý chi phí: API tính phí riêng theo nhà cung cấp/model. “Cao nhất” được ánh xạ sang chế độ chất lượng tối đa mà model được cấu hình hỗ trợ; kích thước thực tế tùy model và tỷ lệ ảnh.</p>
 </section>
 </main>
-<footer>AI Image Studio V6 · GitHub Pages + backend riêng · API key chỉ ở backend · UI tiếng Việt (Vietnamese) + thuật ngữ tiếng Anh (English).</footer>
+<footer>AI Image Studio V6.4 · GitHub Pages + backend riêng · API key chỉ ở backend · UI tiếng Việt (Vietnamese) + thuật ngữ tiếng Anh (English).</footer>
 <script>
 const $ = id => document.getElementById(id);
 let referenceFiles = [];
