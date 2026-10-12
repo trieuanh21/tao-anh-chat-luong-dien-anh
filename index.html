@@ -56,15 +56,15 @@ footer{max-width:1200px;margin:-28px auto 30px;padding:0 18px;color:var(--muted)
     <div><label for="resolution">Độ phân giải (Resolution)</label><select id="resolution"><option value="max">Cao nhất model hỗ trợ (maximum supported)</option><option value="4K">4K (nếu model hỗ trợ)</option><option value="2K">2K (nếu model hỗ trợ)</option><option value="1K">1K (nhanh hơn)</option></select></div>
   </div>
   <label for="promptLanguage">Ngôn ngữ prompt (Prompt Language)</label>
-  <select id="promptLanguage"><option value="en">Tiếng Anh (English)</option><option value="vi">Tiếng Việt (Vietnamese)</option><option value="both">Tiếng Anh kèm bản dịch tiếng Việt (English + Vietnamese)</option></select>
+  <select id="promptLanguage"><option value="vi" selected>Tiếng Việt (Vietnamese)</option><option value="en">Tiếng Anh (English)</option><option value="both">Tiếng Anh kèm bản dịch tiếng Việt (English + Vietnamese)</option></select>
 
   <hr class="sectionline">
   <h2>2. Nội dung ảnh (Image Brief)</h2><p class="hint">Các ô đã có nội dung mặc định để làm khung prompt. Thím có thể sửa hoặc xóa từng phần; phần để trống sẽ được bỏ qua khi tạo prompt.</p>
-  <label for="subject">Chủ thể (Subject)</label><textarea id="subject" placeholder="Ví dụ: Nữ sinh Việt Nam mặc áo dài trắng ngồi trên ghế đá sân trường.">A clearly defined main subject, described with specific visual details.</textarea>
-  <label for="appearance">Nhận dạng và ngoại hình (Identity & Appearance)</label><textarea id="appearance" placeholder="Trang phục, tóc, khuôn mặt, đặc điểm cần giữ...">Natural, believable appearance; describe clothing, hairstyle, facial features, age range, and distinctive characteristics relevant to the subject.</textarea>
-  <label for="action">Hành động và tương tác vật lý (Action & Physical Interaction)</label><textarea id="action" placeholder="Tư thế, hành động, tay chạm vào đồ vật ra sao...">The subject performs one clear, physically plausible action. Hands and body interact naturally with nearby objects.</textarea>
-  <label for="environment">Bối cảnh (Environment)</label><textarea id="environment" placeholder="Địa điểm, thời tiết, vật thể xung quanh...">A believable real-world environment with relevant architecture, objects, and background details that support the scene.</textarea>
-  <label for="story">Khoảnh khắc kể chuyện (Narrative Moment)</label><textarea id="story" placeholder="Cảm xúc hoặc khoảnh khắc cần bắt được...">A candid, meaningful moment that feels spontaneous, emotionally readable, and grounded in everyday reality.</textarea>
+  <label for="subject">Chủ thể (Subject)</label><textarea id="subject" placeholder="Ví dụ: Nữ sinh Việt Nam mặc áo dài trắng ngồi trên ghế đá sân trường.">Mô tả rõ chủ thể chính bằng các đặc điểm hình ảnh cụ thể.</textarea>
+  <label for="appearance">Nhận dạng và ngoại hình (Identity & Appearance)</label><textarea id="appearance" placeholder="Mô tả trang phục, kiểu tóc, khuôn mặt và đặc điểm cần giữ...">Ngoại hình tự nhiên, đáng tin cậy; mô tả trang phục, kiểu tóc, đặc điểm khuôn mặt, độ tuổi phù hợp và những dấu hiệu nhận dạng quan trọng.</textarea>
+  <label for="action">Hành động và tương tác vật lý (Action & Physical Interaction)</label><textarea id="action" placeholder="Mô tả tư thế, hành động và cách tay tiếp xúc với đồ vật...">Chủ thể thực hiện một hành động rõ ràng, hợp lý về mặt vật lý. Bàn tay và cơ thể tương tác tự nhiên với các vật thể xung quanh.</textarea>
+  <label for="environment">Bối cảnh (Environment)</label><textarea id="environment" placeholder="Mô tả địa điểm, thời tiết và các vật thể xung quanh...">Bối cảnh đời thực đáng tin cậy, có kiến trúc, đồ vật và chi tiết hậu cảnh phù hợp với cảnh.</textarea>
+  <label for="story">Khoảnh khắc kể chuyện (Narrative Moment)</label><textarea id="story" placeholder="Mô tả cảm xúc hoặc khoảnh khắc muốn ghi lại...">Một khoảnh khắc đời thường có ý nghĩa, tự nhiên, dễ cảm nhận cảm xúc và gần gũi với thực tế.</textarea>
   <h3>Bố cục và máy ảnh (Composition & Camera)</h3>
   <div class="grid2">
     <div><label for="shot">Cỡ cảnh (Shot Size)</label><select id="shot"><option value="Wide shot (toàn cảnh)">Toàn cảnh (Wide shot)</option><option value="Medium shot (trung cảnh)">Trung cảnh (Medium shot)</option><option value="Close-up (cận cảnh)">Cận cảnh (Close-up)</option><option value="Extreme close-up (đặc tả)">Đặc tả (Extreme close-up)</option><option value="Full-body shot (toàn thân)">Toàn thân (Full-body shot)</option></select></div>
@@ -74,7 +74,7 @@ footer{max-width:1200px;margin:-28px auto 30px;padding:0 18px;color:var(--muted)
     <div><label for="lens">Ống kính (Lens)</label><select id="lens"><option value="35mm lens (ống kính 35mm)">35mm — tự nhiên (35mm, natural)</option><option value="24mm lens (ống kính 24mm)">24mm — góc rộng (24mm, wide)</option><option value="50mm lens (ống kính 50mm)">50mm — góc nhìn tự nhiên (50mm, normal)</option><option value="85mm lens (ống kính 85mm)">85mm — chân dung (85mm, portrait)</option><option value="telephoto lens (ống kính tele)">Tele — nén phối cảnh (telephoto)</option><option value="macro lens (ống kính macro)">Macro — cận chi tiết (macro)</option></select></div>
     <div><label for="dof">Độ sâu trường ảnh (Depth of Field)</label><select id="dof"><option value="Moderate depth of field (độ sâu trường ảnh trung bình)">Trung bình (moderate)</option><option value="Shallow depth of field, soft background bokeh (trường ảnh nông, hậu cảnh mờ)">Nông, hậu cảnh mờ (shallow)</option><option value="Deep depth of field, foreground to background in focus (trường ảnh sâu)">Sâu, nhiều lớp rõ (deep)</option></select></div>
   </div>
-  <label for="layers">Các lớp không gian (Spatial Layers)</label><textarea id="layers" placeholder="Tiền cảnh, trung cảnh, hậu cảnh; vật thể nào được phép che khuất...">Clear foreground, middle ground, and background. Keep the main subject unobstructed; use foreground elements only when they improve depth and framing.</textarea>
+  <label for="layers">Các lớp không gian (Spatial Layers)</label><textarea id="layers" placeholder="Mô tả tiền cảnh, trung cảnh, hậu cảnh và vật thể được phép xuất hiện...">Phân lớp tiền cảnh, trung cảnh và hậu cảnh rõ ràng. Không để vật thể che khuất chủ thể chính; chỉ dùng chi tiết tiền cảnh khi giúp tăng chiều sâu và tạo khung hình.</textarea>
   <div class="grid2">
     <div><label for="lighting">Ánh sáng (Lighting)</label><select id="lighting"><option value="Cinematic natural daylight (ánh sáng tự nhiên điện ảnh)">Ánh sáng tự nhiên điện ảnh (cinematic daylight)</option><option value="Soft diffused light (ánh sáng tán xạ mềm)">Tán xạ mềm (soft diffused)</option><option value="Cinematic low-key lighting (ánh sáng điện ảnh thiên tối)">Điện ảnh thiên tối (low-key)</option><option value="Golden hour sunlight (nắng giờ vàng)">Nắng giờ vàng (golden hour)</option><option value="Studio lighting with soft key light (ánh sáng studio mềm)">Studio mềm (soft studio)</option><option value="Hard directional sunlight (nắng chiếu hướng rõ)">Nắng hướng mạnh (hard directional)</option></select></div>
     <div><label for="style">Phong cách hình ảnh (Visual Style)</label><select id="style"><option value="Photorealistic cinematic 35mm film still (khung hình phim 35mm chân thực)">Phim 35mm chân thực (photorealistic film still)</option><option value="Documentary photography (nhiếp ảnh tài liệu)">Tài liệu (documentary)</option><option value="Editorial fashion photography (ảnh thời trang biên tập)">Thời trang (editorial fashion)</option><option value="Anime illustration (minh họa anime)">Anime (anime illustration)</option><option value="Oil painting (tranh sơn dầu)">Sơn dầu (oil painting)</option><option value="3D stylized render (hình dựng 3D cách điệu)">Dựng 3D (3D render)</option><option value="Watercolor illustration (minh họa màu nước)">Màu nước (watercolor)</option></select></div>
@@ -84,8 +84,8 @@ footer{max-width:1200px;margin:-28px auto 30px;padding:0 18px;color:var(--muted)
     <div><label for="mood">Cảm xúc (Mood)</label><select id="mood"><option value="Natural, optimistic, lively (tự nhiên, lạc quan, sống động)">Tự nhiên, lạc quan (natural, optimistic)</option><option value="Dreamlike and mysterious (mơ màng, bí ẩn)">Mơ màng, bí ẩn (dreamlike)</option><option value="Melancholic and contemplative (man mác buồn, suy tư)">Man mác buồn (melancholic)</option><option value="Tense and dramatic (căng thẳng, kịch tính)">Kịch tính (dramatic)</option><option value="Calm and intimate (bình yên, gần gũi)">Bình yên (calm, intimate)</option></select></div>
   </div>
   <label for="realism">Chất liệu và tính chân thực vật lý (Material & Physical Realism)</label><textarea id="realism">Anatomically correct proportions, natural hand-object contact, believable weight and movement, realistic materials, natural fabric folds, consistent perspective and physically plausible shadows.</textarea>
-  <label for="negative">Điều cần tránh (Negative Constraints)</label><textarea id="negative" placeholder="Ví dụ: distorted fingers, extra limbs, unrealistic fabric, overly dark exposure...">Avoid distorted anatomy, malformed hands, extra fingers or limbs, duplicated objects, floating objects, inconsistent perspective, artificial textures, excessive sharpening, and unintended text or watermarks.</textarea>
-  <label for="extra">Ghi chú bổ sung (Additional Notes)</label><textarea id="extra" placeholder="Chi tiết quan trọng khác...">Preserve the core idea. Do not add unrelated subjects or props. Keep all visual details consistent with the requested scene.</textarea>
+  <label for="negative">Điều cần tránh (Negative Constraints)</label><textarea id="negative" placeholder="Ví dụ: ngón tay méo, thừa chi, vải thiếu chân thực, ảnh quá tối...">Tránh giải phẫu méo mó, bàn tay dị dạng, thừa ngón hoặc chi, vật thể bị nhân đôi hoặc lơ lửng, phối cảnh thiếu nhất quán, bề mặt giả tạo, tăng nét quá mức, chữ hoặc hình mờ ngoài ý muốn.</textarea>
+  <label for="extra">Ghi chú bổ sung (Additional Notes)</label><textarea id="extra" placeholder="Nhập chi tiết quan trọng khác...">Giữ nguyên ý tưởng cốt lõi. Không tự thêm chủ thể hoặc đạo cụ không liên quan. Đảm bảo mọi chi tiết hình ảnh nhất quán với cảnh được yêu cầu.</textarea>
 
   <hr class="sectionline">
   <h2>3. Ảnh tham chiếu (Reference Images)</h2>
@@ -105,7 +105,7 @@ footer{max-width:1200px;margin:-28px auto 30px;padding:0 18px;color:var(--muted)
 
   <button id="generate" class="primary">✨ Tạo ảnh (Generate Image)</button>
   <div class="actions"><button id="buildPrompt" class="secondary">Tạo prompt xem trước (Build Prompt)</button><button id="copyPrompt" class="secondary">Sao chép prompt (Copy Prompt)</button></div>
-  <label for="promptOutput">Prompt cuối cùng (Final Prompt)</label><textarea id="promptOutput" placeholder="Prompt được tạo sẽ hiện ở đây..." style="min-height:170px"></textarea>
+  <label for="promptOutput">Prompt cuối cùng (Final Prompt)</label><textarea id="promptOutput" placeholder="Prompt hoàn chỉnh sẽ xuất hiện ở đây..." style="min-height:170px"></textarea>
   <div id="status" class="status">Chưa kết nối backend. Hãy triển khai backend, cấu hình API key trong .env và nhập địa chỉ backend ở phía trên.</div>
 </section>
 
@@ -154,24 +154,44 @@ $("references").addEventListener("change", e => {
 });
 function selectedPurposes(){return Array.from(document.querySelectorAll('input[name="refPurpose"]:checked')).map(x=>x.value)}
 function makePrompt(){
-  const get = id => $(id).value.trim();
-  const sections = [];
-  const add = (title,id) => { const v=get(id); if(v) sections.push(`${title}: ${v}`); };
-  add("SUBJECT (CHỦ THỂ)","subject"); add("IDENTITY & APPEARANCE (NHẬN DẠNG VÀ NGOẠI HÌNH)","appearance");
-  add("ACTION & PHYSICAL INTERACTION (HÀNH ĐỘNG VÀ TƯƠNG TÁC VẬT LÝ)","action"); add("ENVIRONMENT (BỐI CẢNH)","environment");
-  add("NARRATIVE MOMENT (KHOẢNH KHẮC KỂ CHUYỆN)","story");
-  sections.push(`COMPOSITION & CAMERA (BỐ CỤC VÀ MÁY ẢNH): ${get("shot")}; ${get("angle")}; ${$("ratio").value} aspect ratio (tỷ lệ khung hình); ${get("lens")}; ${get("dof")}. ${get("layers")}`);
-  sections.push(`LIGHTING (ÁNH SÁNG): ${get("lighting")}`);
-  sections.push(`VISUAL STYLE (PHONG CÁCH HÌNH ẢNH): ${get("style")}`);
-  add("COLOR & MOOD (MÀU SẮC VÀ TÂM TRẠNG)","palette"); add("COLOR & MOOD (MÀU SẮC VÀ TÂM TRẠNG)","mood");
-  add("MATERIAL & PHYSICAL REALISM (CHẤT LIỆU VÀ TÍNH CHÂN THỰC VẬT LÝ)","realism");
-  add("IMPORTANT CONSTRAINTS (RÀNG BUỘC QUAN TRỌNG)","negative"); add("ADDITIONAL NOTES (GHI CHÚ BỔ SUNG)","extra");
-  const purposes=selectedPurposes();
-  if(referenceFiles.length) sections.push(`REFERENCE IMAGE INSTRUCTION (HƯỚNG DẪN ẢNH THAM CHIẾU): Use the uploaded reference image(s) as visual guidance only for these selected attributes: ${purposes.join(", ") || "general visual guidance"}. Preserve selected attributes and follow the new scene described above. Do not blindly copy unrelated details. ${get("refNotes") ? "Reference notes: "+get("refNotes") : ""}`);
   const lang=$("promptLanguage").value;
-  if(lang==="vi") return "Tạo một ảnh theo mô tả sau. Giữ đúng chủ thể, hành động, bố cục và các ràng buộc đã nêu.\n\n"+sections.join("\n\n");
-  if(lang==="both") return sections.join("\n\n")+"\n\nBẢN DIỄN GIẢI TIẾNG VIỆT (VIETNAMESE INTERPRETATION):\n"+sections.map(s=>s.replace(/^[A-Z &()]+:\s*/,"")).join("\n\n");
-  return "Generate a single image following this brief. Preserve the subject, action, composition, and constraints exactly as specified.\n\n"+sections.join("\n\n");
+  const raw = id => $(id).value.trim();
+  const viSelect = id => {
+    const el=$(id);
+    if(!el || !el.options) return raw(id);
+    return el.options[el.selectedIndex].text.replace(/\s*\([^)]*\)/g,"").trim();
+  };
+  const purposes=selectedPurposes();
+  const purposeVi={"Identity":"giữ gương mặt và nhận dạng nhân vật","Outfit":"giữ trang phục","Hairstyle":"giữ kiểu tóc","Pose":"tham khảo tư thế","Style":"tham khảo phong cách hình ảnh","Composition":"tham khảo bố cục"};
+  const viSections=[];
+  const enSections=[];
+  const addBoth=(viTitle,enTitle,id)=>{
+    const v=raw(id);
+    if(v){viSections.push(`${viTitle}: ${v}`);enSections.push(`${enTitle}: ${v}`);}
+  };
+  addBoth("CHỦ THỂ","SUBJECT","subject");
+  addBoth("NHẬN DẠNG VÀ NGOẠI HÌNH","IDENTITY & APPEARANCE","appearance");
+  addBoth("HÀNH ĐỘNG VÀ TƯƠNG TÁC VẬT LÝ","ACTION & PHYSICAL INTERACTION","action");
+  addBoth("BỐI CẢNH","ENVIRONMENT","environment");
+  addBoth("KHOẢNH KHẮC KỂ CHUYỆN","NARRATIVE MOMENT","story");
+  const viComposition=`BỐ CỤC VÀ MÁY ẢNH: ${viSelect("shot")}; ${viSelect("angle")}; tỷ lệ khung hình ${$("ratio").value}; ${viSelect("lens")}; ${viSelect("dof")}. ${raw("layers")}`;
+  const enComposition=`COMPOSITION & CAMERA: ${raw("shot")}; ${raw("angle")}; ${$("ratio").value} aspect ratio; ${raw("lens")}; ${raw("dof")}. ${raw("layers")}`;
+  viSections.push(viComposition); enSections.push(enComposition);
+  viSections.push(`ÁNH SÁNG: ${viSelect("lighting")}`); enSections.push(`LIGHTING: ${raw("lighting")}`);
+  viSections.push(`PHONG CÁCH HÌNH ẢNH: ${viSelect("style")}`); enSections.push(`VISUAL STYLE: ${raw("style")}`);
+  viSections.push(`MÀU SẮC: ${viSelect("palette")}`); enSections.push(`COLOR PALETTE: ${raw("palette")}`);
+  viSections.push(`CẢM XÚC: ${viSelect("mood")}`); enSections.push(`MOOD: ${raw("mood")}`);
+  addBoth("CHẤT LIỆU VÀ TÍNH CHÂN THỰC VẬT LÝ","MATERIAL & PHYSICAL REALISM","realism");
+  addBoth("ĐIỀU CẦN TRÁNH","IMPORTANT CONSTRAINTS","negative");
+  addBoth("GHI CHÚ BỔ SUNG","ADDITIONAL NOTES","extra");
+  if(referenceFiles.length){
+    const viPurposes=purposes.map(x=>purposeVi[x]||x).join(", ")||"tham khảo hình ảnh tổng quát";
+    viSections.push(`HƯỚNG DẪN ẢNH THAM CHIẾU: Dùng ảnh đã tải lên làm tư liệu tham khảo cho các mục đã chọn: ${viPurposes}. Chỉ giữ những thuộc tính được chọn; thực hiện bối cảnh và hành động mới theo mô tả bên trên. Không sao chép máy móc các chi tiết không liên quan.${raw("refNotes")?" Ghi chú tham chiếu: "+raw("refNotes"):""}`);
+    enSections.push(`REFERENCE IMAGE INSTRUCTION: Use uploaded reference image(s) only for these selected attributes: ${purposes.join(", ")||"general visual guidance"}. Preserve selected attributes while following the new scene and action described above. Do not blindly copy unrelated details.${raw("refNotes")?" Reference notes: "+raw("refNotes"):""}`);
+  }
+  if(lang==="vi") return "Tạo một ảnh theo mô tả sau. Giữ đúng chủ thể, hành động, bố cục và các yêu cầu đã nêu.\n\n"+viSections.join("\n\n");
+  if(lang==="both") return "ENGLISH PROMPT (TIẾNG ANH):\nGenerate a single image following this brief. Preserve the subject, action, composition, and constraints exactly as specified.\n\n"+enSections.join("\n\n")+"\n\nBẢN TIẾNG VIỆT (VIETNAMESE VERSION):\nTạo một ảnh theo mô tả sau.\n\n"+viSections.join("\n\n");
+  return "Generate a single image following this brief. Preserve the subject, action, composition, and constraints exactly as specified.\n\n"+enSections.join("\n\n");
 }
 function setStatus(msg,err=false,ok=false){const el=$("status");el.textContent=msg;el.className="status"+(err?" err":ok?" ok":"")}
 $("buildPrompt").addEventListener("click",()=>{$("promptOutput").value=makePrompt();setStatus("Đã tạo prompt xem trước. (Prompt preview ready.)",false,true)});
