@@ -25,15 +25,18 @@ button,.button{border:0;border-radius:10px;background:var(--accent);color:#10172
 small{color:var(--muted)}.sectionline{border:0;border-top:1px solid var(--line);margin:20px 0}
 footer{max-width:1200px;margin:-28px auto 30px;padding:0 18px;color:var(--muted);font-size:12px}
 @media(max-width:850px){main{grid-template-columns:1fr}.grid3{grid-template-columns:1fr 1fr}}@media(max-width:480px){.grid2,.checks,.grid3{grid-template-columns:1fr}.panel{padding:15px}}
+.api-toggle-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:16px}.api-toggle-row .hint{margin:0}.api-tools[hidden]{display:none!important}.prompt-language{margin:10px 0 18px;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
 </style>
 </head>
 <body>
 <header>
-  <h1>AI Image Studio <span style="color:var(--accent)">V6.7</span></h1>
-  <p>Tạo prompt, dùng ảnh tham chiếu để định hướng nhân vật, gửi đến OpenAI hoặc Gemini API, xem kết quả và tải ảnh gốc. V6.7 bổ sung chế độ giữ nhận dạng người mẫu; các tính năng cũ vẫn được giữ nguyên.</p>
-  <div><span class="pill">Giao diện web</span><span class="pill">Backend chạy local</span><span class="pill">Không cần mật khẩu</span><span class="pill">API key vẫn nằm trong .env</span></div>
+  <h1>AI Image Studio <span style="color:var(--accent)">V6.8</span></h1>
+  <p>Ưu tiên tạo và sao chép prompt. Các công cụ tạo/xuất ảnh bằng OpenAI và Gemini được thu gọn, chỉ hiện khi thím chủ động mở; mọi tính năng cũ vẫn được giữ nguyên.</p>
+  <div><span class="pill">Giao diện web</span><span class="pill">Backend chạy local</span><span class="pill">Không cần mật khẩu</span><span class="pill">Mặc định: chỉ tạo prompt</span><span class="pill">API key vẫn nằm trong .env</span></div>
+  <div class="api-toggle-row"><button type="button" id="toggleApiTools" class="secondary" aria-expanded="false" aria-controls="apiToolsPanel">☁ Hiện công cụ tạo/xuất ảnh qua API</button><span class="hint">Đang ẩn các menu API để giao diện gọn hơn.</span></div>
 </header>
 <main>
+<div id="apiToolsPanel" class="api-tools" hidden>
 <section class="panel">
   <h2>1. Kết nối dịch vụ (Provider Setup)</h2>
   <p class="hint">Backend local của thím. Không cần đăng nhập bằng mật khẩu; API key vẫn được giữ trong file .env, không đưa vào trình duyệt.</p>
@@ -49,11 +52,17 @@ footer{max-width:1200px;margin:-28px auto 30px;padding:0 18px;color:var(--muted)
     <div id="openaiModelWrap" hidden><label for="openaiModel">Model OpenAI (OpenAI Image Model)</label><select id="openaiModel"><option value="gpt-image-2.5-sunburst">GPT Image 2.5 Sunburst — chất lượng tối đa (max)</option><option value="gpt-image-2.5-flare">GPT Image 2.5 Flare (max)</option><option value="gpt-image-2">GPT Image 2 (high)</option></select></div>
     <div><label for="resolution">Độ phân giải (Resolution)</label><select id="resolution"><option value="max">Cao nhất model hỗ trợ (maximum supported)</option><option value="4K">4K (nếu model hỗ trợ)</option><option value="2K">2K (nếu model hỗ trợ)</option><option value="1K">1K (nhanh hơn)</option></select></div>
   </div>
-  <label for="promptLanguage">Ngôn ngữ prompt (Prompt Language)</label>
-  <select id="promptLanguage"><option value="vi" selected>Tiếng Việt (Vietnamese)</option><option value="en">Tiếng Anh (English)</option><option value="both">Tiếng Anh kèm bản dịch tiếng Việt (English + Vietnamese)</option></select>
 
+
+
+</section>
+</div>
+
+<section class="panel">
   <hr class="sectionline">
-  <h2>2. Nội dung ảnh (Image Brief)</h2><p class="hint">Các ô đã được điền sẵn bằng một ví dụ hoàn chỉnh: cô gái Việt Nam mặc áo dài, cầm nón lá và bấm điện thoại trên ghế đá sân trường. Thím sửa theo ý mình hoặc xóa phần không cần; ô nào để trống sẽ được bỏ qua khi tạo prompt.</p>
+  <h2>1. Tạo prompt (Prompt Builder)</h2><p class="hint">Các ô đã được điền sẵn bằng một ví dụ hoàn chỉnh: cô gái Việt Nam mặc áo dài, cầm nón lá và bấm điện thoại trên ghế đá sân trường. Thím sửa theo ý mình hoặc xóa phần không cần; ô nào để trống sẽ được bỏ qua khi tạo prompt.</p>
+  <div class="prompt-language">  <label for="promptLanguage">Ngôn ngữ prompt (Prompt Language)</label>
+  <select id="promptLanguage"><option value="vi" selected>Tiếng Việt (Vietnamese)</option><option value="en">Tiếng Anh (English)</option><option value="both">Tiếng Anh kèm bản dịch tiếng Việt (English + Vietnamese)</option></select></div>
   <label for="subject">Chủ thể (Subject)</label><textarea id="subject" placeholder="Ví dụ: Một cô gái Việt Nam mặc áo dài trắng, tay cầm nón lá, ngồi trên ghế đá trong sân trường và bấm điện thoại.">Một cô gái Việt Nam mặc áo dài trắng, tay cầm nón lá và ngồi bấm điện thoại trên ghế đá trong sân trường.</textarea>
   <label for="appearance">Nhận dạng và ngoại hình (Identity & Appearance)</label><textarea id="appearance" placeholder="Ví dụ: Tóc đen dài buộc nửa đầu, gương mặt tự nhiên, áo dài trắng tay dài, quần trắng, không trang điểm đậm.">Cô gái có mái tóc đen dài buộc nửa đầu, gương mặt tự nhiên, mặc áo dài trắng tay dài và quần trắng; vẻ ngoài giản dị như nữ sinh Việt Nam.</textarea>
   <label for="action">Hành động và tương tác vật lý (Action & Physical Interaction)</label><textarea id="action" placeholder="Ví dụ: Cô gái ngồi thoải mái, tay phải bấm điện thoại, tay trái giữ chiếc nón lá đặt trên đùi.">Cô gái ngồi thoải mái trên ghế đá, cúi nhẹ nhìn màn hình và dùng tay phải bấm điện thoại; tay trái giữ chiếc nón lá đặt trên đùi. Tư thế và tiếp xúc giữa bàn tay với đồ vật tự nhiên.</textarea>
@@ -99,10 +108,12 @@ footer{max-width:1200px;margin:-28px auto 30px;padding:0 18px;color:var(--muted)
   <label for="extra">Ghi chú bổ sung (Additional Notes)</label><textarea id="extra" placeholder="Ví dụ: Giữ màu áo dài trắng tinh khôi, cảnh đời thường, không thêm người đứng sát nhân vật.">Ưu tiên cảm giác ảnh chụp đời thực, màu sắc tự nhiên, áo dài trắng rõ nếp vải; giữ cô gái là chủ thể chính và không thêm đạo cụ không liên quan.</textarea>
 
   <hr class="sectionline">
-  <h2>3. Ảnh tham chiếu (Reference Images)</h2>
-  <p class="hint">Ảnh sẽ được gửi qua backend đến API đã chọn. Chỉ tải ảnh bạn có quyền sử dụng. Ảnh không được lưu vào GitHub Pages.</p>
+  <div class="api-tools" hidden>
+  <h2>Ảnh tham chiếu gửi API (API Reference Images)</h2>
+  <p class="hint">Phần tải ảnh tham chiếu chỉ cần mở khi sử dụng API. Chỉ tải ảnh bạn có quyền sử dụng.</p>
   <div class="drop"><label for="references">Chọn ảnh tham chiếu (Upload Reference Images)</label><input id="references" type="file" accept="image/png,image/jpeg,image/webp" multiple><small>PNG, JPEG, WebP. Giới hạn mặc định 4 ảnh, mỗi ảnh tối đa 10 MB.</small></div>
   <div id="referencePreview" class="preview"></div>
+  </div>
   <h3>Chế độ người mẫu (Character Reference Mode)</h3>
   <p class="hint">Chế độ mới: ưu tiên giữ khuôn mặt, kiểu tóc và tỷ lệ vóc dáng của ảnh mẫu; cho phép thay đổi trang phục, tư thế và cách tạo dáng theo prompt. Không thể bảo đảm giống 100% vì kết quả phụ thuộc model/API và ảnh đầu vào.</p>
   <label for="characterMode">Cách sử dụng ảnh tham chiếu (Reference Mode)</label>
@@ -128,13 +139,13 @@ footer{max-width:1200px;margin:-28px auto 30px;padding:0 18px;color:var(--muted)
   </div>
   <label for="refNotes">Ghi chú ảnh tham chiếu (Reference Notes)</label><textarea id="refNotes" placeholder="Ví dụ: Ảnh 1 dùng để giữ khuôn mặt; ảnh 2 chỉ tham khảo tư thế ngồi."></textarea>
 
-  <button id="generate" class="primary">✨ Tạo ảnh (Generate Image)</button>
+  <div class="api-tools" hidden><button id="generate" class="primary">✨ Tạo ảnh qua API (Generate Image)</button></div>
   <div class="actions"><button id="buildPrompt" class="secondary">Tạo prompt xem trước (Build Prompt)</button><button id="copyPrompt" class="secondary">Sao chép prompt (Copy Prompt)</button></div>
   <label for="promptOutput">Prompt cuối cùng (Final Prompt)</label><textarea id="promptOutput" placeholder="Prompt hoàn chỉnh theo ví dụ cô gái mặc áo dài trong sân trường sẽ xuất hiện ở đây..." style="min-height:170px"></textarea>
-  <div id="status" class="status">Backend mặc định: http://localhost:8787. Đảm bảo backend đang chạy trên máy này; nếu dùng backend online, hãy thay URL ở ô phía trên.</div>
+  <div id="status" class="status">Chế độ tạo prompt: không gọi API và không phát sinh phí. Bấm “Tạo prompt xem trước” rồi sao chép prompt để dùng trong ComfyUI hoặc công cụ khác.</div>
 </section>
 
-<section class="panel">
+<section class="panel api-tools" hidden>
   <h2>4. Kết quả (Generated Result)</h2>
   <p class="hint">Ảnh hiển thị bên dưới là kết quả trả về từ API. Nút tải về lưu dữ liệu ảnh gốc nhận được, không phải ảnh chụp màn hình hay ảnh thu nhỏ.</p>
   <div id="empty" class="drop" style="padding:45px 15px"><strong>Chưa có ảnh</strong><p class="hint">Sau khi tạo ảnh thành công, ảnh sẽ xuất hiện ở đây.</p></div>
@@ -153,12 +164,21 @@ footer{max-width:1200px;margin:-28px auto 30px;padding:0 18px;color:var(--muted)
   <p class="hint">Lưu ý chi phí: API tính phí riêng theo nhà cung cấp/model. “Cao nhất” được ánh xạ sang chế độ chất lượng tối đa mà model được cấu hình hỗ trợ; kích thước thực tế tùy model và tỷ lệ ảnh.</p>
 </section>
 </main>
-<footer>AI Image Studio V6.7.1 · Backend URL mặc định localhost:8787 · GitHub Pages + backend riêng · API key chỉ ở backend · UI tiếng Việt (Vietnamese) + thuật ngữ tiếng Anh (English).</footer>
+<footer>AI Image Studio V6.8 · Mặc định tạo prompt, không gọi API · Công cụ OpenAI/Gemini được thu gọn · API key chỉ ở backend.</footer>
 <script>
 const $ = id => document.getElementById(id);
 let referenceFiles = [];
 let currentBlob = null, currentMime = "image/png", currentFilename = "ai-image.png";
 const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const toggleApiTools = $("toggleApiTools");
+toggleApiTools.addEventListener("click", () => {
+  const opening = toggleApiTools.getAttribute("aria-expanded") !== "true";
+  document.querySelectorAll(".api-tools").forEach(el => { el.hidden = !opening; });
+  toggleApiTools.setAttribute("aria-expanded", String(opening));
+  toggleApiTools.textContent = opening ? "☁ Ẩn công cụ tạo/xuất ảnh qua API" : "☁ Hiện công cụ tạo/xuất ảnh qua API";
+  const hint = document.querySelector(".api-toggle-row .hint");
+  if (hint) hint.textContent = opening ? "Đã mở menu API. Chỉ tạo ảnh khi thím bấm nút tạo ảnh." : "Đang ẩn các menu API để giao diện gọn hơn.";
+});
 function updateProvider(){
   const gemini = $("provider").value === "gemini";
   $("geminiModelWrap").hidden = !gemini;
