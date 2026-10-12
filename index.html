@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>AI Image Studio V6</title>
+<title>AI Image Studio V6.1</title>
 <style>
 :root{color-scheme:dark;--bg:#10131a;--panel:#191e29;--line:#303849;--text:#edf1f8;--muted:#a8b2c4;--accent:#8ab4ff;--accent2:#b4f0cf;--danger:#ffb4ab}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 10% 0%,#1b2940 0,transparent 35%),var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,Segoe UI,sans-serif}
@@ -29,7 +29,7 @@ footer{max-width:1200px;margin:-28px auto 30px;padding:0 18px;color:var(--muted)
 </head>
 <body>
 <header>
-  <h1>AI Image Studio <span style="color:var(--accent)">V6</span></h1>
+  <h1>AI Image Studio <span style="color:var(--accent)">V6.1</span></h1>
   <p>Tạo prompt, gửi ảnh tham chiếu đến OpenAI hoặc Gemini API, xem kết quả và tải ảnh gốc. Giao diện tiếng Việt kèm thuật ngữ tiếng Anh trong ngoặc.</p>
   <div><span class="pill">GitHub Pages (giao diện)</span><span class="pill">Backend riêng (máy chủ trung gian)</span><span class="pill">Không lưu API key trong trình duyệt</span></div>
 </header>
@@ -39,6 +39,13 @@ footer{max-width:1200px;margin:-28px auto 30px;padding:0 18px;color:var(--muted)
   <p class="hint">Địa chỉ backend được công khai; API key chỉ được lưu trong file .env trên backend, tuyệt đối không nhập API key vào ô này.</p>
   <label for="backendUrl">Địa chỉ backend (Backend URL)</label>
   <input id="backendUrl" placeholder="https://ten-backend-cua-ban.onrender.com" autocomplete="url">
+  <label for="studioPassword">Mật khẩu sử dụng API (AI Studio Password)</label>
+  <div class="grid2">
+    <input id="studioPassword" type="password" placeholder="Nhập mật khẩu do bạn đặt" autocomplete="current-password">
+    <button id="unlock" type="button" class="secondary">Mở khóa (Unlock)</button>
+  </div>
+  <div class="actions"><button id="logout" type="button" class="secondary" disabled>Khóa phiên (Lock Session)</button></div>
+  <p class="hint">Mật khẩu được gửi đến backend để xác thực; app chỉ giữ mã phiên trong bộ nhớ của tab hiện tại, không lưu mật khẩu hoặc mã phiên vào localStorage.</p>
   <div class="grid2">
     <div><label for="provider">Nhà cung cấp (Provider)</label><select id="provider"><option value="gemini">Gemini API (Google)</option><option value="openai">OpenAI API</option></select></div>
     <div><label for="ratio">Tỷ lệ khung hình (Aspect Ratio)</label><select id="ratio"><option value="16:9">Ngang 16:9 (landscape widescreen)</option><option value="3:2">Ngang 3:2 (landscape)</option><option value="4:3">Ngang 4:3 (standard landscape)</option><option value="1:1">Vuông 1:1 (square)</option><option value="3:4">Dọc 3:4 (portrait)</option><option value="2:3">Dọc 2:3 (portrait)</option><option value="9:16">Dọc 9:16 (vertical video)</option><option value="21:9">Siêu rộng 21:9 (ultrawide)</option></select></div>
@@ -52,12 +59,12 @@ footer{max-width:1200px;margin:-28px auto 30px;padding:0 18px;color:var(--muted)
   <select id="promptLanguage"><option value="en">Tiếng Anh (English)</option><option value="vi">Tiếng Việt (Vietnamese)</option><option value="both">Tiếng Anh kèm bản dịch tiếng Việt (English + Vietnamese)</option></select>
 
   <hr class="sectionline">
-  <h2>2. Nội dung ảnh (Image Brief)</h2>
-  <label for="subject">Chủ thể (Subject)</label><textarea id="subject" placeholder="Ví dụ: Nữ sinh Việt Nam mặc áo dài trắng ngồi trên ghế đá sân trường."></textarea>
-  <label for="appearance">Nhận dạng và ngoại hình (Identity & Appearance)</label><textarea id="appearance" placeholder="Trang phục, tóc, khuôn mặt, đặc điểm cần giữ..."></textarea>
-  <label for="action">Hành động và tương tác vật lý (Action & Physical Interaction)</label><textarea id="action" placeholder="Tư thế, hành động, tay chạm vào đồ vật ra sao..."></textarea>
-  <label for="environment">Bối cảnh (Environment)</label><textarea id="environment" placeholder="Địa điểm, thời tiết, vật thể xung quanh..."></textarea>
-  <label for="story">Khoảnh khắc kể chuyện (Narrative Moment)</label><textarea id="story" placeholder="Cảm xúc hoặc khoảnh khắc cần bắt được..."></textarea>
+  <h2>2. Nội dung ảnh (Image Brief)</h2><p class="hint">Các ô đã có nội dung mặc định để làm khung prompt. Thím có thể sửa hoặc xóa từng phần; phần để trống sẽ được bỏ qua khi tạo prompt.</p>
+  <label for="subject">Chủ thể (Subject)</label><textarea id="subject" placeholder="Ví dụ: Nữ sinh Việt Nam mặc áo dài trắng ngồi trên ghế đá sân trường.">A clearly defined main subject, described with specific visual details.</textarea>
+  <label for="appearance">Nhận dạng và ngoại hình (Identity & Appearance)</label><textarea id="appearance" placeholder="Trang phục, tóc, khuôn mặt, đặc điểm cần giữ...">Natural, believable appearance; describe clothing, hairstyle, facial features, age range, and distinctive characteristics relevant to the subject.</textarea>
+  <label for="action">Hành động và tương tác vật lý (Action & Physical Interaction)</label><textarea id="action" placeholder="Tư thế, hành động, tay chạm vào đồ vật ra sao...">The subject performs one clear, physically plausible action. Hands and body interact naturally with nearby objects.</textarea>
+  <label for="environment">Bối cảnh (Environment)</label><textarea id="environment" placeholder="Địa điểm, thời tiết, vật thể xung quanh...">A believable real-world environment with relevant architecture, objects, and background details that support the scene.</textarea>
+  <label for="story">Khoảnh khắc kể chuyện (Narrative Moment)</label><textarea id="story" placeholder="Cảm xúc hoặc khoảnh khắc cần bắt được...">A candid, meaningful moment that feels spontaneous, emotionally readable, and grounded in everyday reality.</textarea>
   <h3>Bố cục và máy ảnh (Composition & Camera)</h3>
   <div class="grid2">
     <div><label for="shot">Cỡ cảnh (Shot Size)</label><select id="shot"><option value="Wide shot (toàn cảnh)">Toàn cảnh (Wide shot)</option><option value="Medium shot (trung cảnh)">Trung cảnh (Medium shot)</option><option value="Close-up (cận cảnh)">Cận cảnh (Close-up)</option><option value="Extreme close-up (đặc tả)">Đặc tả (Extreme close-up)</option><option value="Full-body shot (toàn thân)">Toàn thân (Full-body shot)</option></select></div>
@@ -67,7 +74,7 @@ footer{max-width:1200px;margin:-28px auto 30px;padding:0 18px;color:var(--muted)
     <div><label for="lens">Ống kính (Lens)</label><select id="lens"><option value="35mm lens (ống kính 35mm)">35mm — tự nhiên (35mm, natural)</option><option value="24mm lens (ống kính 24mm)">24mm — góc rộng (24mm, wide)</option><option value="50mm lens (ống kính 50mm)">50mm — góc nhìn tự nhiên (50mm, normal)</option><option value="85mm lens (ống kính 85mm)">85mm — chân dung (85mm, portrait)</option><option value="telephoto lens (ống kính tele)">Tele — nén phối cảnh (telephoto)</option><option value="macro lens (ống kính macro)">Macro — cận chi tiết (macro)</option></select></div>
     <div><label for="dof">Độ sâu trường ảnh (Depth of Field)</label><select id="dof"><option value="Moderate depth of field (độ sâu trường ảnh trung bình)">Trung bình (moderate)</option><option value="Shallow depth of field, soft background bokeh (trường ảnh nông, hậu cảnh mờ)">Nông, hậu cảnh mờ (shallow)</option><option value="Deep depth of field, foreground to background in focus (trường ảnh sâu)">Sâu, nhiều lớp rõ (deep)</option></select></div>
   </div>
-  <label for="layers">Các lớp không gian (Spatial Layers)</label><textarea id="layers" placeholder="Tiền cảnh, trung cảnh, hậu cảnh; vật thể nào được phép che khuất..."></textarea>
+  <label for="layers">Các lớp không gian (Spatial Layers)</label><textarea id="layers" placeholder="Tiền cảnh, trung cảnh, hậu cảnh; vật thể nào được phép che khuất...">Clear foreground, middle ground, and background. Keep the main subject unobstructed; use foreground elements only when they improve depth and framing.</textarea>
   <div class="grid2">
     <div><label for="lighting">Ánh sáng (Lighting)</label><select id="lighting"><option value="Cinematic natural daylight (ánh sáng tự nhiên điện ảnh)">Ánh sáng tự nhiên điện ảnh (cinematic daylight)</option><option value="Soft diffused light (ánh sáng tán xạ mềm)">Tán xạ mềm (soft diffused)</option><option value="Cinematic low-key lighting (ánh sáng điện ảnh thiên tối)">Điện ảnh thiên tối (low-key)</option><option value="Golden hour sunlight (nắng giờ vàng)">Nắng giờ vàng (golden hour)</option><option value="Studio lighting with soft key light (ánh sáng studio mềm)">Studio mềm (soft studio)</option><option value="Hard directional sunlight (nắng chiếu hướng rõ)">Nắng hướng mạnh (hard directional)</option></select></div>
     <div><label for="style">Phong cách hình ảnh (Visual Style)</label><select id="style"><option value="Photorealistic cinematic 35mm film still (khung hình phim 35mm chân thực)">Phim 35mm chân thực (photorealistic film still)</option><option value="Documentary photography (nhiếp ảnh tài liệu)">Tài liệu (documentary)</option><option value="Editorial fashion photography (ảnh thời trang biên tập)">Thời trang (editorial fashion)</option><option value="Anime illustration (minh họa anime)">Anime (anime illustration)</option><option value="Oil painting (tranh sơn dầu)">Sơn dầu (oil painting)</option><option value="3D stylized render (hình dựng 3D cách điệu)">Dựng 3D (3D render)</option><option value="Watercolor illustration (minh họa màu nước)">Màu nước (watercolor)</option></select></div>
@@ -77,8 +84,8 @@ footer{max-width:1200px;margin:-28px auto 30px;padding:0 18px;color:var(--muted)
     <div><label for="mood">Cảm xúc (Mood)</label><select id="mood"><option value="Natural, optimistic, lively (tự nhiên, lạc quan, sống động)">Tự nhiên, lạc quan (natural, optimistic)</option><option value="Dreamlike and mysterious (mơ màng, bí ẩn)">Mơ màng, bí ẩn (dreamlike)</option><option value="Melancholic and contemplative (man mác buồn, suy tư)">Man mác buồn (melancholic)</option><option value="Tense and dramatic (căng thẳng, kịch tính)">Kịch tính (dramatic)</option><option value="Calm and intimate (bình yên, gần gũi)">Bình yên (calm, intimate)</option></select></div>
   </div>
   <label for="realism">Chất liệu và tính chân thực vật lý (Material & Physical Realism)</label><textarea id="realism">Anatomically correct proportions, natural hand-object contact, believable weight and movement, realistic materials, natural fabric folds, consistent perspective and physically plausible shadows.</textarea>
-  <label for="negative">Điều cần tránh (Negative Constraints)</label><textarea id="negative" placeholder="Ví dụ: distorted fingers, extra limbs, unrealistic fabric, overly dark exposure..."></textarea>
-  <label for="extra">Ghi chú bổ sung (Additional Notes)</label><textarea id="extra" placeholder="Chi tiết quan trọng khác..."></textarea>
+  <label for="negative">Điều cần tránh (Negative Constraints)</label><textarea id="negative" placeholder="Ví dụ: distorted fingers, extra limbs, unrealistic fabric, overly dark exposure...">Avoid distorted anatomy, malformed hands, extra fingers or limbs, duplicated objects, floating objects, inconsistent perspective, artificial textures, excessive sharpening, and unintended text or watermarks.</textarea>
+  <label for="extra">Ghi chú bổ sung (Additional Notes)</label><textarea id="extra" placeholder="Chi tiết quan trọng khác...">Preserve the core idea. Do not add unrelated subjects or props. Keep all visual details consistent with the requested scene.</textarea>
 
   <hr class="sectionline">
   <h2>3. Ảnh tham chiếu (Reference Images)</h2>
@@ -170,9 +177,40 @@ function setStatus(msg,err=false,ok=false){const el=$("status");el.textContent=m
 $("buildPrompt").addEventListener("click",()=>{$("promptOutput").value=makePrompt();setStatus("Đã tạo prompt xem trước. (Prompt preview ready.)",false,true)});
 $("copyPrompt").addEventListener("click",async()=>{if(!$("promptOutput").value)$("promptOutput").value=makePrompt();try{await navigator.clipboard.writeText($("promptOutput").value);setStatus("Đã sao chép prompt. (Prompt copied.)",false,true)}catch{setStatus("Không thể truy cập clipboard tự động. Hãy chọn và sao chép prompt thủ công.",true)}});
 function dataUrlToBlob(url){const [head,data]=url.split(",");const mime=(head.match(/data:(.*?);base64/)||[])[1]||"image/png";const bin=atob(data);const arr=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)arr[i]=bin.charCodeAt(i);return {blob:new Blob([arr],{type:mime}),mime};}
+
+let studioToken = null;
+$("unlock").addEventListener("click", async () => {
+  const base=$("backendUrl").value.trim().replace(/\/+$/,"");
+  const password=$("studioPassword").value;
+  if(!base){setStatus("Hãy nhập địa chỉ backend trước. (Enter the backend URL first.)",true);return}
+  if(!password){setStatus("Hãy nhập mật khẩu AI Studio. (Enter the AI Studio password.)",true);$("studioPassword").focus();return}
+  $("unlock").disabled=true;
+  try {
+    const resp=await fetch(base+"/api/auth/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({password})});
+    const data=await resp.json().catch(()=>({error:"Backend trả về dữ liệu không hợp lệ."}));
+    if(!resp.ok) {
+      if(resp.status===401){studioToken=null;$("logout").disabled=true;}
+      throw new Error(data.error||`HTTP ${resp.status}`);
+    }
+    studioToken=data.token;
+    $("studioPassword").value="";
+    $("logout").disabled=false;
+    setStatus("Đã mở khóa. Phiên tự hết hạn sau 8 giờ hoặc khi thím khóa phiên/đóng tab. (Session unlocked.)",false,true);
+  } catch(e) {
+    studioToken=null;$("logout").disabled=true;
+    setStatus("Không mở khóa được: "+(e.message||e),true);
+  } finally {$("unlock").disabled=false}
+});
+$("logout").addEventListener("click",async()=>{
+  const base=$("backendUrl").value.trim().replace(/\/+$/,"");
+  try{if(base&&studioToken)await fetch(base+"/api/auth/logout",{method:"POST",headers:{Authorization:"Bearer "+studioToken}})}catch{}
+  studioToken=null;$("logout").disabled=true;
+  setStatus("Đã khóa phiên trên trình duyệt. (Session locked.)",false,true);
+});
 $("generate").addEventListener("click",async()=>{
   const base=$("backendUrl").value.trim().replace(/\/+$/,"");
   if(!base){setStatus("Hãy nhập địa chỉ backend trước. (Enter the backend URL first.)",true);return}
+  if(!studioToken){setStatus("Trước tiên hãy nhập mật khẩu và bấm Mở khóa (Unlock).",true);$("studioPassword").focus();return}
   if(!$("subject").value.trim() && !$("promptOutput").value.trim()){setStatus("Hãy nhập chủ thể hoặc prompt trước khi tạo ảnh.",true);return}
   const prompt=$("promptOutput").value.trim()||makePrompt();$("promptOutput").value=prompt;
   $("generate").disabled=true;$("generate").textContent="Đang tạo ảnh… (Generating…)";setStatus("Đang gửi yêu cầu đến API. Thời gian có thể từ vài giây đến vài phút…");
@@ -181,7 +219,7 @@ $("generate").addEventListener("click",async()=>{
     fd.append("model",$("provider").value==="gemini"?$("geminiModel").value:$("openaiModel").value);
     fd.append("referencePurposes",JSON.stringify(selectedPurposes()));fd.append("referenceNotes",$("refNotes").value);
     referenceFiles.forEach(f=>fd.append("references",f,f.name));
-    const resp=await fetch(base+"/api/generate",{method:"POST",body:fd});
+    const resp=await fetch(base+"/api/generate",{method:"POST",headers:{"Authorization":"Bearer "+studioToken},body:fd});
     const data=await resp.json().catch(()=>({error:"Backend trả về dữ liệu không hợp lệ."}));
     if(!resp.ok) throw new Error(data.error||`HTTP ${resp.status}`);
     const decoded=dataUrlToBlob(data.imageDataUrl);currentBlob=decoded.blob;currentMime=decoded.mime;currentFilename=data.filename||"ai-image.png";
@@ -193,5 +231,7 @@ $("generate").addEventListener("click",async()=>{
 });
 $("download").addEventListener("click",()=>{if(!currentBlob)return;const url=URL.createObjectURL(currentBlob);const a=document.createElement("a");a.href=url;a.download=currentFilename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2000)});
 $("openOriginal").addEventListener("click",()=>{if(currentBlob)window.open(URL.createObjectURL(currentBlob),"_blank","noopener")});
+// Initialize the prompt with the complete default structure instead of showing an empty box.
+if (!$("promptOutput").value.trim()) $("promptOutput").value = makePrompt();
 </script>
 </body></html>
