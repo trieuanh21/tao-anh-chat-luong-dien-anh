@@ -2,213 +2,175 @@
 <html lang="vi">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#10131b">
-<meta name="description" content="Prompt Studio — xây dựng prompt hình ảnh và video theo cấu trúc rõ ràng, dùng với ChatGPT, Gemini, Flux, Qwen Image và Wan.">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Prompt Studio — xây dựng prompt ảnh và video có cấu trúc, phù hợp từng model AI.">
 <title>Prompt Studio — AI Local</title>
 <style>
-:root{--bg:#0b0e14;--panel:#121722;--panel2:#171e2b;--line:#293246;--text:#edf2fb;--muted:#9ca9bd;--accent:#8b9cff;--accent2:#b8c2ff;--green:#75dfb1;--warn:#ffd27d;--radius:16px}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 20% 0%,#1c2340 0,transparent 40%),var(--bg);color:var(--text);font:15px/1.55 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
-button,input,select,textarea{font:inherit}button{cursor:pointer}
-.wrap{max-width:1320px;margin:auto;padding:26px 18px 54px}
-header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:24px}
-.brand{display:flex;align-items:center;gap:12px}.logo{display:grid;place-items:center;width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,#8c9cff,#bd8cff);color:#111527;font-weight:900;font-size:22px}
-h1{font-size:clamp(24px,3vw,34px);line-height:1.15;margin:0;letter-spacing:-.04em}.sub{color:var(--muted);margin:6px 0 0;font-size:14px}
-.pill{border:1px solid #34405a;background:#161c2a;color:#cbd5ff;border-radius:999px;padding:7px 11px;font-size:12px;white-space:nowrap}
-.hero{border:1px solid #303a57;background:linear-gradient(115deg,rgba(105,125,255,.14),rgba(181,132,255,.06));padding:18px 20px;border-radius:var(--radius);margin-bottom:20px}
-.hero strong{color:#dce2ff}.hero p{margin:4px 0 0;color:#b5bfd2;font-size:14px}
-.layout{display:grid;grid-template-columns:minmax(0,1.02fr) minmax(0,.98fr);gap:20px;align-items:start}
-.panel{background:rgba(18,23,34,.94);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
-.panelhead{padding:17px 19px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px}
-.panelhead h2{font-size:17px;margin:0}.panelhead small{color:var(--muted)}
-.panelbody{padding:19px}.section{margin-bottom:22px}.section:last-child{margin-bottom:0}
-.section-title{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.11em;color:#aebaff;margin:0 0 12px}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{margin-bottom:13px}.field:last-child{margin-bottom:0}
-label{display:block;color:#dce3f0;font-size:13px;font-weight:650;margin:0 0 6px}
-.hint{color:var(--muted);font-size:12px;font-weight:400;margin-top:4px}
-input[type=text],select,textarea{width:100%;border:1px solid #303b50;background:#0d121c;color:var(--text);border-radius:10px;padding:10px 11px;outline:none}
-textarea{resize:vertical;min-height:76px}input:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px #8b9cff20}
-.choices{display:flex;flex-wrap:wrap;gap:8px}.choice{position:relative}.choice input{position:absolute;opacity:0;pointer-events:none}.choice span{display:block;border:1px solid #303b50;background:#0d121c;color:#c2ccdc;border-radius:10px;padding:8px 10px;font-size:12px;cursor:pointer}.choice input:checked+span{border-color:#899aff;background:#343d694d;color:#eef0ff}
-.checks{display:grid;grid-template-columns:1fr 1fr;gap:9px}.check{display:flex;align-items:flex-start;gap:9px;padding:10px;border:1px solid #293347;background:#0e131d;border-radius:10px;font-size:12px;color:#c7d0df}.check input{margin-top:4px;accent-color:#929fff}
-.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}.btn{border:1px solid #39445c;border-radius:10px;background:#1b2333;color:#e8edfa;padding:10px 13px;font-weight:700;font-size:13px}.btn:hover{filter:brightness(1.13)}.btn.primary{background:linear-gradient(135deg,#8b9cff,#b8a0ff);border:0;color:#111526}.btn.ghost{background:transparent}.btn.small{padding:7px 10px;font-size:12px}
-.output-tabs{display:flex;gap:6px;flex-wrap:wrap}.tab{border:1px solid #303b50;background:#0d121c;color:#aeb9cc;border-radius:9px;padding:7px 10px;font-size:12px}.tab.active{background:#333d65;border-color:#8b9cff;color:white}
-.output{min-height:400px;white-space:pre-wrap;overflow-wrap:anywhere;background:#0a0e15;border:1px solid #293347;border-radius:12px;padding:15px;color:#e0e7f5;font:13px/1.7 ui-monospace,SFMono-Regular,Consolas,monospace}
-.output-meta{display:flex;justify-content:space-between;gap:8px;align-items:center;margin:12px 0}
-.notice{font-size:12px;color:var(--muted);margin-top:10px}.status{font-size:12px;color:var(--green);min-height:20px}
-.warning{padding:10px 12px;border:1px solid #715c35;background:#3a2c1429;color:#f5dba6;border-radius:10px;font-size:12px;margin:0 0 12px}
-footer{color:#77849a;font-size:12px;text-align:center;margin-top:24px}
-@media(max-width:900px){.layout{grid-template-columns:1fr}.output{min-height:300px}}
-@media(max-width:560px){.wrap{padding:18px 11px 36px}header{align-items:flex-start}.pill{display:none}.grid2,.checks{grid-template-columns:1fr}.panelbody{padding:14px}.panelhead{padding:14px}}
+:root{--bg:#0b1020;--panel:#131b2e;--panel2:#19243b;--line:#2c3953;--text:#eef3ff;--muted:#a6b3cc;--accent:#86a8ff;--accent2:#9be7d3;--warn:#ffd27a;--danger:#ff9aab}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 15% 0%,#17284b 0,transparent 35%),var(--bg);color:var(--text);font:15px/1.55 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+header{padding:26px max(18px,calc((100% - 1240px)/2));border-bottom:1px solid var(--line);background:#0b1020dd;position:sticky;top:0;z-index:5;backdrop-filter:blur(14px)}
+h1{font-size:clamp(24px,4vw,36px);margin:0 0 5px;letter-spacing:-.04em}header p{margin:0;color:var(--muted)}main{max-width:1240px;margin:22px auto;padding:0 18px 50px;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(320px,.9fr);gap:20px}
+.panel{background:linear-gradient(180deg,#151e32,#10182a);border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:0 18px 50px #0002}.panel h2{font-size:19px;margin:0 0 5px}.hint{color:var(--muted);font-size:13px;margin:0 0 16px}
+.section{border:1px solid #293650;border-radius:14px;padding:15px;margin:14px 0;background:#111a2c}.section h3{font-size:15px;margin:0 0 12px;color:#dbe5ff;display:flex;gap:8px;align-items:center}.num{display:inline-grid;place-items:center;background:#25375a;color:#cfe0ff;border-radius:8px;width:27px;height:27px;font-size:12px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.field{min-width:0}.field.full{grid-column:1/-1}label{display:block;font-size:13px;color:#c3cfe5;margin-bottom:6px}input,select,textarea{width:100%;border:1px solid #354560;border-radius:10px;background:#0b1324;color:var(--text);padding:10px 11px;font:inherit;outline:none}input:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px #86a8ff20}textarea{resize:vertical;min-height:74px}select{cursor:pointer}option{background:#0b1324}.chips{display:flex;flex-wrap:wrap;gap:7px}.chip{border:1px solid #394967;border-radius:999px;padding:7px 10px;background:#10192b;color:#dce6fb;font-size:12px;cursor:pointer}.chip:hover{border-color:var(--accent);background:#1b2a49}.checks{display:flex;flex-wrap:wrap;gap:10px}.checks label{display:flex;align-items:center;gap:7px;margin:0;background:#10192b;border:1px solid #2e3c56;border-radius:9px;padding:8px 10px}.checks input{width:auto;accent-color:var(--accent)}
+.actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:15px}.btn{border:1px solid #3b4b68;background:#202d47;color:#f4f7ff;border-radius:10px;padding:10px 13px;font:600 13px system-ui;cursor:pointer}.btn.primary{background:linear-gradient(135deg,#91b2ff,#9be7d3);border:0;color:#0b1424}.btn:hover{filter:brightness(1.09)}.output{position:sticky;top:150px;align-self:start}.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0}.tab{border:1px solid #34435f;background:#0c1527;color:var(--muted);border-radius:9px;padding:8px 10px;cursor:pointer}.tab.active{color:#fff;border-color:#829fff;background:#26395c}.outbox{white-space:pre-wrap;overflow-wrap:anywhere;background:#0a1221;border:1px solid #2e3c56;border-radius:12px;padding:14px;min-height:260px;max-height:60vh;overflow:auto;font:13px/1.65 ui-monospace,SFMono-Regular,Consolas,monospace}.status{font-size:12px;color:var(--muted);margin-top:10px}.warning{border:1px solid #725c2c;background:#332a17;color:#ffe4a4;border-radius:10px;padding:10px 12px;font-size:13px;margin-top:12px}.small{font-size:12px;color:var(--muted)}.pill{display:inline-block;border:1px solid #40516f;border-radius:999px;padding:3px 8px;color:#bfd0ef;font-size:11px;margin-right:5px}
+@media(max-width:900px){main{grid-template-columns:1fr}.output{position:static}.outbox{max-height:none}}@media(max-width:560px){.grid{grid-template-columns:1fr}.panel{padding:14px}.section{padding:12px}header{position:static}}
 </style>
 </head>
 <body>
-<div class="wrap">
-<header>
- <div class="brand"><div class="logo">P</div><div><h1>Prompt Studio</h1><p class="sub">Biến ý tưởng thành prompt có cấu trúc — cho AI ảnh, video và chatbot.</p></div></div>
- <span class="pill">AI LOCAL · V1.1 · OFFLINE</span>
-</header>
-<div class="hero"><strong>Không chỉ nhồi thật nhiều từ khóa.</strong><p>Ứng dụng ưu tiên chủ thể → hành động → bố cục nhiều lớp → ánh sáng → ngôn ngữ máy ảnh → chất liệu/chân thực → cảm xúc → điều cần tránh. Có thể xuất prompt để nhờ ChatGPT/Gemini hoàn thiện hoặc dùng làm bản nháp cho ComfyUI.</p></div>
-<div class="layout">
+<header><h1>✦ Prompt Studio</h1><p>Xây dựng prompt có cấu trúc — giữ đúng ý tưởng, mô tả không gian rõ ràng, giảm lỗi AI.</p></header>
+<main>
 <section class="panel">
- <div class="panelhead"><h2>01 / Mô tả ý tưởng</h2><small>Điền phần bạn biết</small></div>
- <div class="panelbody">
-  <div class="section">
-   <p class="section-title">Chủ thể & câu chuyện</p>
-   <div class="field"><label for="subject">Chủ thể chính *</label><input id="subject" type="text" value="một nữ nông dân Việt Nam đang thu hoạch lúa" placeholder="Ví dụ: một người thợ sửa xe trong gara nhỏ"></div>
-   <div class="grid2">
-    <div class="field"><label for="identity">Đặc điểm nhận diện</label><textarea id="identity" placeholder="Tuổi trưởng thành, trang phục, nét mặt, ngoại hình...">áo sơ mi trắng giản dị, nón lá, khẩu trang kéo xuống dưới cằm</textarea></div>
-    <div class="field"><label for="action">Hành động / tư thế</label><textarea id="action" placeholder="Đang làm gì? Cơ thể tương tác với vật thể ra sao?">ôm bó lúa nặng sát người, thân hơi nghiêng vì sức nặng, mỉm cười tự nhiên khi nhìn về phía máy ảnh</textarea></div>
-   </div>
-   <div class="field"><label for="story">Khoảnh khắc / ý nghĩa</label><input id="story" type="text" value="khoảnh khắc lao động đời thường, chân thật và đầy sức sống" placeholder="Điều người xem nên cảm nhận hoặc hiểu"></div>
-  </div>
-  <div class="section">
-   <p class="section-title">Không gian & bố cục</p>
-   <div class="field"><label for="setting">Bối cảnh</label><textarea id="setting" placeholder="Địa điểm, thời gian, thời tiết, vật thể xung quanh...">ruộng lúa chín vàng ở Việt Nam, những người nông dân khác đang làm việc mờ nhẹ phía sau</textarea></div>
-   <div class="grid2">
-    <div class="field"><label for="framing">Khung hình</label><select id="framing"><option value="close-up">Cận cảnh (close-up)</option><option value="medium shot" selected>Trung cảnh (medium shot)</option><option value="wide shot">Toàn cảnh (wide shot)</option><option value="full-body shot">Toàn thân</option><option value="extreme close-up">Đặc tả (extreme close-up)</option><option value="over-the-shoulder shot">Qua vai</option><option value="low-angle shot">Góc máy thấp</option><option value="high-angle shot">Góc máy cao</option><option value="top-down shot">Nhìn từ trên xuống</option></select></div>
-    <div class="field"><label for="ratio">Tỷ lệ khung hình</label><select id="ratio"><option>1:1</option><option>4:3</option><option>3:2</option><option>16:9</option><option selected>21:9</option><option>9:16</option></select></div>
-   </div>
-   <div class="field"><label for="layers">Lớp không gian / điểm đặt trong khung</label><textarea id="layers" placeholder="Tiền cảnh, chủ thể, hậu cảnh; chủ thể nằm ở đâu trong khung...">tiền cảnh có vài lá lúa mờ ở mép dưới; chủ thể nằm lệch nhẹ khỏi trung tâm; hậu cảnh có người làm ruộng và cánh đồng kéo dài</textarea><div class="hint">Mô tả vị trí cụ thể giúp ảnh có chiều sâu hơn chỉ ghi “cinematic”.</div></div>
-  </div>
-  <div class="section">
-   <p class="section-title">Ánh sáng, màu sắc & phong cách</p>
-   <div class="grid2">
-    <div class="field"><label for="light">Ánh sáng</label><select id="light"><option value="soft natural daylight">Ánh sáng tự nhiên mềm</option><option value="golden-hour sunlight">Nắng giờ vàng</option><option value="overcast diffused daylight">Trời nhiều mây, ánh sáng tản</option><option value="hard directional sunlight">Nắng xiên mạnh</option><option value="soft window light">Ánh sáng cửa sổ</option><option value="cinematic low-key lighting">Ánh sáng điện ảnh tối</option><option value="studio softbox lighting">Đèn studio mềm</option><option value="neon night lighting">Đèn neon ban đêm</option></select></div>
-    <div class="field"><label for="palette">Bảng màu</label><select id="palette"><option value="natural warm earth tones">Tông đất ấm tự nhiên</option><option value="muted cool tones">Tông lạnh trầm</option><option value="soft pastel palette">Pastel nhẹ</option><option value="rich saturated colors">Màu bão hòa mạnh</option><option value="cinematic teal and amber">Teal & amber điện ảnh</option><option value="monochrome black and white">Đen trắng</option><option value="neutral documentary colors">Màu trung tính kiểu tư liệu</option></select></div>
-   </div>
-   <div class="field"><label>Phong cách hình ảnh</label><div class="choices">
-    <label class="choice"><input type="radio" name="style" value="photorealistic documentary photography" checked><span>Ảnh tư liệu chân thực</span></label>
-    <label class="choice"><input type="radio" name="style" value="cinematic 35mm film still"><span>Điện ảnh 35mm</span></label>
-    <label class="choice"><input type="radio" name="style" value="editorial fashion photography"><span>Editorial / thời trang</span></label>
-    <label class="choice"><input type="radio" name="style" value="fine-art photography"><span>Fine-art</span></label>
-    <label class="choice"><input type="radio" name="style" value="stylized illustration"><span>Minh họa</span></label>
-    <label class="choice"><input type="radio" name="style" value="anime film still"><span>Anime</span></label>
-   </div></div>
-   <div class="grid2">
-    <div class="field"><label for="mood">Cảm xúc / không khí</label><input id="mood" type="text" value="mộc mạc, gần gũi, lạc quan" placeholder="Ví dụ: cô độc, hoài niệm, căng thẳng"></div>
-    <div class="field"><label for="lens">Ngôn ngữ máy ảnh (tùy chọn)</label><select id="lens"><option value="">Không chỉ định thông số máy ảnh</option><option value="shot on a 35mm lens, moderate depth of field">Ống kính 35mm, DOF vừa</option><option value="shot on a 50mm lens, natural perspective">Ống kính 50mm, phối cảnh tự nhiên</option><option value="shot on an 85mm lens, compressed perspective and shallow depth of field">Ống kính 85mm, hậu cảnh nén và DOF mỏng</option><option value="wide-angle lens, deep depth of field">Góc rộng, DOF sâu</option><option value="documentary handheld photography, natural perspective">Ảnh tư liệu cầm tay</option></select></div>
-   </div>
-  </div>
-  <div class="section">
-   <p class="section-title">Chi tiết bắt buộc & điều cần tránh</p>
-   <div class="field"><label for="details">Chi tiết quan trọng phải có</label><textarea id="details" placeholder="Chất liệu, bàn tay, giọt mồ hôi, nếp vải, phản chiếu...">bàn tay nắm chắc bó lúa; sợi rơm và hạt lúa có kết cấu rõ; nếp áo tự nhiên; biểu cảm không tạo dáng quá mức</textarea></div>
-   <div class="field"><label for="avoid">Điều không muốn xuất hiện</label><textarea id="avoid" placeholder="Ví dụ: da nhựa, tay lỗi, ánh sáng giả, chữ thừa...">da nhựa, vẻ đẹp chỉnh sửa quá mức, tạo dáng thời trang, bàn tay biến dạng, ngón tay thừa, bó lúa lơ lửng, hậu cảnh giả</textarea></div>
-  </div>
-  <div class="section">
-   <p class="section-title">Cách xuất prompt</p>
-   <div class="field"><label for="target">Mục đích sử dụng</label><select id="target"><option value="assistant" selected>Nhờ ChatGPT / Gemini / Claude viết prompt hoàn chỉnh</option><option value="image">Prompt ảnh trực tiếp cho ComfyUI</option><option value="video">Prompt video cho Wan 2.2</option></select></div>
-   <div class="field"><label for="model">Model / hệ thống đích</label><select id="model"><option value="general">Chung / chưa quyết định</option><option value="qwen">Qwen Image 2</option><option value="flux">Flux Schnell FP8</option><option value="wan">Wan 2.2 5B</option><option value="chatgpt">ChatGPT</option><option value="gemini">Gemini</option><option value="claude">Claude</option></select><div class="hint">Ứng dụng không gọi API. Lựa chọn này chỉ giúp định dạng lời hướng dẫn phù hợp.</div></div>
-   <div class="checks">
-    <label class="check"><input id="useLayers" type="checkbox" checked><span><b>Nhấn mạnh chiều sâu</b><br>Tiền cảnh – chủ thể – hậu cảnh</span></label>
-    <label class="check"><input id="useRealism" type="checkbox" checked><span><b>Ưu tiên chân thực</b><br>Vật lý, chất liệu, cơ thể hợp lý</span></label>
-    <label class="check"><input id="useNeg" type="checkbox" checked><span><b>Tạo negative prompt</b><br>Nhắm vào lỗi cụ thể, tránh danh sách rác</span></label>
-    <label class="check"><input id="useCamera" type="checkbox" checked><span><b>Thêm ngôn ngữ máy ảnh</b><br>Chỉ khi thông số không mâu thuẫn</span></label>
-   </div>
-  </div>
-  <div class="actions"><button class="btn primary" id="generate">✦ Tạo prompt</button><button class="btn" id="sunburst">Nạp ví dụ Sunburst</button><button class="btn ghost" id="clear">Làm mới</button></div>
- </div>
-</section>
-<section class="panel">
- <div class="panelhead"><h2>02 / Kết quả</h2><small>Không cần API</small></div>
- <div class="panelbody">
-  <div id="warnings"></div>
-  <div class="output-tabs">
-   <button class="tab active" data-tab="assistant">Hướng dẫn cho AI</button>
-   <button class="tab" data-tab="prompt">Prompt ảnh / video</button>
-   <button class="tab" data-tab="negative">Negative prompt</button>
-  </div>
-  <div class="output-meta"><span class="hint" id="outputLabel">Dùng khi muốn ChatGPT/Gemini viết lại prompt chất lượng hơn</span><button class="btn small" id="copy">Sao chép</button></div>
-  <div class="output" id="output" aria-live="polite"></div>
-  <div class="actions"><button class="btn primary" id="copyAll">Sao chép tất cả</button><button class="btn" id="download">Tải .txt</button></div>
-  <p class="notice">Mẹo: mô tả hành động vật lý cụ thể (tay nắm gì, vật nặng ra sao, cơ thể phản ứng thế nào) thường hữu ích hơn việc chỉ thêm nhiều từ như “8K, masterpiece”.</p>
-  <p class="status" id="status" role="status"></p>
- </div>
-</section>
+<h2>Thiết lập prompt</h2><p class="hint">Điền những gì thím biết. Các mục không cần thiết có thể để trống; app sẽ không tự bịa thêm chi tiết cốt lõi.</p>
+<div class="section"><h3><span class="num">01</span> Chủ thể & nhận dạng</h3><div class="grid">
+<div class="field full"><label>Chủ thể chính *</label><input id="subject" placeholder="Ví dụ: nữ sinh Việt Nam mặc áo dài trắng"></div>
+<div class="field"><label>Độ tuổi / giai đoạn</label><select id="age"><option value="">Tự quyết / không nêu</option><option>teenage high-school student</option><option>young adult</option><option>middle-aged adult</option><option>elderly person</option><option>child</option></select></div>
+<div class="field"><label>Đặc điểm nhận dạng</label><input id="identity" placeholder="Tóc, mắt, dáng người, đặc điểm riêng"></div>
+<div class="field"><label>Gương mặt / biểu cảm</label><select id="face"><option value="">Tự nhiên, phù hợp cảnh</option><option>natural everyday facial features, subtle asymmetry</option><option>gentle oval face, dark brown eyes, natural smile</option><option>candid expression, looking at someone off-camera</option><option>calm serious expression</option><option>joyful unposed expression</option><option>polished commercial beauty portrait</option><option>distinctive character face, not a generic beauty template</option></select></div>
+<div class="field"><label>Da & trang điểm</label><select id="skin"><option value="">Tự chọn phù hợp</option><option>realistic skin texture, subtle natural imperfections, minimal makeup</option><option>soft natural skin, restrained makeup</option><option>clean editorial makeup</option><option>dramatic makeup</option><option>no visible makeup, everyday appearance</option></select></div>
+<div class="field full"><label>Trang phục / vật dụng bắt buộc</label><textarea id="wardrobe" placeholder="Ví dụ: áo dài trắng, quần đen, nón lá, cặp đen kiểu xưa"></textarea></div>
+</div></div>
+<div class="section"><h3><span class="num">02</span> Hành động & tương tác vật lý</h3><div class="grid">
+<div class="field full"><label>Hành động chính</label><input id="action" placeholder="Đang chạy, quay đầu nhìn bạn bè..."></div>
+<div class="field full"><label>Tay, chân và cách tương tác với vật thể</label><textarea id="interaction" placeholder="Tay nào cầm vật gì, vật nặng hay nhẹ, chân đang ở pha chuyển động nào"></textarea></div>
+<div class="field"><label>Nhịp hành động</label><select id="motion"><option value="">Tự chọn</option><option>still, quiet moment</option><option>subtle natural movement</option><option>energetic candid movement</option><option>fast dynamic action</option><option>slow graceful movement</option></select></div>
+<div class="field"><label>Trạng thái biểu cảm</label><select id="emotionAction"><option value="">Tự chọn</option><option>relaxed and unposed</option><option>focused on the activity</option><option>laughing naturally with friends</option><option>surprised in a believable way</option><option>quietly reflective</option></select></div>
+</div></div>
+<div class="section"><h3><span class="num">03</span> Bối cảnh & câu chuyện</h3><div class="grid">
+<div class="field full"><label>Địa điểm / môi trường</label><input id="environment" placeholder="Sân trường cấp 3 Việt Nam, hành lang, lớp học..."></div>
+<div class="field"><label>Thời điểm</label><select id="time"><option value="">Tự chọn</option><option>early morning</option><option>late morning</option><option>afternoon</option><option>golden hour</option><option>overcast daytime</option><option>blue hour</option><option>night</option></select></div>
+<div class="field"><label>Thời đại / bối cảnh văn hóa</label><select id="era"><option value="">Không nhấn mạnh</option><option>contemporary Vietnam</option><option>Vietnam in the 1990s</option><option>Vietnam in the early 2000s</option><option>nostalgic Vietnamese school life, late 20th century</option><option>historical period, research-grounded details</option><option>fictional fantasy world</option></select></div>
+<div class="field full"><label>Khoảnh khắc / ý nghĩa câu chuyện</label><textarea id="story" placeholder="Khoảnh khắc đời thường, chân thật, đầy sức sống..."></textarea></div>
+</div></div>
+<div class="section"><h3><span class="num">04</span> Bố cục & lớp không gian</h3><div class="grid">
+<div class="field"><label>Cỡ cảnh</label><select id="framing"><option>medium shot</option><option>extreme close-up</option><option>close-up portrait</option><option>medium close-up</option><option>medium-wide shot</option><option>wide shot</option><option>extreme wide establishing shot</option><option>full-body shot</option><option>over-the-shoulder shot</option></select></div>
+<div class="field"><label>Góc máy</label><select id="angle"><option>eye-level angle</option><option>low angle</option><option>slightly low angle</option><option>high angle</option><option>overhead view</option><option>three-quarter side angle</option><option>profile view</option><option>ground-level angle</option></select></div>
+<div class="field"><label>Tỷ lệ khung hình</label><select id="ratio"><option>16:9</option><option>2.39:1</option><option>21:9</option><option>4:3</option><option>3:2</option><option>1:1</option><option>9:16</option></select></div>
+<div class="field"><label>Vị trí chủ thể</label><select id="placement"><option>naturally placed near the center</option><option>left third of the frame</option><option>right third of the frame</option><option>centered and symmetrical</option><option>off-center with breathing room</option></select></div>
+<div class="field full"><label>Tiền cảnh / vật thể gần máy</label><input id="foreground" placeholder="Một góc băng ghế đá ở tiền cảnh"></div>
+<div class="field full"><label>Trung cảnh / tương tác chính</label><input id="midground" placeholder="Chủ thể rõ nét, hành động dễ đọc"></div>
+<div class="field full"><label>Hậu cảnh / chi tiết môi trường</label><input id="background" placeholder="Dãy lớp học, cây xanh, học sinh khác ở xa"></div>
+<div class="field full"><label>Độ sâu không gian</label><select id="depth"><option>moderate depth of field, subject clear and environment still readable</option><option>shallow depth of field, background softly separated</option><option>deep focus, foreground to background clearly readable</option><option>layered depth with foreground framing and visible background</option></select></div>
+</div></div>
+<div class="section"><h3><span class="num">05</span> Ánh sáng, màu sắc & cảm xúc</h3><div class="grid">
+<div class="field"><label>Ánh sáng</label><select id="light"><option>soft natural daylight</option><option>diffused overcast daylight</option><option>soft morning sunlight</option><option>late-afternoon warm sunlight</option><option>hard directional sunlight</option><option>window light</option><option>cinematic low-key lighting</option><option>neon practical lighting</option><option>soft studio lighting</option></select></div>
+<div class="field"><label>Màu sắc</label><select id="palette"><option>natural warm earth tones</option><option>neutral realistic colors</option><option>muted cool tones</option><option>soft pastel palette</option><option>rich saturated colors</option><option>faded nostalgic film colors</option><option>monochrome black and white</option><option>high-contrast teal and amber</option></select></div>
+<div class="field"><label>Tâm trạng</label><select id="mood"><option>mộc mạc, gần gũi, lạc quan</option><option>melancholic and introspective</option><option>quiet and intimate</option><option>joyful and energetic</option><option>tense and suspenseful</option><option>dreamlike and surreal</option><option>epic and heroic</option><option>mysterious and unsettling</option></select></div>
+<div class="field"><label>Độ tương phản</label><select id="contrast"><option>natural moderate contrast</option><option>soft low contrast</option><option>balanced contrast</option><option>strong dramatic contrast</option></select></div>
+</div></div>
+<div class="section"><h3><span class="num">06</span> Ngôn ngữ máy ảnh / phong cách</h3><div class="grid">
+<div class="field"><label>Phong cách hình ảnh</label><select id="style"><option>cinematic 35mm film still</option><option>natural documentary photography</option><option>candid photojournalism</option><option>nostalgic analog film photograph</option><option>modern cinematic realism</option><option>fashion editorial photography</option><option>fine-art portrait photography</option><option>fantasy concept art</option><option>anime illustration</option><option>watercolor illustration</option><option>vintage family snapshot</option><option>realistic historical drama still</option></select></div>
+<div class="field"><label>Tiêu cự</label><select id="lens"><option>35mm lens</option><option>24mm lens</option><option>28mm lens</option><option>50mm lens</option><option>85mm portrait lens</option><option>wide-angle lens</option><option>telephoto lens</option><option>no explicit lens specification</option></select></div>
+<div class="field"><label>Độ sâu trường ảnh</label><select id="dof"><option>moderate depth of field</option><option>shallow depth of field</option><option>deep depth of field</option><option>no explicit depth-of-field specification</option></select></div>
+<div class="field"><label>Chất ảnh / hạt phim</label><select id="film"><option>subtle organic 35mm film grain</option><option>clean digital image</option><option>fine analog grain and gentle halation</option><option>faded vintage film texture</option><option>crisp documentary detail</option><option>no added film effects</option></select></div>
+</div><div class="small" style="margin-top:9px">Gợi ý: 35mm + medium shot thường cân bằng bối cảnh và chủ thể. 85mm + khung rất rộng có thể tạo cảm giác phối cảnh khác mong muốn.</div></div>
+<div class="section"><h3><span class="num">07</span> Chất liệu & tính chân thực</h3><div class="grid">
+<div class="field full"><label>Chi tiết vật liệu / bề mặt</label><textarea id="texture" placeholder="Nếp vải áo dài tự nhiên, vân nón lá, cặp da cũ, bề mặt băng ghế đá..."></textarea></div>
+<div class="field full"><label>Chi tiết bắt buộc phải xuất hiện</label><textarea id="required" placeholder="Liệt kê những chi tiết không được bỏ sót"></textarea></div>
+<div class="field full"><label>Điều cần tránh</label><textarea id="avoid" placeholder="Da nhựa, tạo dáng thời trang, hậu cảnh giả..."></textarea></div>
+<div class="field full checks">
+<label><input type="checkbox" id="realism" checked> Tăng tính chân thực</label>
+<label><input type="checkbox" id="spatial" checked> Mô tả lớp không gian</label>
+<label><input type="checkbox" id="neg" checked> Tạo negative prompt</label>
+<label><input type="checkbox" id="camera" checked> Dùng ngôn ngữ máy ảnh</label>
+<label><input type="checkbox" id="consistency" checked> Kiểm tra mâu thuẫn</label>
 </div>
-<footer>Prompt Studio · mã nguồn tĩnh HTML/CSS/JS · có thể host miễn phí bằng GitHub Pages · không gửi dữ liệu đi đâu.</footer>
-</div>
+</div></div>
+<div class="section"><h3><span class="num">08</span> Đầu ra & model đích</h3><div class="grid">
+<div class="field"><label>Loại nội dung</label><select id="kind"><option value="image">Ảnh tĩnh</option><option value="video">Video</option><option value="both">Cả ảnh và video</option></select></div>
+<div class="field"><label>Model / nơi dùng prompt</label><select id="target"><option value="chatgpt">ChatGPT (viết prompt)</option><option value="gemini">Gemini (viết prompt)</option><option value="claude">Claude (viết prompt)</option><option value="qwen">Qwen Image 2</option><option value="flux">FLUX.1 Schnell</option><option value="wan">Wan 2.2 / Wan video</option><option value="generic">Model khác / dùng chung</option></select></div>
+<div class="field"><label>Độ dài prompt</label><select id="length"><option value="balanced">Cân bằng, đủ chi tiết</option><option value="concise">Ngắn gọn</option><option value="detailed">Chi tiết cao</option></select></div>
+<div class="field"><label>Ngôn ngữ prompt</label><select id="language"><option value="en">Tiếng Anh</option><option value="vi">Tiếng Việt</option><option value="both">Anh + Việt</option></select></div>
+<div class="field full" id="videoFields" style="display:none"><label>Chuyển động video (chỉ cần với video)</label><textarea id="videoMotion" placeholder="Ví dụ: camera follows gently, hair and áo dài move naturally in the breeze"></textarea><div class="grid" style="margin-top:10px"><div class="field"><label>Thời lượng dự kiến</label><select id="duration"><option>5 seconds</option><option>3 seconds</option><option>8 seconds</option><option>10 seconds</option></select></div><div class="field"><label>Chuyển động máy</label><select id="cameraMove"><option>gentle tracking shot</option><option>static camera</option><option>slow push-in</option><option>slow pan</option><option>handheld documentary movement</option><option>orbiting camera</option></select></div></div></div>
+</div></div>
+<div class="actions"><button class="btn primary" id="generate">✦ Tạo prompt</button><button class="btn" id="example">Nạp ví dụ nữ sinh</button><button class="btn" id="sunburst">Nạp ví dụ Sunburst</button><button class="btn" id="clear">Xóa biểu mẫu</button></div>
+</section>
+<section class="panel output"><h2>Kết quả</h2><p class="hint">Prompt được ghép theo cấu trúc 8 phần. Có thể sao chép sang chatbot để yêu cầu biên tập sâu hơn.</p>
+<div class="tabs"><button class="tab active" data-tab="instruction">Hướng dẫn cho AI</button><button class="tab" data-tab="prompt">Prompt chính</button><button class="tab" data-tab="negative">Negative prompt</button><button class="tab" data-tab="checks">Kiểm tra</button></div>
+<div class="outbox" id="output"></div><div class="actions"><button class="btn primary" id="copy">Sao chép mục này</button><button class="btn" id="copyAll">Sao chép tất cả</button><button class="btn" id="download">Xuất TXT</button></div><div class="status" id="status">Điền biểu mẫu rồi bấm “Tạo prompt”.</div>
+<div class="warning" id="warnings" style="display:none"></div>
+</section>
+</main>
 <script>
-const $ = id => document.getElementById(id);
-const fieldIds = ["subject","identity","action","story","setting","framing","ratio","layers","light","palette","mood","lens","details","avoid","target","model"];
-let activeTab = "assistant", result = {};
-const val = id => ($(id).value || "").trim();
-const checked = id => $(id).checked;
-const styleVal = () => document.querySelector('input[name="style"]:checked')?.value || "photorealistic documentary photography";
-function clean(s){return (s||"").replace(/\s+/g," ").trim()}
-function make(){
- const subject=val("subject"), identity=val("identity"), action=val("action"), story=val("story"), setting=val("setting"), framing=val("framing"), ratio=val("ratio"), layers=val("layers"), light=val("light"), palette=val("palette"), mood=val("mood"), lens=val("lens"), details=val("details"), avoid=val("avoid"), style=styleVal(), target=val("target"), model=val("model");
- const isVideo = target==="video" || model==="wan";
- let pieces=[];
- if(subject) pieces.push("Main subject: "+subject+".");
- if(identity) pieces.push("Identity and appearance: "+identity+".");
- if(action) pieces.push("Action and physical interaction: "+action+".");
- if(story) pieces.push("Narrative moment: "+story+".");
- if(setting) pieces.push("Environment: "+setting+".");
- pieces.push("Composition and framing: "+framing+", aspect ratio "+ratio+".");
- if(checked("useLayers") && layers) pieces.push("Spatial layering: "+layers+".");
- pieces.push("Lighting: "+light+".");
- pieces.push("Color palette: "+palette+".");
- pieces.push("Visual style: "+style+".");
- if(checked("useCamera") && lens) pieces.push("Camera language: "+lens+".");
- if(mood) pieces.push("Mood: "+mood+".");
- if(details) pieces.push("Required visual details: "+details+".");
- if(checked("useRealism")) pieces.push("Physical realism: believable anatomy and weight, natural contact between hands and objects, coherent perspective, authentic material texture, realistic fabric folds, no decorative detail that contradicts the scene.");
- if(isVideo){
-   pieces.push("Video motion: describe one clear continuous action with a readable beginning, middle, and end; keep subject identity, clothing, environment, and lighting consistent throughout the shot. Specify camera movement only if it serves the action.");
- }
- pieces.push("Avoid: "+(avoid || "unintended distortions, inconsistent details, artificial-looking textures")+".");
- pieces.push("Output framing: "+ratio+".");
- const direct = pieces.join("\n\n");
- const neg = checked("useNeg") ? (avoid ? avoid+", " : "")+"deformed hands, extra fingers, missing fingers, duplicated limbs, broken anatomy, floating objects, impossible grip, inconsistent shadows, warped perspective, plastic skin, excessive retouching, artificial bokeh, oversharpening, random text, watermark, logo" : "";
- const modelNotes = {
-  qwen:"Qwen Image 2: use clear natural-language descriptions, explicit spatial relationships, materials, and interactions. Avoid contradictory camera instructions.",
-  flux:"Flux Schnell FP8: keep the main subject and action early; remove repeated adjectives and long redundant camera-spec lists. Iterate with concise prompts.",
-  wan:"Wan 2.2 5B: describe motion and temporal continuity, not only a still frame. Keep the action simple and identity consistent; separate start/end state if needed.",
-  chatgpt:"ChatGPT: refine the draft while preserving the user's intent and all required details.",
-  gemini:"Gemini: refine the draft while preserving the user's intent and all required details.",
-  claude:"Claude: refine the draft while preserving the user's intent and all required details.",
-  general:"Choose wording appropriate to the target image/video model; do not invent requirements the user did not specify."
- }[model] || "";
- const assistant = `Bạn là chuyên gia viết prompt hình ảnh/video. Hãy biến brief dưới đây thành prompt chất lượng cao, cụ thể và nhất quán.\n\nNGUYÊN TẮC:\n1. Giữ nguyên ý tưởng, chủ thể, hành động và các chi tiết bắt buộc.\n2. Tổ chức theo thứ tự: chủ thể → hành động/tương tác vật lý → bối cảnh → bố cục/lớp không gian → ánh sáng → máy ảnh (nếu phù hợp) → chất liệu/chân thực → màu sắc/cảm xúc → giới hạn.\n3. Giải thích quan hệ không gian cụ thể; không chỉ dùng từ chung chung như “cinematic” hoặc “masterpiece”.\n4. Kiểm tra tính hợp lý giữa góc máy, tiêu cự, độ sâu trường ảnh, ánh sáng và tỷ lệ khung hình. Nếu xung đột, ưu tiên ý đồ hình ảnh và nêu ngắn gọn cách xử lý.\n5. Negative prompt phải nhắm vào lỗi có khả năng xảy ra, không lặp từ vô ích.\n6. Nếu thiếu thông tin không thiết yếu, tự chọn phương án hợp lý; không hỏi lại. Không thêm chi tiết làm đổi ý tưởng.\n7. Trả về: (A) prompt chính bằng tiếng Anh; (B) negative prompt riêng; (C) giải thích ngắn bằng tiếng Việt về các lựa chọn quan trọng.\n\nMODEL / ĐÍCH: ${modelNotes}\n\nBRIEF:\n${direct}\n\n${isVideo ? "Với video, thêm diễn tiến hành động theo thời gian và chuyển động camera hợp lý; tránh nhồi nhiều hành động không thể thực hiện trong một shot." : "Với ảnh tĩnh, ưu tiên một khoảnh khắc rõ ràng và bố cục đọc được ngay."}`;
- result={assistant,prompt:direct,negative:neg};
+const $=id=>document.getElementById(id);
+let activeTab='instruction', results={instruction:'',prompt:'',negative:'',checks:''};
+const get=id=>($(id)?.value||'').trim();
+const add=(arr,label,val)=>{if(val)arr.push(label?`${label}: ${val}`:val)};
+function build(){
+ const subject=get('subject'), kind=get('kind'), target=get('target');
  const warnings=[];
- if(!subject) warnings.push("Bạn chưa nhập chủ thể chính. Đây là phần quan trọng nhất.");
- if((framing==="low-angle shot" || framing==="wide shot") && lens.includes("85mm")) warnings.push("Góc máy rộng/thấp kết hợp 85mm có thể không hợp ý đồ. Hãy kiểm tra trường nhìn; nếu cần không gian rộng, thử 35mm hoặc bỏ tiêu cự.");
- if(lens.includes("shallow depth") && (layers.toLowerCase().includes("foreground") || layers.toLowerCase().includes("tiền cảnh")) && !layers.toLowerCase().includes("blur")) warnings.push("Bạn muốn nhiều lớp không gian nhưng chọn DOF mỏng: hãy nói rõ lớp nào được nét và lớp nào mờ để tránh làm mất chi tiết.");
- if(ratio==="21:9" && framing==="close-up") warnings.push("Cận cảnh trong khung 21:9 có thể tạo nhiều khoảng trống ngang. Có thể dùng khoảng trống đó có chủ đích hoặc chọn tỷ lệ khác.");
- if(isVideo && !action) warnings.push("Với video, hãy thêm một hành động cụ thể để model biết điều gì cần chuyển động.");
- $("warnings").innerHTML=warnings.map(w=>`<div class="warning">⚠ ${escapeHtml(w)}</div>`).join("");
+ if(!subject) warnings.push('Chưa nhập chủ thể chính — kết quả sẽ thiếu trọng tâm.');
+ const lens=get('lens'), framing=get('framing'), ratio=get('ratio'), depth=get('depth'), dof=get('dof'), light=get('light');
+ if($('consistency').checked){
+  if(lens.includes('85mm') && ['wide shot','extreme wide establishing shot','medium-wide shot'].includes(framing)) warnings.push('85mm + cỡ cảnh rộng: có thể cần đứng xa hơn hoặc đổi sang 35mm/50mm để giữ bối cảnh dễ đọc.');
+  if(depth.includes('deep focus') && dof.includes('shallow')) warnings.push('Đang chọn cả deep focus và shallow depth of field. Hãy ưu tiên một ý đồ.');
+  if(light.includes('hard directional') && get('mood').includes('mộc mạc')) warnings.push('Ánh sáng gắt có thể làm cảnh bớt mềm mại; cân nhắc ánh sáng tán xạ nếu muốn đời thường dịu.');
+  if(ratio==='9:16' && ['wide shot','extreme wide establishing shot'].includes(framing)) warnings.push('Khung dọc + cỡ cảnh rất rộng có thể khiến chủ thể nhỏ; cần ưu tiên vị trí và khoảng trống.');
+ }
+ const realism=$('realism').checked, spatial=$('spatial').checked, camera=$('camera').checked;
+ let p=[];
+ add(p,'Main subject',subject);
+ add(p,'Appearance', [get('age'),get('identity'),get('face'),get('skin'),get('wardrobe')].filter(Boolean).join(', '));
+ add(p,'Action',get('action'));
+ add(p,'Physical interaction',get('interaction'));
+ add(p,'Movement quality',get('motion'));
+ add(p,'Expression during action',get('emotionAction'));
+ add(p,'Environment', [get('environment'),get('time'),get('era')].filter(Boolean).join(', '));
+ add(p,'Narrative moment',get('story'));
+ let comp=[get('framing'),get('angle'),`aspect ratio ${ratio}`,get('placement')].filter(Boolean);
+ add(p,'Composition',comp.join(', '));
+ if(spatial) add(p,'Spatial layers',[get('foreground')&&`Foreground: ${get('foreground')}`,get('midground')&&`Midground: ${get('midground')}`,get('background')&&`Background: ${get('background')}`,get('depth')].filter(Boolean).join('; '));
+ add(p,'Lighting',light);
+ add(p,'Color palette and contrast',[get('palette'),get('contrast')].filter(Boolean).join(', '));
+ if(camera) add(p,'Camera and visual language',[get('style'),get('lens')!=='no explicit lens specification'?`shot on a ${lens}`:'',get('dof')!=='no explicit depth-of-field specification'?dof:'',get('film')].filter(Boolean).join(', '));
+ if(realism) add(p,'Physical realism','believable anatomy and weight, natural contact between hands and objects, coherent perspective, authentic material texture, realistic fabric folds, natural skin texture, no excessive retouching');
+ add(p,'Material details',get('texture'));
+ add(p,'Required visual details',get('required'));
+ add(p,'Mood', [get('mood')].filter(Boolean).join(', '));
+ if(kind!=='image') add(p,'Video motion', [get('videoMotion'),get('cameraMove'),get('duration')].filter(Boolean).join(', '));
+ add(p,'Output constraints',`single clear ${kind==='video'?'video moment':kind==='both'?'image and video concept':'still-image moment'}, ${ratio}, coherent perspective, no invented objects or story details`);
+ let prompt=p.join('. ').replace(/\.\s*\./g,'.')+'.';
+ if(get('length')==='concise') prompt=p.filter(x=>!x.startsWith('Physical realism')&&!x.startsWith('Material details')).join('. ')+'.';
+ if(get('length')==='detailed') prompt += ' Preserve every required detail and make spatial relationships physically explicit; do not replace concrete visual instructions with generic quality adjectives.';
+ const avoid=get('avoid');
+ const negatives=[];
+ if(avoid) negatives.push(avoid);
+ if(realism) negatives.push('plastic skin, excessive beauty retouching, generic AI beauty face, doll-like features, malformed hands, extra fingers, missing fingers, duplicated limbs, broken anatomy, floating objects, impossible grip, inconsistent shadows, warped perspective, artificial bokeh, oversharpening');
+ negatives.push('random text, watermark, logo');
+ const negative=$('neg').checked?[...new Set(negatives.join(', ').split(',').map(s=>s.trim()).filter(Boolean))].join(', '):'Negative prompt not requested.';
+ const targetNames={chatgpt:'ChatGPT',gemini:'Gemini',claude:'Claude',qwen:'Qwen Image 2',flux:'FLUX.1 Schnell',wan:'Wan 2.2 / Wan video',generic:'the selected image/video model'};
+ let targetNotes='';
+ if(target==='qwen') targetNotes='Use detailed natural-language spatial and material descriptions. Keep the required objects explicit.';
+ if(target==='flux') targetNotes='Prefer concise, concrete visual phrases. Avoid overloading the prompt with redundant adjectives.';
+ if(target==='wan') targetNotes='For video, describe one coherent action, motion direction, camera movement, and continuity. Avoid contradictory simultaneous actions.';
+ if(['chatgpt','gemini','claude'].includes(target)) targetNotes='Return a polished English image/video prompt, a separate concise negative prompt, and a short Vietnamese explanation. Preserve the brief and do not invent story details.';
+ const languageNote=get('language')==='vi'?'Write the final prompt in Vietnamese.':get('language')==='both'?'Provide English first, then a faithful Vietnamese version.':'Write the final prompt in English.';
+ const instruction=`You are an expert prompt writer for images and video. Turn the brief below into a specific, coherent prompt for ${targetNames[target]}.\n\nRULES:\n1. Preserve the user's core idea, subject, action, and required details.\n2. Organize as: subject and identity → action and physical interaction → environment → composition and spatial layers → lighting → camera language when relevant → material realism → color and mood → constraints.\n3. Describe concrete spatial relationships and believable contact with objects; avoid generic filler such as “masterpiece” or “ultra quality”.\n4. Check for conflicts among lens, framing, depth of field, light, and aspect ratio. Resolve conflicts in favor of the intended scene and briefly explain any important compromise.\n5. Keep negative prompts relevant to likely failures; remove irrelevant carry-over items from other examples.\n6. If nonessential information is missing, make a restrained choice. Do not change the idea or add unsupported narrative details.\n7. ${languageNote}\n8. Output: (A) main prompt; (B) separate negative prompt if supported; (C) brief explanation in Vietnamese.\n\nMODEL NOTES: ${targetNotes||'Use wording suitable for the selected model; do not invent model-specific requirements.'}\n\nBRIEF:\n${prompt}\n\nNEGATIVE PROMPT:\n${negative}`;
+ const checksText=(warnings.length?'POTENTIAL CONFLICTS:\n- '+warnings.join('\n- '):'No obvious conflicts detected from the selected fields.')+'\n\nREMINDERS:\n- Confirm every required object appears in the main prompt.\n- Remove irrelevant negative terms that do not match the scene.\n- For a still image, describe one readable instant, not a sequence of events.\n- Current target: '+targetNames[target]+'.';
+ results={instruction,prompt,negative,checks:checksText};
+ $('warnings').style.display=warnings.length?'block':'none';
+ $('warnings').textContent=warnings.length?'⚠ '+warnings.join(' '):'';
  render();
+ $('status').textContent='Đã tạo prompt. Kiểm tra tab “Kiểm tra” trước khi sao chép.';
 }
-function escapeHtml(s){return s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
-function render(){
- $("output").textContent=result[activeTab]||"Bấm “Tạo prompt” để xem kết quả.";
- $("outputLabel").textContent={assistant:"Dùng khi muốn ChatGPT/Gemini/Claude phát triển prompt",prompt:"Bản nháp có cấu trúc — có thể chỉnh trước khi đưa vào workflow",negative:"Negative prompt riêng, chỉ gồm các lỗi cần hạn chế"}[activeTab];
- document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active",b.dataset.tab===activeTab));
-}
-document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>{activeTab=b.dataset.tab;render()}));
-$("generate").addEventListener("click",()=>{make();$("status").textContent="Đã tạo prompt từ dữ liệu hiện tại."});
-$("copy").addEventListener("click",async()=>{await navigator.clipboard.writeText(result[activeTab]||"");$("status").textContent="Đã sao chép nội dung đang xem."});
-$("copyAll").addEventListener("click",async()=>{if(!result.assistant)make();await navigator.clipboard.writeText("HƯỚNG DẪN CHO AI\n\n"+result.assistant+"\n\nPROMPT ẢNH/VIDEO\n\n"+result.prompt+"\n\nNEGATIVE PROMPT\n\n"+result.negative);$("status").textContent="Đã sao chép cả ba phần."});
-$("download").addEventListener("click",()=>{if(!result.assistant)make();const content="PROMPT STUDIO — KẾT QUẢ\n\n=== HƯỚNG DẪN CHO AI ===\n"+result.assistant+"\n\n=== PROMPT ẢNH / VIDEO ===\n"+result.prompt+"\n\n=== NEGATIVE PROMPT ===\n"+result.negative+"\n";const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([content],{type:"text/plain;charset=utf-8"}));a.download="prompt-studio-result.txt";a.click();URL.revokeObjectURL(a.href);$("status").textContent="Đã tạo file TXT."});
-$("sunburst").addEventListener("click",()=>{
- $("subject").value="một nữ nông dân Việt Nam đang thu hoạch lúa";
- $("identity").value="áo sơ mi trắng giản dị, nón lá, khẩu trang kéo xuống dưới cằm, gương mặt có dấu vết lao động tự nhiên";
- $("action").value="ôm một bó lúa nặng sát người; hai tay giữ bó lúa chắc chắn; vai và thân hơi nghiêng để phản ứng với trọng lượng; mỉm cười tự nhiên nhìn về phía máy ảnh";
- $("story").value="một khoảnh khắc lao động chân thực giữa mùa gặt, thể hiện sự gần gũi và tự hào";
- $("setting").value="ruộng lúa chín vàng ở Việt Nam, hàng lúa bao quanh nhân vật, một nông dân khác đang làm việc ở xa";
- $("framing").value="low-angle shot";$("ratio").value="21:9";
- $("layers").value="vài lá lúa ở tiền cảnh sát mép khung; nhân vật ở lớp giữa và hơi lệch trung tâm; người nông dân thứ hai cùng cánh đồng nằm ở hậu cảnh";
- $("light").value="soft natural daylight";$("palette").value="neutral documentary colors";
- document.querySelector('input[name="style"][value="photorealistic documentary photography"]').checked=true;
- $("mood").value="mộc mạc, sống động, không tạo dáng, tôn trọng người lao động";
- $("lens").value="shot on a 35mm lens, moderate depth of field";
- $("details").value="sợi rơm và hạt lúa rõ; bàn tay nắm chắc và tiếp xúc tự nhiên với bó lúa; nếp áo thật; làn da có kết cấu tự nhiên; hậu cảnh có chi tiết nhưng không tranh sự chú ý";
- $("avoid").value="da nhựa, vẻ đẹp chỉnh sửa quá mức, tạo dáng thời trang, bàn tay biến dạng, ngón tay thừa, bó lúa lơ lửng, ánh sáng giả, hậu cảnh giả, bokeh quá mạnh";
- $("target").value="assistant";$("model").value="qwen";$("useLayers").checked=true;$("useRealism").checked=true;$("useNeg").checked=true;$("useCamera").checked=true;make();$("status").textContent="Đã nạp ví dụ Sunburst để bạn sửa từng trường.";
-});
-$("clear").addEventListener("click",()=>{if(!confirm("Xóa dữ liệu trong biểu mẫu và đưa về trạng thái mặc định?"))return;location.reload()});
-make();
+function render(){ $('output').textContent=results[activeTab]||''; document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===activeTab));}
+document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{activeTab=b.dataset.tab;render()}));
+$('generate').onclick=build;
+$('copy').onclick=async()=>{try{await navigator.clipboard.writeText(results[activeTab]||'');$('status').textContent='Đã sao chép.'}catch(e){$('status').textContent='Không truy cập clipboard; hãy chọn và sao chép thủ công.'}};
+$('copyAll').onclick=async()=>{try{await navigator.clipboard.writeText(`PROMPT INSTRUCTION\n${results.instruction}\n\nMAIN PROMPT\n${results.prompt}\n\nNEGATIVE PROMPT\n${results.negative}\n\nCHECKS\n${results.checks}`);$('status').textContent='Đã sao chép toàn bộ kết quả.'}catch(e){$('status').textContent='Không truy cập clipboard; hãy sao chép thủ công.'}};
+$('download').onclick=()=>{const blob=new Blob([`PROMPT INSTRUCTION\n${results.instruction}\n\nMAIN PROMPT\n${results.prompt}\n\nNEGATIVE PROMPT\n${results.negative}\n\nCHECKS\n${results.checks}`],{type:'text/plain;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='prompt-studio-output.txt';a.click();URL.revokeObjectURL(a.href)};
+$('kind').onchange=()=>{$('videoFields').style.display=$('kind').value==='image'?'none':'block'};
+$('example').onclick=()=>{
+ const vals={subject:'A Vietnamese high-school girl wearing a white áo dài',age:'teenage high-school student',identity:'long dark hair falling past her shoulders, natural everyday appearance',face:'candid expression, looking at someone off-camera',skin:'realistic skin texture, subtle natural imperfections, minimal makeup',wardrobe:'white áo dài, black trousers, a traditional nón lá, a small old-fashioned black school satchel',action:'running naturally across a Vietnamese high-school courtyard',interaction:'one hand securely holds the nón lá by its rim; the other hand carries the satchel by its handle; the objects swing slightly with her running motion',motion:'energetic candid movement',emotionAction:'laughing naturally with friends',environment:'a Vietnamese high-school courtyard with mature trees, a weathered stone bench, and classroom buildings',time:'late morning',era:'nostalgic Vietnamese school life, late 20th century',story:'an unposed, lively everyday school moment, warm and optimistic',framing:'medium shot',angle:'eye-level angle',ratio:'16:9',placement:'left third of the frame',foreground:'one corner of a weathered stone bench enters the lower-left foreground',midground:'the student is clearly visible with both hands and carried objects readable',background:'school corridors, trees, and a few distant students softly out of focus',depth:'layered depth with foreground framing and visible background',light:'soft natural daylight',palette:'natural warm earth tones',mood:'mộc mạc, gần gũi, lạc quan',contrast:'natural moderate contrast',style:'natural documentary photography',lens:'35mm lens',dof:'moderate depth of field',film:'subtle organic 35mm film grain',texture:'natural folds in the áo dài, woven texture of the nón lá, worn leather or canvas on the small black satchel, rough stone bench surface',required:'white áo dài, black trousers, nón lá, small old-fashioned black school satchel, visible corner of stone bench, 16:9 composition',avoid:'plastic skin, overly retouched beauty, fashion-model posing, generic AI beauty face, deformed hands, extra fingers, floating objects, fake-looking background',target:'chatgpt',kind:'image'};
+ for(const [k,v] of Object.entries(vals)) if($(k)) $(k).value=v;
+ build();
+};
+$('sunburst').onclick=()=>{
+ const vals={subject:'A Vietnamese woman rice farmer wearing a conical hat',age:'young adult',identity:'sun-weathered, everyday appearance',face:'joyful unposed expression',skin:'realistic skin texture, subtle natural imperfections, minimal makeup',wardrobe:'practical rural work clothes',action:'lifting and carrying a freshly harvested sheaf of rice',interaction:'both hands support the heavy rice sheaf; the shoulders and torso respond naturally to its weight; rice stalks bend and overlap realistically',environment:'a working rice field in rural Vietnam during harvest',time:'late morning',era:'contemporary Vietnam',story:'a candid documentary moment showing honest work and quiet pride',framing:'medium-wide shot',angle:'slightly low angle',ratio:'21:9',placement:'left third of the frame',foreground:'soft rice leaves partially frame the lower edge',midground:'the farmer and rice sheaf are the clear visual focus',background:'another farmer works farther back in the field, visibly separated by distance',depth:'layered depth with foreground framing and visible background',light:'soft natural daylight',palette:'natural warm earth tones',mood:'mộc mạc, gần gũi, lạc quan',contrast:'natural moderate contrast',style:'natural documentary photography',lens:'50mm lens',dof:'moderate depth of field',film:'crisp documentary detail',texture:'individual rice grains and stalks, woven hat fibers, worn fabric, realistic skin and hands',required:'conical hat, heavy rice sheaf supported by both hands, rice leaves in foreground, a second farmer in the distance',avoid:'plastic skin, fashion posing, floating rice sheaf, impossible grip, deformed hands, fake field background',target:'qwen',kind:'image'};
+ for(const [k,v] of Object.entries(vals)) if($(k)) $(k).value=v;
+ build();
+};
+$('clear').onclick=()=>{document.querySelectorAll('input:not([type=checkbox]),textarea').forEach(x=>x.value='');document.querySelectorAll('input[type=checkbox]').forEach(x=>x.checked=['realism','spatial','neg','camera','consistency'].includes(x.id));document.querySelectorAll('select').forEach(x=>x.selectedIndex=0);$('videoFields').style.display='none';results={instruction:'',prompt:'',negative:'',checks:''};$('warnings').style.display='none';activeTab='instruction';render();$('status').textContent='Đã xóa biểu mẫu.'};
+build();
 </script>
-</body>
-</html>
+</body></html>
