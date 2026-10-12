@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>AI Image Studio V6.5 — Local, không mật khẩu</title>
+<title>AI Image Studio V6.7 — Character Reference</title>
 <style>
 :root{color-scheme:dark;--bg:#10131a;--panel:#191e29;--line:#303849;--text:#edf1f8;--muted:#a8b2c4;--accent:#8ab4ff;--accent2:#b4f0cf;--danger:#ffb4ab}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 10% 0%,#1b2940 0,transparent 35%),var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,Segoe UI,sans-serif}
@@ -29,8 +29,8 @@ footer{max-width:1200px;margin:-28px auto 30px;padding:0 18px;color:var(--muted)
 </head>
 <body>
 <header>
-  <h1>AI Image Studio <span style="color:var(--accent)">V6.5</span></h1>
-  <p>Tạo prompt, gửi ảnh tham chiếu đến OpenAI hoặc Gemini API, xem kết quả và tải ảnh gốc. Giao diện tiếng Việt kèm thuật ngữ tiếng Anh trong ngoặc.</p>
+  <h1>AI Image Studio <span style="color:var(--accent)">V6.7</span></h1>
+  <p>Tạo prompt, dùng ảnh tham chiếu để định hướng nhân vật, gửi đến OpenAI hoặc Gemini API, xem kết quả và tải ảnh gốc. V6.7 bổ sung chế độ giữ nhận dạng người mẫu; các tính năng cũ vẫn được giữ nguyên.</p>
   <div><span class="pill">Giao diện web</span><span class="pill">Backend chạy local</span><span class="pill">Không cần mật khẩu</span><span class="pill">API key vẫn nằm trong .env</span></div>
 </header>
 <main>
@@ -78,6 +78,23 @@ footer{max-width:1200px;margin:-28px auto 30px;padding:0 18px;color:var(--muted)
     <div><label for="mood">Cảm xúc (Mood)</label><select id="mood"><option value="Natural, optimistic, lively (tự nhiên, lạc quan, sống động)">Tự nhiên, lạc quan (natural, optimistic)</option><option value="Dreamlike and mysterious (mơ màng, bí ẩn)">Mơ màng, bí ẩn (dreamlike)</option><option value="Melancholic and contemplative (man mác buồn, suy tư)">Man mác buồn (melancholic)</option><option value="Tense and dramatic (căng thẳng, kịch tính)">Kịch tính (dramatic)</option><option value="Calm and intimate (bình yên, gần gũi)">Bình yên (calm, intimate)</option></select></div>
   </div>
   <label for="realism">Chất liệu và tính chân thực vật lý (Material & Physical Realism)</label><textarea id="realism" placeholder="Ví dụ: Nếp áo dài rủ tự nhiên, bàn tay cầm điện thoại đúng tư thế, bóng đổ phù hợp ánh nắng.">Tỷ lệ cơ thể và bàn tay tự nhiên; ngón tay tiếp xúc đúng với điện thoại và nón lá; nếp vải áo dài mềm, có trọng lượng; chất liệu tre đan của nón lá chân thực; phối cảnh và bóng đổ phù hợp với ánh sáng ban ngày.</textarea>
+  <h3>Làn da nhân vật (Skin Realism)</h3>
+  <p class="hint">Chọn cách thể hiện da. Ứng dụng tự ghép mô tả phù hợp vào prompt cuối theo ngôn ngữ đã chọn; mặc định là da tự nhiên có khuyết điểm nhẹ.</p>
+  <div class="grid2">
+    <div><label for="skinRealism">Độ chân thật của làn da (Skin Style)</label><select id="skinRealism">
+      <option value="beauty">Da đẹp, mịn màng (Smooth beauty skin)</option>
+      <option value="natural" selected>Da tự nhiên, khuyết điểm nhẹ (Natural skin)</option>
+      <option value="real">Da chân thật, giữ rõ khuyết điểm (Realistic skin)</option>
+      <option value="raw">Da thô mộc, không làm đẹp (Unretouched skin)</option>
+      <option value="custom">Tự mô tả (Custom)</option>
+    </select></div>
+    <div><label for="skinImperfection">Mức độ khuyết điểm (Imperfection Strength)</label><select id="skinImperfection">
+      <option value="light">Nhẹ — chỉ thấy khi nhìn gần (Subtle)</option>
+      <option value="medium" selected>Vừa — rõ nhưng tự nhiên (Moderate)</option>
+      <option value="strong">Mạnh — giữ rõ kết cấu da (Pronounced)</option>
+    </select></div>
+  </div>
+  <div id="skinCustomWrap" hidden><label for="skinCustom">Mô tả làn da theo ý thím (Custom Skin Description)</label><textarea id="skinCustom" placeholder="Ví dụ: Da dầu nhẹ, vài nốt mụn nhỏ ở má, lỗ chân lông thấy rõ ở vùng mũi."></textarea></div>
   <label for="negative">Điều cần tránh (Negative Constraints)</label><textarea id="negative" placeholder="Ví dụ: Không méo bàn tay, không thừa ngón, không nhân đôi điện thoại, không làm biến dạng nón lá hoặc áo dài.">Không méo bàn tay, không thừa hoặc dính ngón tay, không nhân đôi điện thoại hay nón lá, không làm biến dạng khuôn mặt, cơ thể hoặc áo dài; không để vật thể lơ lửng, không tạo chữ ngẫu nhiên, watermark hay hiệu ứng da nhựa.</textarea>
   <label for="extra">Ghi chú bổ sung (Additional Notes)</label><textarea id="extra" placeholder="Ví dụ: Giữ màu áo dài trắng tinh khôi, cảnh đời thường, không thêm người đứng sát nhân vật.">Ưu tiên cảm giác ảnh chụp đời thực, màu sắc tự nhiên, áo dài trắng rõ nếp vải; giữ cô gái là chủ thể chính và không thêm đạo cụ không liên quan.</textarea>
 
@@ -86,11 +103,25 @@ footer{max-width:1200px;margin:-28px auto 30px;padding:0 18px;color:var(--muted)
   <p class="hint">Ảnh sẽ được gửi qua backend đến API đã chọn. Chỉ tải ảnh bạn có quyền sử dụng. Ảnh không được lưu vào GitHub Pages.</p>
   <div class="drop"><label for="references">Chọn ảnh tham chiếu (Upload Reference Images)</label><input id="references" type="file" accept="image/png,image/jpeg,image/webp" multiple><small>PNG, JPEG, WebP. Giới hạn mặc định 4 ảnh, mỗi ảnh tối đa 10 MB.</small></div>
   <div id="referencePreview" class="preview"></div>
+  <h3>Chế độ người mẫu (Character Reference Mode)</h3>
+  <p class="hint">Chế độ mới: ưu tiên giữ khuôn mặt, kiểu tóc và tỷ lệ vóc dáng của ảnh mẫu; cho phép thay đổi trang phục, tư thế và cách tạo dáng theo prompt. Không thể bảo đảm giống 100% vì kết quả phụ thuộc model/API và ảnh đầu vào.</p>
+  <label for="characterMode">Cách sử dụng ảnh tham chiếu (Reference Mode)</label>
+  <select id="characterMode">
+    <option value="normal" selected>Tham chiếu thông thường — giữ theo các mục bên dưới (Standard Reference)</option>
+    <option value="identity">A. Ưu tiên giữ tối đa khuôn mặt, tóc và vóc dáng (Maximum Identity Preservation)</option>
+    <option value="face">B. Ưu tiên khuôn mặt; cơ thể và trang phục linh hoạt (Face Priority)</option>
+    <option value="character-flexible">C. Giữ mặt, tóc và vóc dáng — trang phục/tư thế linh hoạt (Character Lock, Flexible Outfit & Pose)</option>
+  </select>
+  <div class="checks" style="margin-top:10px">
+    <label class="check"><input id="allowPoseChange" type="checkbox" checked><span>Cho phép thay đổi tư thế theo prompt (Allow pose changes)</span></label>
+    <label class="check"><input id="allowOutfitChange" type="checkbox" checked><span>Cho phép thay đổi trang phục theo prompt (Allow outfit changes)</span></label>
+  </div>
   <h3>Mục đích tham chiếu (Reference Purpose)</h3>
   <div class="checks">
     <label class="check"><input type="checkbox" name="refPurpose" value="Identity (giữ gương mặt và nhận dạng)" checked><span>Giữ gương mặt và nhận dạng (Identity)</span></label>
     <label class="check"><input type="checkbox" name="refPurpose" value="Outfit (giữ trang phục)" checked><span>Giữ trang phục (Outfit)</span></label>
     <label class="check"><input type="checkbox" name="refPurpose" value="Hairstyle (giữ kiểu tóc)"><span>Giữ kiểu tóc (Hairstyle)</span></label>
+    <label class="check"><input type="checkbox" name="refPurpose" value="Body proportions (giữ vóc dáng và tỷ lệ cơ thể)"><span>Giữ vóc dáng và tỷ lệ cơ thể (Body Proportions)</span></label>
     <label class="check"><input type="checkbox" name="refPurpose" value="Pose (tham khảo tư thế)"><span>Tham khảo tư thế (Pose)</span></label>
     <label class="check"><input type="checkbox" name="refPurpose" value="Style (tham khảo phong cách hình ảnh)"><span>Phong cách hình ảnh (Style)</span></label>
     <label class="check"><input type="checkbox" name="refPurpose" value="Composition (tham khảo bố cục)"><span>Tham khảo bố cục (Composition)</span></label>
@@ -122,7 +153,7 @@ footer{max-width:1200px;margin:-28px auto 30px;padding:0 18px;color:var(--muted)
   <p class="hint">Lưu ý chi phí: API tính phí riêng theo nhà cung cấp/model. “Cao nhất” được ánh xạ sang chế độ chất lượng tối đa mà model được cấu hình hỗ trợ; kích thước thực tế tùy model và tỷ lệ ảnh.</p>
 </section>
 </main>
-<footer>AI Image Studio V6.4.1 · Backend URL mặc định localhost:8787 · GitHub Pages + backend riêng · API key chỉ ở backend · UI tiếng Việt (Vietnamese) + thuật ngữ tiếng Anh (English).</footer>
+<footer>AI Image Studio V6.7 · Backend URL mặc định localhost:8787 · GitHub Pages + backend riêng · API key chỉ ở backend · UI tiếng Việt (Vietnamese) + thuật ngữ tiếng Anh (English).</footer>
 <script>
 const $ = id => document.getElementById(id);
 let referenceFiles = [];
@@ -147,6 +178,55 @@ $("references").addEventListener("change", e => {
   });
 });
 function selectedPurposes(){return Array.from(document.querySelectorAll('input[name="refPurpose"]:checked')).map(x=>x.value)}
+const skinDescriptions = {
+  vi: {
+    beauty: {
+      light: "Làn da mịn màng, đều màu, được chăm chút nhưng vẫn giữ kết cấu da tự nhiên; không làm da thành nhựa.",
+      medium: "Làn da mịn màng, đều màu và được chăm chút, vẫn giữ kết cấu da thật tinh tế; tránh hiệu ứng da nhựa hoặc làm mịn quá mức.",
+      strong: "Làn da được làm đẹp và mịn rõ rệt nhưng vẫn có kết cấu da hợp lý, không bóng nhựa hoặc mất chi tiết khuôn mặt."
+    },
+    natural: {
+      light: "Làn da người chân thật với lỗ chân lông tự nhiên, sợi lông tơ mảnh và sắc độ da hơi không đồng đều rất nhẹ; không làm mịn quá mức.",
+      medium: "Làn da người chân thật với lỗ chân lông tự nhiên, sợi lông tơ mảnh, vùng da hơi không đều màu, một vài nốt mụn nhỏ hoặc vết thâm nhẹ; giữ kết cấu da, không retouch quá mức.",
+      strong: "Làn da tự nhiên với lỗ chân lông rõ, sợi lông tơ, vùng da không đều màu, vài nốt mụn và vết thâm nhìn thấy rõ nhưng phù hợp với nhân vật; không xóa khuyết điểm bằng làm mịn da."
+    },
+    real: {
+      light: "Giữ kết cấu da chân thật, lỗ chân lông và nếp nhăn nhỏ tự nhiên; chỉ giảm chỉnh sửa làm đẹp, không phóng đại khuyết điểm.",
+      medium: "Kết cấu da chân thật, lỗ chân lông rõ, nếp nhăn nhỏ, mụn hoặc thâm mụn và đốm sắc tố tự nhiên; giữ các khuyết điểm phù hợp với độ tuổi, không retouch xóa sạch.",
+      strong: "Giữ rõ kết cấu da thật gồm lỗ chân lông, nếp nhăn nhỏ, mụn, vết thâm, đốm sắc tố và vùng da không đều màu; không làm đẹp, không làm mịn hoặc xóa khuyết điểm."
+    },
+    raw: {
+      light: "Làn da thô mộc chưa qua chỉnh sửa làm đẹp, giữ lỗ chân lông và kết cấu tự nhiên, tránh làm mịn da.",
+      medium: "Làn da thô mộc chưa qua chỉnh sửa, giữ nguyên kết cấu, lỗ chân lông, nếp nhăn nhỏ và khuyết điểm vốn có; không làm đẹp hoặc làm mịn da.",
+      strong: "Làn da thô mộc chưa retouch, giữ rõ mọi chi tiết kết cấu da và các khuyết điểm vốn có như lỗ chân lông, mụn, vết thâm, nếp nhăn và sắc tố không đều; không làm đẹp da."
+    }
+  },
+  en: {
+    beauty: {
+      light: "Smooth, even-toned, well-groomed skin while retaining subtle natural skin texture; avoid a plastic appearance.",
+      medium: "Smooth, even-toned beauty skin with delicate realistic texture; avoid plastic shine and excessive smoothing.",
+      strong: "Clearly polished and smooth beauty skin while preserving plausible skin detail; avoid waxy plastic skin or loss of facial detail."
+    },
+    natural: {
+      light: "Realistic human skin with natural pores, fine facial vellus hair, and very subtle uneven skin tone; avoid excessive smoothing.",
+      medium: "Realistic human skin with natural pores, fine facial vellus hair, subtly uneven skin tone, a few small blemishes or faint acne marks; preserve skin texture and avoid excessive retouching.",
+      strong: "Natural skin with visible pores, fine vellus hair, uneven tone, a few blemishes and acne marks clearly visible but appropriate for the character; do not erase imperfections through skin smoothing."
+    },
+    real: {
+      light: "Preserve realistic skin texture, pores, and fine natural lines; minimize beauty retouching without exaggerating imperfections.",
+      medium: "Realistic skin texture with visible pores, fine lines, natural blemishes or acne marks, and pigmentation; retain imperfections appropriate to the character's age, without airbrushing them away.",
+      strong: "Preserve clearly visible real skin texture, including pores, fine lines, acne, blemish marks, pigmentation, and uneven skin tone; no beautifying, smoothing, or removing imperfections."
+    },
+    raw: {
+      light: "Unretouched, unpolished skin with natural pores and texture; avoid skin smoothing.",
+      medium: "Unretouched skin that preserves its natural texture, pores, fine lines, and existing imperfections; no beauty retouching or skin smoothing.",
+      strong: "Raw, unretouched skin preserving visible texture and existing imperfections such as pores, blemishes, acne marks, fine lines, and uneven pigmentation; no beautification."
+    }
+  }
+};
+function updateSkinControls(){ $("skinCustomWrap").hidden = $("skinRealism").value !== "custom"; }
+$("skinRealism").addEventListener("change", updateSkinControls);
+updateSkinControls();
 function makePrompt(){
   const lang=$("promptLanguage").value;
   const raw = id => $(id).value.trim();
@@ -155,8 +235,27 @@ function makePrompt(){
     if(!el || !el.options) return raw(id);
     return el.options[el.selectedIndex].text.replace(/\s*\([^)]*\)/g,"").trim();
   };
-  const purposes=selectedPurposes();
-  const purposeVi={"Identity":"giữ gương mặt và nhận dạng nhân vật","Outfit":"giữ trang phục","Hairstyle":"giữ kiểu tóc","Pose":"tham khảo tư thế","Style":"tham khảo phong cách hình ảnh","Composition":"tham khảo bố cục"};
+  const purposes=activeCharacterPurposeValues();
+  const purposeVi={"Identity":"giữ gương mặt và nhận dạng nhân vật","Outfit":"giữ trang phục","Hairstyle":"giữ kiểu tóc","Body proportions":"giữ vóc dáng và tỷ lệ cơ thể","Pose":"tham khảo tư thế","Style":"tham khảo phong cách hình ảnh","Composition":"tham khảo bố cục"};
+  const characterMode=$("characterMode")?.value||"normal";
+  const characterInstructions={
+    vi:{
+      identity:"CHẾ ĐỘ GIỮ NHẬN DẠNG NGƯỜI MẪU: Ưu tiên tối đa các đặc điểm nhận dạng khuôn mặt, kiểu tóc, màu tóc, vóc dáng và tỷ lệ cơ thể theo ảnh tham chiếu. Không tự ý đổi danh tính hoặc làm đẹp thay đổi các nét riêng. Chỉ thay đổi các yếu tố được prompt yêu cầu rõ ràng.",
+      face:"CHẾ ĐỘ ƯU TIÊN KHUÔN MẶT: Giữ các đặc điểm nhận dạng khuôn mặt theo ảnh tham chiếu. Cho phép thay đổi tóc, tư thế, vóc dáng và trang phục theo prompt.",
+      flexible:"CHẾ ĐỘ NGƯỜI MẪU — TRANG PHỤC VÀ TƯ THẾ LINH HOẠT: Ưu tiên cao nhất việc giữ đúng người trong ảnh tham chiếu: hình dáng khuôn mặt, khoảng cách và tỷ lệ mắt, mũi, môi, đường hàm, tông da, kiểu tóc, màu tóc, đường chân tóc, vóc dáng và tỷ lệ cơ thể. Không tạo ra một người khác hoặc tự ý đổi tuổi và các đặc điểm nhận dạng. Được phép thay đổi trang phục, phụ kiện, tư thế, cách tạo dáng, hành động, bối cảnh, ánh sáng và góc máy theo prompt. Khi thay đổi tư thế, giữ tỷ lệ cơ thể tự nhiên và nhất quán với người mẫu. Ảnh tham chiếu quyết định danh tính; prompt quyết định trang phục, hành động và bối cảnh."
+    },
+    en:{
+      identity:"CHARACTER IDENTITY PRESERVATION: Give maximum priority to the reference person's facial identity, hairstyle, hair color, body shape, and body proportions. Do not change identity or alter distinctive facial traits for beautification. Change only elements explicitly requested in the prompt.",
+      face:"FACE PRIORITY MODE: Preserve the reference person's facial identity. Hair, pose, body shape, and outfit may change according to the prompt.",
+      flexible:"CHARACTER REFERENCE — FLEXIBLE OUTFIT AND POSE: Highest priority is preserving the same person from the reference image: facial shape, eye spacing and proportions, nose, lips, jawline, skin tone, hairstyle, hair color, hairline, body shape, and body proportions. Do not turn the person into someone else or arbitrarily change age or distinctive identity traits. Outfit, accessories, pose, action, background, lighting, and camera angle may change according to the prompt. When changing pose, keep anatomy and body proportions natural and consistent with the reference person. The reference image defines identity; the prompt defines outfit, action, and setting."
+    }
+  };
+  function activeCharacterPurposeValues(){
+    if(characterMode==="identity") return ["Identity (giữ gương mặt và nhận dạng)","Hairstyle (giữ kiểu tóc)","Body proportions (giữ vóc dáng và tỷ lệ cơ thể)"];
+    if(characterMode==="face") return ["Identity (giữ gương mặt và nhận dạng)"];
+    if(characterMode==="character-flexible") return ["Identity (giữ gương mặt và nhận dạng)","Hairstyle (giữ kiểu tóc)","Body proportions (giữ vóc dáng và tỷ lệ cơ thể)"];
+    return selectedPurposes();
+  }
   const viSections=[];
   const enSections=[];
   const addBoth=(viTitle,enTitle,id)=>{
@@ -176,12 +275,36 @@ function makePrompt(){
   viSections.push(`MÀU SẮC: ${viSelect("palette")}`); enSections.push(`COLOR PALETTE: ${raw("palette")}`);
   viSections.push(`CẢM XÚC: ${viSelect("mood")}`); enSections.push(`MOOD: ${raw("mood")}`);
   addBoth("CHẤT LIỆU VÀ TÍNH CHÂN THỰC VẬT LÝ","MATERIAL & PHYSICAL REALISM","realism");
+  const skinStyle=$("skinRealism").value;
+  const skinLevel=$("skinImperfection").value;
+  const skinLevelVi={light:"nhẹ",medium:"vừa",strong:"mạnh"}[skinLevel];
+  const skinText=skinStyle==="custom" ? raw("skinCustom") : (skinDescriptions.vi[skinStyle]||skinDescriptions.vi.natural)[skinLevel];
+  const skinTextEn=skinStyle==="custom" ? raw("skinCustom") : (skinDescriptions.en[skinStyle]||skinDescriptions.en.natural)[skinLevel];
+  if(skinText){
+    viSections.push(`ĐỘ CHÂN THẬT CỦA LÀN DA: ${skinText}${skinStyle!=="custom"?` (Mức độ khuyết điểm: ${skinLevelVi}.)`:""}`);
+    enSections.push(`SKIN REALISM: ${skinTextEn}${skinStyle!=="custom"?` (Imperfection intensity: ${skinLevel}.)`:""}`);
+  }
   addBoth("ĐIỀU CẦN TRÁNH","IMPORTANT CONSTRAINTS","negative");
   addBoth("GHI CHÚ BỔ SUNG","ADDITIONAL NOTES","extra");
   if(referenceFiles.length){
     const viPurposes=purposes.map(x=>purposeVi[x]||x).join(", ")||"tham khảo hình ảnh tổng quát";
     viSections.push(`HƯỚNG DẪN ẢNH THAM CHIẾU: Dùng ảnh đã tải lên làm tư liệu tham khảo cho các mục đã chọn: ${viPurposes}. Chỉ giữ những thuộc tính được chọn; thực hiện bối cảnh và hành động mới theo mô tả bên trên. Không sao chép máy móc các chi tiết không liên quan.${raw("refNotes")?" Ghi chú tham chiếu: "+raw("refNotes"):""}`);
     enSections.push(`REFERENCE IMAGE INSTRUCTION: Use uploaded reference image(s) only for these selected attributes: ${purposes.join(", ")||"general visual guidance"}. Preserve selected attributes while following the new scene and action described above. Do not blindly copy unrelated details.${raw("refNotes")?" Reference notes: "+raw("refNotes"):""}`);
+  }
+  if(characterMode!=="normal"){
+    const key=characterMode==="character-flexible"?"flexible":characterMode;
+    viSections.push(characterInstructions.vi[key]);
+    enSections.push(characterInstructions.en[key]);
+    if(characterMode==="character-flexible"){
+      const outfit=$("allowOutfitChange").checked;
+      const pose=$("allowPoseChange").checked;
+      const viExtra=[]; const enExtra=[];
+      if(outfit){viExtra.push("ĐƯỢC PHÉP THAY ĐỔI TRANG PHỤC theo mô tả trong prompt.");enExtra.push("OUTFIT MAY CHANGE according to the prompt.");}
+      else {viExtra.push("Giữ trang phục theo ảnh tham chiếu.");enExtra.push("Keep the outfit from the reference image.");}
+      if(pose){viExtra.push("ĐƯỢC PHÉP THAY ĐỔI TƯ THẾ/TẠO DÁNG theo mô tả trong prompt.");enExtra.push("POSE MAY CHANGE according to the prompt.");}
+      else {viExtra.push("Giữ tư thế gần với ảnh tham chiếu.");enExtra.push("Keep the pose close to the reference image.");}
+      viSections.push(viExtra.join(" ")); enSections.push(enExtra.join(" "));
+    }
   }
   if(lang==="vi") return "Tạo một ảnh theo mô tả sau. Giữ đúng chủ thể, hành động, bố cục và các yêu cầu đã nêu.\n\n"+viSections.join("\n\n");
   if(lang==="both") return "ENGLISH PROMPT (TIẾNG ANH):\nGenerate a single image following this brief. Preserve the subject, action, composition, and constraints exactly as specified.\n\n"+enSections.join("\n\n")+"\n\nBẢN TIẾNG VIỆT (VIETNAMESE VERSION):\nTạo một ảnh theo mô tả sau.\n\n"+viSections.join("\n\n");
@@ -201,7 +324,9 @@ $("generate").addEventListener("click",async()=>{
   try{
     const fd=new FormData();fd.append("provider",$("provider").value);fd.append("prompt",prompt);fd.append("aspectRatio",$("ratio").value);fd.append("resolution",$("resolution").value);
     fd.append("model",$("provider").value==="gemini"?$("geminiModel").value:$("openaiModel").value);
-    fd.append("referencePurposes",JSON.stringify(selectedPurposes()));fd.append("referenceNotes",$("refNotes").value);
+    const mode=$("characterMode")?.value||"normal";
+    const effectivePurposes=mode==="identity"?["Identity (giữ gương mặt và nhận dạng)","Hairstyle (giữ kiểu tóc)","Body proportions (giữ vóc dáng và tỷ lệ cơ thể)"]:mode==="face"?["Identity (giữ gương mặt và nhận dạng)"]:mode==="character-flexible"?["Identity (giữ gương mặt và nhận dạng)","Hairstyle (giữ kiểu tóc)","Body proportions (giữ vóc dáng và tỷ lệ cơ thể)"]:selectedPurposes();
+    fd.append("referencePurposes",JSON.stringify(effectivePurposes));fd.append("referenceNotes",$("refNotes").value);
     referenceFiles.forEach(f=>fd.append("references",f,f.name));
     const resp=await fetch(base+"/api/generate",{method:"POST",body:fd});
     const data=await resp.json().catch(()=>({error:"Backend trả về dữ liệu không hợp lệ."}));
