@@ -247,16 +247,54 @@ const skinDescriptions = {
 function updateSkinControls(){ $("skinCustomWrap").hidden = $("skinRealism").value !== "custom"; }
 $("skinRealism").addEventListener("change", updateSkinControls);
 updateSkinControls();
-function makePrompt(){
+async function translateToEnglish(text){
+  const input=String(text||"").trim();
+  if(!input) return "";
+  // Keep already-English content intact where possible, but translate Vietnamese/mixed text.
+  const cacheKey=input;
+  if(translationCache.has(cacheKey)) return translationCache.get(cacheKey);
+  const chunks=[];
+  // Google Translate's public web endpoint has URL-size limits; split long text safely by sentences.
+  let remaining=input;
+  while(remaining.length>0){
+    if(remaining.length<=900){chunks.push(remaining);break;}
+    let cut=remaining.lastIndexOf(". ",900);
+    if(cut<300) cut=remaining.lastIndexOf("; ",900);
+    if(cut<300) cut=remaining.lastIndexOf(" ",900);
+    if(cut<1) cut=900;
+    chunks.push(remaining.slice(0,cut+1));
+    remaining=remaining.slice(cut+1).trim();
+  }
+  const translated=[];
+  for(const chunk of chunks){
+    const params=new URLSearchParams({client:"gtx",sl:"auto",tl:"en",dt:"t",q:chunk});
+    const response=await fetch("https://translate.googleapis.com/translate_a/single?"+params.toString());
+    if(!response.ok) throw new Error("Không thể dịch prompt sang tiếng Anh. Hãy kiểm tra kết nối Internet rồi thử lại.");
+    const data=await response.json();
+    const result=Array.isArray(data?.[0])?data[0].map(part=>part?.[0]||"").join(""):"";
+    if(!result) throw new Error("Dịch vụ dịch không trả về nội dung. Hãy thử lại.");
+    translated.push(result);
+  }
+  const output=translated.join(" ").trim();
+  translationCache.set(cacheKey,output);
+  return output;
+}
+const translationCache=new Map();
+
+async function makePrompt(){
   const lang=$("promptLanguage").value;
-  const raw = id => $(id).value.trim();
+  const raw = id => $(id)?.value?.trim()||"";
+  const cleanEnglishSelect = id => {
+    const el=$(id);
+    if(!el || !el.options) return raw(id);
+    return el.options[el.selectedIndex].value.replace(/\s*\([^)]*\)/g,"").trim();
+  };
   const viSelect = id => {
     const el=$(id);
     if(!el || !el.options) return raw(id);
     return el.options[el.selectedIndex].text.replace(/\s*\([^)]*\)/g,"").trim();
   };
-  // Initialize characterMode before resolving selected purposes. The old order
-  // triggered a Temporal Dead Zone ReferenceError and made Build Prompt appear unresponsive.
+  const en = async id => lang==="vi" ? raw(id) : await translateToEnglish(raw(id));
   const characterMode=$("characterMode")?.value||"normal";
   const purposes=activeCharacterPurposeValues();
   const purposeVi={"Identity":"giữ gương mặt và nhận dạng nhân vật","Outfit":"giữ trang phục","Hairstyle":"giữ kiểu tóc","Body proportions":"giữ vóc dáng và tỷ lệ cơ thể","Pose":"tham khảo tư thế","Style":"tham khảo phong cách hình ảnh","Composition":"tham khảo bố cục"};
@@ -273,59 +311,59 @@ function makePrompt(){
     }
   };
   function activeCharacterPurposeValues(){
-    if(characterMode==="identity") return ["Identity (giữ gương mặt và nhận dạng)","Hairstyle (giữ kiểu tóc)","Body proportions (giữ vóc dáng và tỷ lệ cơ thể)"];
-    if(characterMode==="face") return ["Identity (giữ gương mặt và nhận dạng)"];
-    if(characterMode==="character-flexible") return ["Identity (giữ gương mặt và nhận dạng)","Hairstyle (giữ kiểu tóc)","Body proportions (giữ vóc dáng và tỷ lệ cơ thể)"];
-    return selectedPurposes();
+    if(characterMode==="identity") return ["Identity","Hairstyle","Body proportions"];
+    if(characterMode==="face") return ["Identity"];
+    if(characterMode==="character-flexible") return ["Identity","Hairstyle","Body proportions"];
+    return selectedPurposes().map(x=>x.split(" (")[0]);
   }
-  const viSections=[];
-  const enSections=[];
-  const addBoth=(viTitle,enTitle,id)=>{
+  const viSections=[], enSections=[];
+  const addField=async(viTitle,enTitle,id)=>{
     const v=raw(id);
-    if(v){viSections.push(`${viTitle}: ${v}`);enSections.push(`${enTitle}: ${v}`);}
+    if(v){
+      viSections.push(`${viTitle}: ${v}`);
+      enSections.push(`${enTitle}: ${await en(id)}`);
+    }
   };
-  addBoth("CHỦ THỂ","SUBJECT","subject");
-  addBoth("NHẬN DẠNG VÀ NGOẠI HÌNH","IDENTITY & APPEARANCE","appearance");
-  addBoth("HÀNH ĐỘNG VÀ TƯƠNG TÁC VẬT LÝ","ACTION & PHYSICAL INTERACTION","action");
-  addBoth("BỐI CẢNH","ENVIRONMENT","environment");
-  addBoth("KHOẢNH KHẮC KỂ CHUYỆN","NARRATIVE MOMENT","story");
-  const viComposition=`BỐ CỤC VÀ MÁY ẢNH: ${viSelect("shot")}; ${viSelect("angle")}; tỷ lệ khung hình ${$("ratio").value}; ${viSelect("lens")}; ${viSelect("dof")}. ${raw("layers")}`;
-  const enComposition=`COMPOSITION & CAMERA: ${raw("shot")}; ${raw("angle")}; ${$("ratio").value} aspect ratio; ${raw("lens")}; ${raw("dof")}. ${raw("layers")}`;
+  await addField("CHỦ THỂ","SUBJECT","subject");
+  await addField("NHẬN DẠNG VÀ NGOẠI HÌNH","IDENTITY & APPEARANCE","appearance");
+  await addField("HÀNH ĐỘNG VÀ TƯƠNG TÁC VẬT LÝ","ACTION & PHYSICAL INTERACTION","action");
+  await addField("BỐI CẢNH","ENVIRONMENT","environment");
+  await addField("KHOẢNH KHẮC KỂ CHUYỆN","NARRATIVE MOMENT","story");
+  const layersVi=raw("layers"), layersEn=await en("layers");
+  const viComposition=`BỐ CỤC VÀ MÁY ẢNH: ${viSelect("shot")}; ${viSelect("angle")}; tỷ lệ khung hình ${$("ratio").value}; ${viSelect("lens")}; ${viSelect("dof")}.${layersVi?" "+layersVi:""}`;
+  const enComposition=`COMPOSITION & CAMERA: ${cleanEnglishSelect("shot")}; ${cleanEnglishSelect("angle")}; ${$("ratio").value} aspect ratio; ${cleanEnglishSelect("lens")}; ${cleanEnglishSelect("dof")}.${layersEn?" "+layersEn:""}`;
   viSections.push(viComposition); enSections.push(enComposition);
-  viSections.push(`ÁNH SÁNG: ${viSelect("lighting")}`); enSections.push(`LIGHTING: ${raw("lighting")}`);
-  viSections.push(`PHONG CÁCH HÌNH ẢNH: ${viSelect("style")}`); enSections.push(`VISUAL STYLE: ${raw("style")}`);
-  viSections.push(`MÀU SẮC: ${viSelect("palette")}`); enSections.push(`COLOR PALETTE: ${raw("palette")}`);
-  viSections.push(`CẢM XÚC: ${viSelect("mood")}`); enSections.push(`MOOD: ${raw("mood")}`);
-  addBoth("CHẤT LIỆU VÀ TÍNH CHÂN THỰC VẬT LÝ","MATERIAL & PHYSICAL REALISM","realism");
-  const skinStyle=$("skinRealism").value;
-  const skinLevel=$("skinImperfection").value;
+  viSections.push(`ÁNH SÁNG: ${viSelect("lighting")}`); enSections.push(`LIGHTING: ${cleanEnglishSelect("lighting")}`);
+  viSections.push(`PHONG CÁCH HÌNH ẢNH: ${viSelect("style")}`); enSections.push(`VISUAL STYLE: ${cleanEnglishSelect("style")}`);
+  viSections.push(`MÀU SẮC: ${viSelect("palette")}`); enSections.push(`COLOR PALETTE: ${cleanEnglishSelect("palette")}`);
+  viSections.push(`CẢM XÚC: ${viSelect("mood")}`); enSections.push(`MOOD: ${cleanEnglishSelect("mood")}`);
+  await addField("CHẤT LIỆU VÀ TÍNH CHÂN THỰC VẬT LÝ","MATERIAL & PHYSICAL REALISM","realism");
+  const skinStyle=$("skinRealism").value, skinLevel=$("skinImperfection").value;
   const skinLevelVi={light:"nhẹ",medium:"vừa",strong:"mạnh"}[skinLevel];
   const skinText=skinStyle==="custom" ? raw("skinCustom") : (skinDescriptions.vi[skinStyle]||skinDescriptions.vi.natural)[skinLevel];
-  const skinTextEn=skinStyle==="custom" ? raw("skinCustom") : (skinDescriptions.en[skinStyle]||skinDescriptions.en.natural)[skinLevel];
+  const skinTextEn=skinStyle==="custom" ? await en("skinCustom") : (skinDescriptions.en[skinStyle]||skinDescriptions.en.natural)[skinLevel];
   if(skinText){
-    viSections.push(`ĐỘ CHÂN THẬT CỦA LÀN DA: ${skinText}${skinStyle!=="custom"?` (Mức độ khuyết điểm: ${skinLevelVi}.)`:""}`);
+    viSections.push(`ĐỘ CHÂN THỰC CỦA LÀN DA: ${skinText}${skinStyle!=="custom"?` (Mức độ khuyết điểm: ${skinLevelVi}.)`:""}`);
     enSections.push(`SKIN REALISM: ${skinTextEn}${skinStyle!=="custom"?` (Imperfection intensity: ${skinLevel}.)`:""}`);
   }
-  addBoth("ĐIỀU CẦN TRÁNH","IMPORTANT CONSTRAINTS","negative");
-  addBoth("GHI CHÚ BỔ SUNG","ADDITIONAL NOTES","extra");
+  await addField("ĐIỀU CẦN TRÁNH","IMPORTANT CONSTRAINTS","negative");
+  await addField("GHI CHÚ BỔ SUNG","ADDITIONAL NOTES","extra");
   if(referenceFiles.length){
     const viPurposes=purposes.map(x=>purposeVi[x]||x).join(", ")||"tham khảo hình ảnh tổng quát";
-    viSections.push(`HƯỚNG DẪN ẢNH THAM CHIẾU: Dùng ảnh đã tải lên làm tư liệu tham khảo cho các mục đã chọn: ${viPurposes}. Chỉ giữ những thuộc tính được chọn; thực hiện bối cảnh và hành động mới theo mô tả bên trên. Không sao chép máy móc các chi tiết không liên quan.${raw("refNotes")?" Ghi chú tham chiếu: "+raw("refNotes"):""}`);
-    enSections.push(`REFERENCE IMAGE INSTRUCTION: Use uploaded reference image(s) only for these selected attributes: ${purposes.join(", ")||"general visual guidance"}. Preserve selected attributes while following the new scene and action described above. Do not blindly copy unrelated details.${raw("refNotes")?" Reference notes: "+raw("refNotes"):""}`);
+    const notesVi=raw("refNotes"), notesEn=await en("refNotes");
+    viSections.push(`HƯỚNG DẪN ẢNH THAM CHIẾU: Dùng ảnh đã tải lên làm tư liệu tham khảo cho các mục đã chọn: ${viPurposes}. Chỉ giữ những thuộc tính được chọn; thực hiện bối cảnh và hành động mới theo mô tả bên trên. Không sao chép máy móc các chi tiết không liên quan.${notesVi?" Ghi chú tham chiếu: "+notesVi:""}`);
+    enSections.push(`REFERENCE IMAGE INSTRUCTION: Use uploaded reference image(s) only for these selected attributes: ${purposes.join(", ")||"general visual guidance"}. Preserve selected attributes while following the new scene and action described above. Do not blindly copy unrelated details.${notesEn?" Reference notes: "+notesEn:""}`);
   }
   if(characterMode!=="normal"){
     const key=characterMode==="character-flexible"?"flexible":characterMode;
     viSections.push(characterInstructions.vi[key]);
     enSections.push(characterInstructions.en[key]);
     if(characterMode==="character-flexible"){
-      const outfit=$("allowOutfitChange").checked;
-      const pose=$("allowPoseChange").checked;
-      const viExtra=[]; const enExtra=[];
-      if(outfit){viExtra.push("ĐƯỢC PHÉP THAY ĐỔI TRANG PHỤC theo mô tả trong prompt.");enExtra.push("OUTFIT MAY CHANGE according to the prompt.");}
-      else {viExtra.push("Giữ trang phục theo ảnh tham chiếu.");enExtra.push("Keep the outfit from the reference image.");}
-      if(pose){viExtra.push("ĐƯỢC PHÉP THAY ĐỔI TƯ THẾ/TẠO DÁNG theo mô tả trong prompt.");enExtra.push("POSE MAY CHANGE according to the prompt.");}
-      else {viExtra.push("Giữ tư thế gần với ảnh tham chiếu.");enExtra.push("Keep the pose close to the reference image.");}
-      viSections.push(viExtra.join(" ")); enSections.push(enExtra.join(" "));
+      const outfit=$("allowOutfitChange").checked, pose=$("allowPoseChange").checked;
+      viSections.push(outfit?"ĐƯỢC PHÉP THAY ĐỔI TRANG PHỤC theo mô tả trong prompt.":"Giữ trang phục theo ảnh tham chiếu.");
+      enSections.push(outfit?"OUTFIT MAY CHANGE according to the prompt.":"Keep the outfit from the reference image.");
+      viSections.push(pose?"ĐƯỢC PHÉP THAY ĐỔI TƯ THẾ/TẠO DÁNG theo mô tả trong prompt.":"Giữ tư thế gần với ảnh tham chiếu.");
+      enSections.push(pose?"POSE MAY CHANGE according to the prompt.":"Keep the pose close to the reference image.");
     }
   }
   if(lang==="vi") return "Tạo một ảnh theo mô tả sau. Giữ đúng chủ thể, hành động, bố cục và các yêu cầu đã nêu.\n\n"+viSections.join("\n\n");
@@ -333,15 +371,15 @@ function makePrompt(){
   return "Generate a single image following this brief. Preserve the subject, action, composition, and constraints exactly as specified.\n\n"+enSections.join("\n\n");
 }
 function setStatus(msg,err=false,ok=false){const el=$("status");el.textContent=msg;el.className="status"+(err?" err":ok?" ok":"")}
-$("buildPrompt").addEventListener("click",()=>{try{$("promptOutput").value=makePrompt();setStatus("Đã tạo prompt xem trước. (Prompt preview ready.)",false,true)}catch(error){console.error("Build Prompt failed:",error);setStatus("Không tạo được prompt: "+(error&&error.message?error.message:"Lỗi JavaScript không xác định"),true)}});
-$("copyPrompt").addEventListener("click",async()=>{if(!$("promptOutput").value)$("promptOutput").value=makePrompt();try{await navigator.clipboard.writeText($("promptOutput").value);setStatus("Đã sao chép prompt. (Prompt copied.)",false,true)}catch{setStatus("Không thể truy cập clipboard tự động. Hãy chọn và sao chép prompt thủ công.",true)}});
+$("buildPrompt").addEventListener("click",async()=>{const btn=$("buildPrompt");btn.disabled=true;const old=btn.textContent;btn.textContent="Đang tạo prompt…";try{$("promptOutput").value=await makePrompt();setStatus("Đã tạo prompt xem trước. (Prompt preview ready.)",false,true)}catch(error){console.error("Build Prompt failed:",error);setStatus("Không tạo được prompt: "+(error&&error.message?error.message:"Lỗi JavaScript không xác định"),true)}finally{btn.disabled=false;btn.textContent=old}});
+$("copyPrompt").addEventListener("click",async()=>{try{if(!$("promptOutput").value)$("promptOutput").value=await makePrompt();await navigator.clipboard.writeText($("promptOutput").value);setStatus("Đã sao chép prompt. (Prompt copied.)",false,true)}catch(error){setStatus(error?.message||"Không thể truy cập clipboard tự động. Hãy chọn và sao chép prompt thủ công.",true)}});
 function dataUrlToBlob(url){const [head,data]=url.split(",");const mime=(head.match(/data:(.*?);base64/)||[])[1]||"image/png";const bin=atob(data);const arr=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)arr[i]=bin.charCodeAt(i);return {blob:new Blob([arr],{type:mime}),mime};}
 
 $("generate").addEventListener("click",async()=>{
   const base=$("backendUrl").value.trim().replace(/\/+$/,"");
   if(!base){setStatus("Hãy nhập địa chỉ backend trước. (Enter the backend URL first.)",true);return}
   if(!$("subject").value.trim() && !$("promptOutput").value.trim()){setStatus("Hãy nhập chủ thể hoặc prompt trước khi tạo ảnh.",true);return}
-  const prompt=$("promptOutput").value.trim()||makePrompt();$("promptOutput").value=prompt;
+  const prompt=$("promptOutput").value.trim()||await makePrompt();$("promptOutput").value=prompt;
   $("generate").disabled=true;$("generate").textContent="Đang tạo ảnh… (Generating…)";setStatus("Đang gửi yêu cầu đến API. Thời gian có thể từ vài giây đến vài phút…");
   try{
     const fd=new FormData();fd.append("provider",$("provider").value);fd.append("prompt",prompt);fd.append("aspectRatio",$("ratio").value);fd.append("resolution",$("resolution").value);
@@ -361,6 +399,6 @@ $("generate").addEventListener("click",async()=>{
 $("download").addEventListener("click",()=>{if(!currentBlob)return;const url=URL.createObjectURL(currentBlob);const a=document.createElement("a");a.href=url;a.download=currentFilename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2000)});
 $("openOriginal").addEventListener("click",()=>{if(currentBlob)window.open(URL.createObjectURL(currentBlob),"_blank","noopener")});
 // Initialize the prompt with the complete default structure instead of showing an empty box.
-if (!$("promptOutput").value.trim()) $("promptOutput").value = makePrompt();
+if (!$("promptOutput").value.trim()) makePrompt().then(prompt=>{$("promptOutput").value=prompt}).catch(error=>setStatus("Không tạo được prompt: "+error.message,true));
 </script>
 </body></html>
