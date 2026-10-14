@@ -1,9 +1,10 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="vi">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>AI Image Studio V6.8.2 — Character Reference</title>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<title>AI Image Studio V6.7 — Character Reference</title>
 <style>
 :root{color-scheme:dark;--bg:#10131a;--panel:#191e29;--line:#303849;--text:#edf1f8;--muted:#a8b2c4;--accent:#8ab4ff;--accent2:#b4f0cf;--danger:#ffb4ab}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 10% 0%,#1b2940 0,transparent 35%),var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,Segoe UI,sans-serif}
@@ -30,138 +31,131 @@ footer{max-width:1200px;margin:-28px auto 30px;padding:0 18px;color:var(--muted)
 </head>
 <body>
 <header>
-  <h1>AI Image Studio <span style="color:var(--accent)">V6.8</span></h1>
-  <p>Ưu tiên tạo và sao chép prompt. Các công cụ tạo/xuất ảnh bằng OpenAI và Gemini được thu gọn, chỉ hiện khi thím chủ động mở; mọi tính năng cũ vẫn được giữ nguyên.</p>
-  <div><span class="pill">Giao diện web</span><span class="pill">Backend chạy local</span><span class="pill">Không cần mật khẩu</span><span class="pill">Mặc định: chỉ tạo prompt</span><span class="pill">API key vẫn nằm trong .env</span></div>
-  <div class="api-toggle-row"><button type="button" id="toggleApiTools" class="secondary" aria-expanded="false" aria-controls="apiToolsPanel">☁ Hiện công cụ tạo/xuất ảnh qua API</button><span class="hint">Đang ẩn các menu API để giao diện gọn hơn.</span></div>
+<h1>AI Image Studio <span style="color:var(--accent)">V6.8</span></h1>
+<p>Ưu tiên tạo và sao chép prompt. Các công cụ tạo/xuất ảnh bằng OpenAI và Gemini được thu gọn, chỉ hiện khi thím chủ động mở; mọi tính năng cũ vẫn được giữ nguyên.</p>
+<div><span class="pill">Giao diện web</span><span class="pill">Backend chạy local</span><span class="pill">Không cần mật khẩu</span><span class="pill">Mặc định: chỉ tạo prompt</span><span class="pill">API key vẫn nằm trong .env</span></div>
+<div class="api-toggle-row"><button aria-controls="apiToolsPanel" aria-expanded="false" class="secondary" id="toggleApiTools" type="button">☁ Hiện công cụ tạo/xuất ảnh qua API</button><span class="hint">Đang ẩn các menu API để giao diện gọn hơn.</span></div>
 </header>
 <main>
-<div id="apiToolsPanel" class="api-tools" hidden>
+<div class="api-tools" hidden="" id="apiToolsPanel">
 <section class="panel">
-  <h2>1. Kết nối dịch vụ (Provider Setup)</h2>
-  <p class="hint">Backend local của thím. Không cần đăng nhập bằng mật khẩu; API key vẫn được giữ trong file .env, không đưa vào trình duyệt.</p>
-  <label for="backendUrl">Địa chỉ backend (Backend URL)</label>
-  <input id="backendUrl" value="http://127.0.0.1:8787" placeholder="https://ten-backend-cua-ban.onrender.com" autocomplete="url">
-  <p class="hint">Chế độ local: backend chỉ lắng nghe trên máy này (127.0.0.1). Không chia sẻ backend ra mạng công cộng.</p>
-  <div class="grid2">
-    <div><label for="provider">Nhà cung cấp (Provider)</label><select id="provider"><option value="gemini">Gemini API (Google)</option><option value="openai">OpenAI API</option></select></div>
-    <div><label for="ratio">Tỷ lệ khung hình (Aspect Ratio)</label><select id="ratio"><option value="16:9">Ngang 16:9 (landscape widescreen)</option><option value="3:2">Ngang 3:2 (landscape)</option><option value="4:3">Ngang 4:3 (standard landscape)</option><option value="1:1">Vuông 1:1 (square)</option><option value="3:4">Dọc 3:4 (portrait)</option><option value="2:3">Dọc 2:3 (portrait)</option><option value="9:16">Dọc 9:16 (vertical video)</option><option value="21:9">Siêu rộng 21:9 (ultrawide)</option></select></div>
-  </div>
-  <div class="grid2">
-    <div id="geminiModelWrap"><label for="geminiModel">Model Gemini (Gemini Model)</label><select id="geminiModel"><option value="gemini-nano-banana-2.1">Nano Banana 2.1 — chất lượng cao, 4K (recommended)</option><option value="gemini-3.1-flash-image">Gemini 3.1 Flash Image (4K)</option><option value="gemini-3-pro-image">Gemini 3 Pro Image (premium)</option></select></div>
-    <div id="openaiModelWrap" hidden><label for="openaiModel">Model OpenAI (OpenAI Image Model)</label><select id="openaiModel"><option value="gpt-image-2.5-sunburst">GPT Image 2.5 Sunburst — chất lượng tối đa (max)</option><option value="gpt-image-2.5-flare">GPT Image 2.5 Flare (max)</option><option value="gpt-image-2">GPT Image 2 (high)</option></select></div>
-    <div><label for="resolution">Độ phân giải (Resolution)</label><select id="resolution"><option value="max">Cao nhất model hỗ trợ (maximum supported)</option><option value="4K">4K (nếu model hỗ trợ)</option><option value="2K">2K (nếu model hỗ trợ)</option><option value="1K">1K (nhanh hơn)</option></select></div>
-  </div>
-
-
-
+<h2>1. Kết nối dịch vụ (Provider Setup)</h2>
+<p class="hint">Backend local của thím. Không cần đăng nhập bằng mật khẩu; API key vẫn được giữ trong file .env, không đưa vào trình duyệt.</p>
+<label for="backendUrl">Địa chỉ backend (Backend URL)</label>
+<input autocomplete="url" id="backendUrl" placeholder="https://ten-backend-cua-ban.onrender.com" value="http://127.0.0.1:8787"/>
+<p class="hint">Chế độ local: backend chỉ lắng nghe trên máy này (127.0.0.1). Không chia sẻ backend ra mạng công cộng.</p>
+<div class="grid2">
+<div><label for="provider">Nhà cung cấp (Provider)</label><select id="provider"><option value="gemini">Gemini API (Google)</option><option value="openai">OpenAI API</option></select></div>
+<div><label for="ratio">Tỷ lệ khung hình (Aspect Ratio)</label><select id="ratio"><option value="16:9">Ngang 16:9 (landscape widescreen)</option><option value="3:2">Ngang 3:2 (landscape)</option><option value="4:3">Ngang 4:3 (standard landscape)</option><option value="1:1">Vuông 1:1 (square)</option><option value="3:4">Dọc 3:4 (portrait)</option><option value="2:3">Dọc 2:3 (portrait)</option><option value="9:16">Dọc 9:16 (vertical video)</option><option selected="selected" value="21:9">Siêu rộng 21:9 (ultrawide)</option></select></div>
+</div>
+<div class="grid2">
+<div id="geminiModelWrap"><label for="geminiModel">Model Gemini (Gemini Model)</label><select id="geminiModel"><option value="gemini-nano-banana-2.1">Nano Banana 2.1 — chất lượng cao, 4K (recommended)</option><option value="gemini-3.1-flash-image">Gemini 3.1 Flash Image (4K)</option><option value="gemini-3-pro-image">Gemini 3 Pro Image (premium)</option></select></div>
+<div hidden="" id="openaiModelWrap"><label for="openaiModel">Model OpenAI (OpenAI Image Model)</label><select id="openaiModel"><option value="gpt-image-2.5-sunburst">GPT Image 2.5 Sunburst — chất lượng tối đa (max)</option><option value="gpt-image-2.5-flare">GPT Image 2.5 Flare (max)</option><option value="gpt-image-2">GPT Image 2 (high)</option></select></div>
+<div><label for="resolution">Độ phân giải (Resolution)</label><select id="resolution"><option value="max">Cao nhất model hỗ trợ (maximum supported)</option><option value="4K">4K (nếu model hỗ trợ)</option><option value="2K">2K (nếu model hỗ trợ)</option><option value="1K">1K (nhanh hơn)</option></select></div>
+</div>
 </section>
 </div>
-
 <section class="panel">
-  <hr class="sectionline">
-  <h2>1. Tạo prompt (Prompt Builder)</h2><p class="hint">Các ô đã được điền sẵn bằng một ví dụ hoàn chỉnh: cô gái Việt Nam mặc áo dài, cầm nón lá và bấm điện thoại trên ghế đá sân trường. Thím sửa theo ý mình hoặc xóa phần không cần; ô nào để trống sẽ được bỏ qua khi tạo prompt.</p>
-  <div class="prompt-language">  <label for="promptLanguage">Ngôn ngữ prompt (Prompt Language)</label>
-  <select id="promptLanguage"><option value="vi" selected>Tiếng Việt (Vietnamese)</option><option value="en">Tiếng Anh (English)</option><option value="both">Tiếng Anh kèm bản dịch tiếng Việt (English + Vietnamese)</option></select></div>
-  <label for="subject">Chủ thể (Subject)</label><textarea id="subject" placeholder="Ví dụ: Một cô gái Việt Nam mặc áo dài trắng, tay cầm nón lá, ngồi trên ghế đá trong sân trường và bấm điện thoại.">Một cô gái Việt Nam mặc áo dài trắng, tay cầm nón lá và ngồi bấm điện thoại trên ghế đá trong sân trường.</textarea>
-  <label for="appearance">Nhận dạng và ngoại hình (Identity & Appearance)</label><textarea id="appearance" placeholder="Ví dụ: Tóc đen dài buộc nửa đầu, gương mặt tự nhiên, áo dài trắng tay dài, quần trắng, không trang điểm đậm.">Cô gái có mái tóc đen dài buộc nửa đầu, gương mặt tự nhiên, mặc áo dài trắng tay dài và quần trắng; vẻ ngoài giản dị như nữ sinh Việt Nam.</textarea>
-  <label for="action">Hành động và tương tác vật lý (Action & Physical Interaction)</label><textarea id="action" placeholder="Ví dụ: Cô gái ngồi thoải mái, tay phải bấm điện thoại, tay trái giữ chiếc nón lá đặt trên đùi.">Cô gái ngồi thoải mái trên ghế đá, cúi nhẹ nhìn màn hình và dùng tay phải bấm điện thoại; tay trái giữ chiếc nón lá đặt trên đùi. Tư thế và tiếp xúc giữa bàn tay với đồ vật tự nhiên.</textarea>
-  <label for="environment">Bối cảnh (Environment)</label><textarea id="environment" placeholder="Ví dụ: Sân trường Việt Nam có dãy phòng học, cây phượng, hành lang và vài ghế đá.">Sân trường Việt Nam vào ban ngày, phía sau là dãy phòng học, hành lang, cây phượng xanh và một vài ghế đá; không gian sạch sẽ, yên bình, có chiều sâu tự nhiên.</textarea>
-  <label for="story">Khoảnh khắc kể chuyện (Narrative Moment)</label><textarea id="story" placeholder="Ví dụ: Khoảnh khắc nghỉ giữa giờ, cô gái tranh thủ đọc tin nhắn trước khi vào lớp.">Khoảnh khắc nghỉ giữa giờ học, cô gái tranh thủ xem điện thoại; nét mặt tập trung nhẹ nhàng, tạo cảm giác đời thường, tự nhiên và gần gũi.</textarea>
-  <h3>Bố cục và máy ảnh (Composition & Camera)</h3>
-  <div class="grid2">
-    <div><label for="shot">Cỡ cảnh (Shot Size)</label><select id="shot"><option value="Wide shot (toàn cảnh)">Toàn cảnh (Wide shot)</option><option value="Medium shot (trung cảnh)">Trung cảnh (Medium shot)</option><option value="Close-up (cận cảnh)">Cận cảnh (Close-up)</option><option value="Extreme close-up (đặc tả)">Đặc tả (Extreme close-up)</option><option value="Full-body shot (toàn thân)">Toàn thân (Full-body shot)</option></select></div>
-    <div><label for="angle">Góc máy (Camera Angle)</label><select id="angle"><option value="Eye-level angle (ngang tầm mắt)">Ngang tầm mắt (Eye-level)</option><option value="Low angle (góc thấp)">Góc thấp (Low angle)</option><option value="High angle (góc cao)">Góc cao (High angle)</option><option value="Top-down view (từ trên xuống)">Từ trên xuống (Top-down)</option><option value="Dutch angle (góc nghiêng)">Góc nghiêng (Dutch angle)</option></select></div>
-  </div>
-  <div class="grid2">
-    <div><label for="lens">Ống kính (Lens)</label><select id="lens"><option value="35mm lens (ống kính 35mm)">35mm — tự nhiên (35mm, natural)</option><option value="24mm lens (ống kính 24mm)">24mm — góc rộng (24mm, wide)</option><option value="50mm lens (ống kính 50mm)">50mm — góc nhìn tự nhiên (50mm, normal)</option><option value="85mm lens (ống kính 85mm)">85mm — chân dung (85mm, portrait)</option><option value="telephoto lens (ống kính tele)">Tele — nén phối cảnh (telephoto)</option><option value="macro lens (ống kính macro)">Macro — cận chi tiết (macro)</option></select></div>
-    <div><label for="dof">Độ sâu trường ảnh (Depth of Field)</label><select id="dof"><option value="Moderate depth of field (độ sâu trường ảnh trung bình)">Trung bình (moderate)</option><option value="Shallow depth of field, soft background bokeh (trường ảnh nông, hậu cảnh mờ)">Nông, hậu cảnh mờ (shallow)</option><option value="Deep depth of field, foreground to background in focus (trường ảnh sâu)">Sâu, nhiều lớp rõ (deep)</option></select></div>
-  </div>
-  <label for="layers">Các lớp không gian (Spatial Layers)</label><textarea id="layers" placeholder="Ví dụ: Tiền cảnh là lối đi, trung cảnh là cô gái và ghế đá, hậu cảnh là cây xanh và dãy lớp học.">Tiền cảnh có một phần lối đi sân trường; trung cảnh tập trung vào cô gái, ghế đá, điện thoại và nón lá; hậu cảnh là cây phượng và dãy phòng học hơi mờ. Các lớp không gian rõ ràng, không có vật thể che khuất gương mặt hoặc bàn tay.</textarea>
-  <div class="grid2">
-    <div><label for="lighting">Ánh sáng (Lighting)</label><select id="lighting"><option value="Cinematic natural daylight (ánh sáng tự nhiên điện ảnh)">Ánh sáng tự nhiên điện ảnh (cinematic daylight)</option><option value="Soft diffused light (ánh sáng tán xạ mềm)">Tán xạ mềm (soft diffused)</option><option value="Cinematic low-key lighting (ánh sáng điện ảnh thiên tối)">Điện ảnh thiên tối (low-key)</option><option value="Golden hour sunlight (nắng giờ vàng)">Nắng giờ vàng (golden hour)</option><option value="Studio lighting with soft key light (ánh sáng studio mềm)">Studio mềm (soft studio)</option><option value="Hard directional sunlight (nắng chiếu hướng rõ)">Nắng hướng mạnh (hard directional)</option></select></div>
-    <div><label for="style">Phong cách hình ảnh (Visual Style)</label><select id="style"><option value="Photorealistic cinematic 35mm film still (khung hình phim 35mm chân thực)">Phim 35mm chân thực (photorealistic film still)</option><option value="Documentary photography (nhiếp ảnh tài liệu)">Tài liệu (documentary)</option><option value="Editorial fashion photography (ảnh thời trang biên tập)">Thời trang (editorial fashion)</option><option value="Anime illustration (minh họa anime)">Anime (anime illustration)</option><option value="Oil painting (tranh sơn dầu)">Sơn dầu (oil painting)</option><option value="3D stylized render (hình dựng 3D cách điệu)">Dựng 3D (3D render)</option><option value="Watercolor illustration (minh họa màu nước)">Màu nước (watercolor)</option></select></div>
-  </div>
-  <div class="grid2">
-    <div><label for="palette">Màu sắc (Color Palette)</label><select id="palette"><option value="Neutral realistic colors (màu trung tính chân thực)">Trung tính chân thực (neutral realistic)</option><option value="Warm cinematic color grading (tông điện ảnh ấm)">Điện ảnh ấm (warm cinematic)</option><option value="Cool muted colors (màu lạnh trầm)">Lạnh trầm (cool muted)</option><option value="Rich saturated colors (màu đậm bão hòa)">Đậm bão hòa (rich saturated)</option><option value="Black and white monochrome (đen trắng đơn sắc)">Đen trắng (monochrome)</option><option value="Pastel colors (màu pastel)">Pastel (pastel colors)</option></select></div>
-    <div><label for="mood">Cảm xúc (Mood)</label><select id="mood"><option value="Natural, optimistic, lively (tự nhiên, lạc quan, sống động)">Tự nhiên, lạc quan (natural, optimistic)</option><option value="Dreamlike and mysterious (mơ màng, bí ẩn)">Mơ màng, bí ẩn (dreamlike)</option><option value="Melancholic and contemplative (man mác buồn, suy tư)">Man mác buồn (melancholic)</option><option value="Tense and dramatic (căng thẳng, kịch tính)">Kịch tính (dramatic)</option><option value="Calm and intimate (bình yên, gần gũi)">Bình yên (calm, intimate)</option></select></div>
-  </div>
-  <label for="realism">Chất liệu và tính chân thực vật lý (Material & Physical Realism)</label><textarea id="realism" placeholder="Ví dụ: Nếp áo dài rủ tự nhiên, bàn tay cầm điện thoại đúng tư thế, bóng đổ phù hợp ánh nắng.">Tỷ lệ cơ thể và bàn tay tự nhiên; ngón tay tiếp xúc đúng với điện thoại và nón lá; nếp vải áo dài mềm, có trọng lượng; chất liệu tre đan của nón lá chân thực; phối cảnh và bóng đổ phù hợp với ánh sáng ban ngày.</textarea>
-  <h3>Làn da nhân vật (Skin Realism)</h3>
-  <p class="hint">Chọn cách thể hiện da. Ứng dụng tự ghép mô tả phù hợp vào prompt cuối theo ngôn ngữ đã chọn; mặc định là da tự nhiên có khuyết điểm nhẹ.</p>
-  <div class="grid2">
-    <div><label for="skinRealism">Độ chân thật của làn da (Skin Style)</label><select id="skinRealism">
-      <option value="beauty">Da đẹp, mịn màng (Smooth beauty skin)</option>
-      <option value="natural" selected>Da tự nhiên, khuyết điểm nhẹ (Natural skin)</option>
-      <option value="real">Da chân thật, giữ rõ khuyết điểm (Realistic skin)</option>
-      <option value="raw">Da thô mộc, không làm đẹp (Unretouched skin)</option>
-      <option value="custom">Tự mô tả (Custom)</option>
-    </select></div>
-    <div><label for="skinImperfection">Mức độ khuyết điểm (Imperfection Strength)</label><select id="skinImperfection">
-      <option value="light">Nhẹ — chỉ thấy khi nhìn gần (Subtle)</option>
-      <option value="medium" selected>Vừa — rõ nhưng tự nhiên (Moderate)</option>
-      <option value="strong">Mạnh — giữ rõ kết cấu da (Pronounced)</option>
-    </select></div>
-  </div>
-  <div id="skinCustomWrap" hidden><label for="skinCustom">Mô tả làn da theo ý thím (Custom Skin Description)</label><textarea id="skinCustom" placeholder="Ví dụ: Da dầu nhẹ, vài nốt mụn nhỏ ở má, lỗ chân lông thấy rõ ở vùng mũi."></textarea></div>
-  <label for="negative">Điều cần tránh (Negative Constraints)</label><textarea id="negative" placeholder="Ví dụ: Tránh lỗi giải phẫu, chi tiết méo mó, hình ảnh mờ, chữ ngẫu nhiên hoặc watermark.">Tránh lỗi giải phẫu; méo mó hoặc biến dạng chi tiết; cấu trúc không tự nhiên; hình ảnh mờ, nhiễu hoặc chất lượng thấp; ánh sáng và bóng đổ phi lý; vật thể lơ lửng; chữ ngẫu nhiên, logo hoặc watermark; hiệu ứng da nhựa.</textarea>
-  <label for="extra">Ghi chú bổ sung (Additional Notes)</label><textarea id="extra" placeholder="Ví dụ: Giữ màu áo dài trắng tinh khôi, cảnh đời thường, không thêm người đứng sát nhân vật.">Ưu tiên cảm giác ảnh chụp đời thực, màu sắc tự nhiên, áo dài trắng rõ nếp vải; giữ cô gái là chủ thể chính và không thêm đạo cụ không liên quan.</textarea>
-
-  <hr class="sectionline">
-  <div class="api-tools" hidden>
-  <h2>Ảnh tham chiếu gửi API (API Reference Images)</h2>
-  <p class="hint">Phần tải ảnh tham chiếu chỉ cần mở khi sử dụng API. Chỉ tải ảnh bạn có quyền sử dụng.</p>
-  <div class="drop"><label for="references">Chọn ảnh tham chiếu (Upload Reference Images)</label><input id="references" type="file" accept="image/png,image/jpeg,image/webp" multiple><small>PNG, JPEG, WebP. Giới hạn mặc định 4 ảnh, mỗi ảnh tối đa 10 MB.</small></div>
-  <div id="referencePreview" class="preview"></div>
-  </div>
-  <h3>Chế độ người mẫu (Character Reference Mode)</h3>
-  <p class="hint">Chế độ mới: ưu tiên giữ khuôn mặt, kiểu tóc và tỷ lệ vóc dáng của ảnh mẫu; cho phép thay đổi trang phục, tư thế và cách tạo dáng theo prompt. Không thể bảo đảm giống 100% vì kết quả phụ thuộc model/API và ảnh đầu vào.</p>
-  <label for="characterMode">Cách sử dụng ảnh tham chiếu (Reference Mode)</label>
-  <select id="characterMode">
-    <option value="normal" selected>Tham chiếu thông thường — giữ theo các mục bên dưới (Standard Reference)</option>
-    <option value="identity">A. Ưu tiên giữ tối đa khuôn mặt, tóc và vóc dáng (Maximum Identity Preservation)</option>
-    <option value="face">B. Ưu tiên khuôn mặt; cơ thể và trang phục linh hoạt (Face Priority)</option>
-    <option value="character-flexible">C. Giữ mặt, tóc và vóc dáng — trang phục/tư thế linh hoạt (Character Lock, Flexible Outfit & Pose)</option>
-  </select>
-  <div class="checks" style="margin-top:10px">
-    <label class="check"><input id="allowPoseChange" type="checkbox" checked><span>Cho phép thay đổi tư thế theo prompt (Allow pose changes)</span></label>
-    <label class="check"><input id="allowOutfitChange" type="checkbox" checked><span>Cho phép thay đổi trang phục theo prompt (Allow outfit changes)</span></label>
-  </div>
-  <h3>Mục đích tham chiếu (Reference Purpose)</h3>
-  <div class="checks">
-    <label class="check"><input type="checkbox" name="refPurpose" value="Identity (giữ gương mặt và nhận dạng)" checked><span>Giữ gương mặt và nhận dạng (Identity)</span></label>
-    <label class="check"><input type="checkbox" name="refPurpose" value="Outfit (giữ trang phục)" checked><span>Giữ trang phục (Outfit)</span></label>
-    <label class="check"><input type="checkbox" name="refPurpose" value="Hairstyle (giữ kiểu tóc)"><span>Giữ kiểu tóc (Hairstyle)</span></label>
-    <label class="check"><input type="checkbox" name="refPurpose" value="Body proportions (giữ vóc dáng và tỷ lệ cơ thể)"><span>Giữ vóc dáng và tỷ lệ cơ thể (Body Proportions)</span></label>
-    <label class="check"><input type="checkbox" name="refPurpose" value="Pose (tham khảo tư thế)"><span>Tham khảo tư thế (Pose)</span></label>
-    <label class="check"><input type="checkbox" name="refPurpose" value="Style (tham khảo phong cách hình ảnh)"><span>Phong cách hình ảnh (Style)</span></label>
-    <label class="check"><input type="checkbox" name="refPurpose" value="Composition (tham khảo bố cục)"><span>Tham khảo bố cục (Composition)</span></label>
-  </div>
-  <label for="refNotes">Ghi chú ảnh tham chiếu (Reference Notes)</label><textarea id="refNotes" placeholder="Ví dụ: Ảnh 1 dùng để giữ khuôn mặt; ảnh 2 chỉ tham khảo tư thế ngồi."></textarea>
-
-  <div class="api-tools" hidden><button id="generate" class="primary">✨ Tạo ảnh qua API (Generate Image)</button></div>
-  <div class="actions"><button id="buildPrompt" class="secondary">Tạo prompt xem trước (Build Prompt)</button><button id="copyPrompt" class="secondary">Sao chép prompt (Copy Prompt)</button></div>
-  <label for="promptOutput">Prompt cuối cùng (Final Prompt)</label><textarea id="promptOutput" placeholder="Prompt hoàn chỉnh theo ví dụ cô gái mặc áo dài trong sân trường sẽ xuất hiện ở đây..." style="min-height:170px"></textarea>
-  <div id="status" class="status">Chế độ tạo prompt: không gọi API và không phát sinh phí. Bấm “Tạo prompt xem trước” rồi sao chép prompt để dùng trong ComfyUI hoặc công cụ khác.</div>
+<hr class="sectionline"/>
+<h2>1. Tạo prompt (Prompt Builder)</h2><p class="hint">Ứng dụng được điền sẵn một ví dụ chân dung điện ảnh để thím xem cách chia prompt theo từng mục. Thím có thể sửa, xóa hoặc thay toàn bộ nội dung trước khi tạo prompt.</p>
+<div class="prompt-language"> <label for="promptLanguage">Ngôn ngữ prompt (Prompt Language)</label>
+<select id="promptLanguage"><option selected="" value="vi">Tiếng Việt (Vietnamese)</option><option value="en">Tiếng Anh (English)</option><option value="both">Tiếng Anh kèm bản dịch tiếng Việt (English + Vietnamese)</option></select></div>
+<label for="subject">Chủ thể (Subject)</label><textarea id="subject" placeholder="Ví dụ: Một nhân vật đang ngồi bên cửa sổ trong ánh sáng buổi sáng.">Chân dung cận cảnh mang chất điện ảnh của một thiếu nữ Việt Nam 16 tuổi đang nằm trên bãi cỏ xanh ngoài trời, đầu tựa nhẹ lên cánh tay gập lại, ánh mắt lặng lẽ hướng về phía máy quay với biểu cảm dịu dàng, suy tư và hơi man mác buồn.</textarea>
+<label for="appearance">Nhận dạng và ngoại hình (Identity &amp; Appearance)</label><textarea id="appearance" placeholder="Ví dụ: Tóc đen tự nhiên, gương mặt chân thực, trang phục phù hợp bối cảnh.">Gương mặt mang nét Việt Nam tự nhiên, trẻ trung và trong sáng; làn da sáng vừa, mũi nhỏ thanh, môi mềm, mắt nâu sẫm; tóc đen dài, suôn tự nhiên hoặc hơi mềm nhẹ, rẽ ngôi gọn gàng theo phong cách truyền thống giản dị. Vẻ ngoài đúng tuổi thiếu niên, tự nhiên, không trang điểm đậm.</textarea>
+<label for="action">Hành động và tương tác vật lý (Action &amp; Physical Interaction)</label><textarea id="action" placeholder="Ví dụ: Nhân vật quay nhẹ đầu về phía máy quay với tư thế tự nhiên.">Cô gái nằm nghiêng trên cỏ, má tì nhẹ lên tay áo hoặc cẳng tay gập lại; ánh mắt hướng về phía máy quay, biểu cảm yên lặng, dịu dàng, suy tư và hơi buồn. Tư thế thư giãn, tự nhiên, không tạo dáng gợi cảm.</textarea>
+<label for="environment">Bối cảnh (Environment)</label><textarea id="environment" placeholder="Ví dụ: Khu vườn yên tĩnh với cây cối tự nhiên và nền có chiều sâu.">Không gian ngoài trời với thảm cỏ xanh tự nhiên, cỏ bao quanh mềm mại; nền có chiều sâu nhẹ, không có vật thể hiện đại, không nhà cửa hiện đại và không đạo cụ nhân tạo.</textarea>
+<label for="story">Khoảnh khắc kể chuyện (Narrative Moment)</label><textarea id="story" placeholder="Ví dụ: Một khoảnh khắc đời thường lặng lẽ, giàu cảm xúc.">Một khoảnh khắc yên tĩnh, nội tâm và mong manh giữa thiên nhiên; cảm giác trong trẻo, vượt thời gian, thơ mộng và hoài niệm.</textarea>
+<h3>Bố cục và máy ảnh (Composition &amp; Camera)</h3>
+<div class="grid2">
+<div><label for="shot">Cỡ cảnh (Shot Size)</label><select id="shot"><option value="Wide shot (toàn cảnh)">Toàn cảnh (Wide shot)</option><option value="Medium shot (trung cảnh)">Trung cảnh (Medium shot)</option><option selected="selected" value="Close-up (cận cảnh)">Cận cảnh (Close-up)</option><option value="Extreme close-up (đặc tả)">Đặc tả (Extreme close-up)</option><option value="Full-body shot (toàn thân)">Toàn thân (Full-body shot)</option></select></div>
+<div><label for="angle">Góc máy (Camera Angle)</label><select id="angle"><option value="Eye-level angle (ngang tầm mắt)">Ngang tầm mắt (Eye-level)</option><option value="Low angle (góc thấp)">Góc thấp (Low angle)</option><option selected="selected" value="High angle (góc cao)">Góc cao (High angle)</option><option value="Top-down view (từ trên xuống)">Từ trên xuống (Top-down)</option><option value="Dutch angle (góc nghiêng)">Góc nghiêng (Dutch angle)</option></select></div>
+</div>
+<div class="grid2">
+<div><label for="lens">Ống kính (Lens)</label><select id="lens"><option value="35mm lens (ống kính 35mm)">35mm — tự nhiên (35mm, natural)</option><option value="24mm lens (ống kính 24mm)">24mm — góc rộng (24mm, wide)</option><option value="50mm lens (ống kính 50mm)">50mm — góc nhìn tự nhiên (50mm, normal)</option><option selected="selected" value="85mm lens (ống kính 85mm)">85mm — chân dung (85mm, portrait)</option><option value="telephoto lens (ống kính tele)">Tele — nén phối cảnh (telephoto)</option><option value="macro lens (ống kính macro)">Macro — cận chi tiết (macro)</option></select></div>
+<div><label for="dof">Độ sâu trường ảnh (Depth of Field)</label><select id="dof"><option value="Moderate depth of field (độ sâu trường ảnh trung bình)">Trung bình (moderate)</option><option selected="selected" value="Shallow depth of field, soft background bokeh (trường ảnh nông, hậu cảnh mờ)">Nông, hậu cảnh mờ (shallow)</option><option value="Deep depth of field, foreground to background in focus (trường ảnh sâu)">Sâu, nhiều lớp rõ (deep)</option></select></div>
+</div>
+<label for="layers">Các lớp không gian (Spatial Layers)</label><textarea id="layers" placeholder="Ví dụ: Tiền cảnh có chi tiết gần máy quay, chủ thể ở trung cảnh và hậu cảnh mềm nhẹ.">Tiền cảnh và xung quanh là cỏ xanh mềm mại; trung cảnh tập trung vào khuôn mặt, cánh tay và phần thân trên; hậu cảnh là thảm cỏ tự nhiên mờ nhẹ, có chiều sâu vừa phải.</textarea>
+<div class="grid2">
+<div><label for="lighting">Ánh sáng (Lighting)</label><select id="lighting"><option value="Cinematic natural daylight (ánh sáng tự nhiên điện ảnh)">Ánh sáng tự nhiên điện ảnh (cinematic daylight)</option><option selected="selected" value="Soft diffused light (ánh sáng tán xạ mềm)">Tán xạ mềm (soft diffused)</option><option value="Cinematic low-key lighting (ánh sáng điện ảnh thiên tối)">Điện ảnh thiên tối (low-key)</option><option value="Golden hour sunlight (nắng giờ vàng)">Nắng giờ vàng (golden hour)</option><option value="Studio lighting with soft key light (ánh sáng studio mềm)">Studio mềm (soft studio)</option><option value="Hard directional sunlight (nắng chiếu hướng rõ)">Nắng hướng mạnh (hard directional)</option></select></div>
+<div><label for="style">Phong cách hình ảnh (Visual Style)</label><select id="style"><option selected="selected" value="Photorealistic cinematic 35mm film still (khung hình phim 35mm chân thực)">Phim 35mm chân thực (photorealistic film still)</option><option value="Documentary photography (nhiếp ảnh tài liệu)">Tài liệu (documentary)</option><option value="Editorial fashion photography (ảnh thời trang biên tập)">Thời trang (editorial fashion)</option><option value="Anime illustration (minh họa anime)">Anime (anime illustration)</option><option value="Oil painting (tranh sơn dầu)">Sơn dầu (oil painting)</option><option value="3D stylized render (hình dựng 3D cách điệu)">Dựng 3D (3D render)</option><option value="Watercolor illustration (minh họa màu nước)">Màu nước (watercolor)</option></select></div>
+</div>
+<div class="grid2">
+<div><label for="palette">Màu sắc (Color Palette)</label><select id="palette"><option value="Neutral realistic colors (màu trung tính chân thực)">Trung tính chân thực (neutral realistic)</option><option value="Warm cinematic color grading (tông điện ảnh ấm)">Điện ảnh ấm (warm cinematic)</option><option selected="selected" value="Cool muted colors (màu lạnh trầm)">Lạnh trầm (cool muted)</option><option value="Rich saturated colors (màu đậm bão hòa)">Đậm bão hòa (rich saturated)</option><option value="Black and white monochrome (đen trắng đơn sắc)">Đen trắng (monochrome)</option><option value="Pastel colors (màu pastel)">Pastel (pastel colors)</option></select></div>
+<div><label for="mood">Cảm xúc (Mood)</label><select id="mood"><option value="Natural, optimistic, lively (tự nhiên, lạc quan, sống động)">Tự nhiên, lạc quan (natural, optimistic)</option><option value="Dreamlike and mysterious (mơ màng, bí ẩn)">Mơ màng, bí ẩn (dreamlike)</option><option selected="selected" value="Melancholic and contemplative (man mác buồn, suy tư)">Man mác buồn (melancholic)</option><option value="Tense and dramatic (căng thẳng, kịch tính)">Kịch tính (dramatic)</option><option value="Calm and intimate (bình yên, gần gũi)">Bình yên (calm, intimate)</option></select></div>
+</div>
+<label for="realism">Chất liệu và tính chân thực vật lý (Material &amp; Physical Realism)</label><textarea id="realism" placeholder="Ví dụ: Chất liệu chân thực, tỷ lệ tự nhiên, phối cảnh và bóng đổ nhất quán.">Da có kết cấu tự nhiên, không hiệu ứng nhựa; tóc và sợi vải chân thực; nếp vải mềm có trọng lượng; tỷ lệ cơ thể tự nhiên; phối cảnh và bóng đổ nhất quán với ánh sáng ban ngày khuếch tán.</textarea>
+<h3>Làn da nhân vật (Skin Realism)</h3>
+<p class="hint">Chọn cách thể hiện da. Ứng dụng tự ghép mô tả phù hợp vào prompt cuối theo ngôn ngữ đã chọn; mặc định là da tự nhiên có khuyết điểm nhẹ.</p>
+<div class="grid2">
+<div><label for="skinRealism">Độ chân thật của làn da (Skin Style)</label><select id="skinRealism">
+<option value="beauty">Da đẹp, mịn màng (Smooth beauty skin)</option>
+<option selected="" value="natural">Da tự nhiên, khuyết điểm nhẹ (Natural skin)</option>
+<option value="real">Da chân thật, giữ rõ khuyết điểm (Realistic skin)</option>
+<option value="raw">Da thô mộc, không làm đẹp (Unretouched skin)</option>
+<option value="custom">Tự mô tả (Custom)</option>
+</select></div>
+<div><label for="skinImperfection">Mức độ khuyết điểm (Imperfection Strength)</label><select id="skinImperfection">
+<option value="light">Nhẹ — chỉ thấy khi nhìn gần (Subtle)</option>
+<option selected="" value="medium">Vừa — rõ nhưng tự nhiên (Moderate)</option>
+<option value="strong">Mạnh — giữ rõ kết cấu da (Pronounced)</option>
+</select></div>
+</div>
+<div hidden="" id="skinCustomWrap"><label for="skinCustom">Mô tả làn da theo ý thím (Custom Skin Description)</label><textarea id="skinCustom" placeholder="Ví dụ: Da tự nhiên, có kết cấu nhẹ và không làm mịn quá mức."></textarea></div>
+<label for="negative">Điều cần tránh (Negative Constraints)</label><textarea id="negative" placeholder="Ví dụ: Tránh lỗi giải phẫu, chi tiết méo mó, hình ảnh mờ, chữ ngẫu nhiên hoặc watermark.">Không tạo hình gợi cảm; không trang điểm đậm hoặc khiến nhân vật trông lớn tuổi hơn; không lỗi giải phẫu, méo mó khuôn mặt hoặc cơ thể, ngón tay bất thường; không quần áo hiện đại, màu quá rực, hiệu ứng glow fantasy, bokeh cường điệu, hình ảnh mờ hoặc nhiễu quá mức; không chữ, logo, watermark, người khác hoặc chi tiết nền hiện đại.</textarea>
+<label for="extra">Ghi chú bổ sung (Additional Notes)</label><textarea id="extra" placeholder="Ví dụ: Giữ màu sắc tiết chế, ánh sáng tự nhiên và không thêm chi tiết ngoài mô tả.">Bảng màu lạnh, hơi giảm bão hòa: xanh cỏ tự nhiên, nâu trầm, xanh xám dịu, màu da chân thực, tương phản vừa phải. Phong cách phim điện ảnh cổ điển 35mm, cảm giác ống kính spherical, rìa nét mềm tự nhiên, highlight roll-off mềm, film grain nhẹ và texture tinh tế. Tỷ lệ khung hình mục tiêu khoảng 2.39:1; trong menu app chọn 21:9 để gần với tỷ lệ này.</textarea>
+<hr class="sectionline"/>
+<div class="api-tools" hidden="">
+<h2>Ảnh tham chiếu gửi API (API Reference Images)</h2>
+<p class="hint">Phần tải ảnh tham chiếu chỉ cần mở khi sử dụng API. Chỉ tải ảnh bạn có quyền sử dụng.</p>
+<div class="drop"><label for="references">Chọn ảnh tham chiếu (Upload Reference Images)</label><input accept="image/png,image/jpeg,image/webp" id="references" multiple="" type="file"/><small>PNG, JPEG, WebP. Giới hạn mặc định 4 ảnh, mỗi ảnh tối đa 10 MB.</small></div>
+<div class="preview" id="referencePreview"></div>
+</div>
+<h3>Chế độ người mẫu (Character Reference Mode)</h3>
+<p class="hint">Chế độ mới: ưu tiên giữ khuôn mặt, kiểu tóc và tỷ lệ vóc dáng của ảnh mẫu; cho phép thay đổi trang phục, tư thế và cách tạo dáng theo prompt. Không thể bảo đảm giống 100% vì kết quả phụ thuộc model/API và ảnh đầu vào.</p>
+<label for="characterMode">Cách sử dụng ảnh tham chiếu (Reference Mode)</label>
+<select id="characterMode">
+<option selected="" value="normal">Tham chiếu thông thường — giữ theo các mục bên dưới (Standard Reference)</option>
+<option value="identity">A. Ưu tiên giữ tối đa khuôn mặt, tóc và vóc dáng (Maximum Identity Preservation)</option>
+<option value="face">B. Ưu tiên khuôn mặt; cơ thể và trang phục linh hoạt (Face Priority)</option>
+<option value="character-flexible">C. Giữ mặt, tóc và vóc dáng — trang phục/tư thế linh hoạt (Character Lock, Flexible Outfit &amp; Pose)</option>
+</select>
+<div class="checks" style="margin-top:10px">
+<label class="check"><input checked="" id="allowPoseChange" type="checkbox"/><span>Cho phép thay đổi tư thế theo prompt (Allow pose changes)</span></label>
+<label class="check"><input checked="" id="allowOutfitChange" type="checkbox"/><span>Cho phép thay đổi trang phục theo prompt (Allow outfit changes)</span></label>
+</div>
+<h3>Mục đích tham chiếu (Reference Purpose)</h3>
+<div class="checks">
+<label class="check"><input checked="" name="refPurpose" type="checkbox" value="Identity (giữ gương mặt và nhận dạng)"/><span>Giữ gương mặt và nhận dạng (Identity)</span></label>
+<label class="check"><input checked="" name="refPurpose" type="checkbox" value="Outfit (giữ trang phục)"/><span>Giữ trang phục (Outfit)</span></label>
+<label class="check"><input name="refPurpose" type="checkbox" value="Hairstyle (giữ kiểu tóc)"/><span>Giữ kiểu tóc (Hairstyle)</span></label>
+<label class="check"><input name="refPurpose" type="checkbox" value="Body proportions (giữ vóc dáng và tỷ lệ cơ thể)"/><span>Giữ vóc dáng và tỷ lệ cơ thể (Body Proportions)</span></label>
+<label class="check"><input name="refPurpose" type="checkbox" value="Pose (tham khảo tư thế)"/><span>Tham khảo tư thế (Pose)</span></label>
+<label class="check"><input name="refPurpose" type="checkbox" value="Style (tham khảo phong cách hình ảnh)"/><span>Phong cách hình ảnh (Style)</span></label>
+<label class="check"><input name="refPurpose" type="checkbox" value="Composition (tham khảo bố cục)"/><span>Tham khảo bố cục (Composition)</span></label>
+</div>
+<label for="refNotes">Ghi chú ảnh tham chiếu (Reference Notes)</label><textarea id="refNotes" placeholder="Ví dụ: Ảnh 1 dùng để tham khảo nhận dạng; ảnh 2 chỉ tham khảo bố cục."></textarea>
+<div class="api-tools" hidden=""><button class="primary" id="generate">✨ Tạo ảnh qua API (Generate Image)</button></div>
+<div class="actions"><button class="secondary" id="buildPrompt">Tạo prompt xem trước (Build Prompt)</button><button class="secondary" id="copyPrompt">Sao chép prompt (Copy Prompt)</button></div>
+<label for="promptOutput">Prompt cuối cùng (Final Prompt)</label><textarea id="promptOutput" placeholder="Prompt hoàn chỉnh sẽ xuất hiện ở đây..." style="min-height:170px"></textarea>
+<div class="status" id="status">Chế độ tạo prompt: không gọi API và không phát sinh phí. Bấm “Tạo prompt xem trước” rồi sao chép prompt để dùng trong ComfyUI hoặc công cụ khác.</div>
 </section>
-
-<section class="panel api-tools" hidden>
-  <h2>4. Kết quả (Generated Result)</h2>
-  <p class="hint">Ảnh hiển thị bên dưới là kết quả trả về từ API. Nút tải về lưu dữ liệu ảnh gốc nhận được, không phải ảnh chụp màn hình hay ảnh thu nhỏ.</p>
-  <div id="empty" class="drop" style="padding:45px 15px"><strong>Chưa có ảnh</strong><p class="hint">Sau khi tạo ảnh thành công, ảnh sẽ xuất hiện ở đây.</p></div>
-  <img id="resultImage" alt="Ảnh AI đã tạo" hidden>
-  <div id="resultMeta" class="muted"></div>
-  <div class="actions"><button id="download" disabled>⬇ Tải ảnh gốc (Download Original)</button><button id="openOriginal" class="secondary" disabled>Mở ảnh gốc (Open Original)</button></div>
-  <hr class="sectionline">
-  <h2>5. Thiết lập backend (Backend Setup)</h2>
-  <ol class="hint" style="padding-left:20px;line-height:1.8">
-    <li>Triển khai thư mục <code>backend</code> lên dịch vụ Node.js riêng như Render.</li>
-    <li>Đặt <code>OPENAI_API_KEY</code> và/hoặc <code>GEMINI_API_KEY</code> trong phần Environment Variables của backend.</li>
-    <li>Đặt <code>ALLOWED_ORIGINS</code> thành URL GitHub Pages của thím.</li>
-    <li>Copy URL backend vào ô ở đầu trang, sau đó bấm kiểm tra bằng nút tạo ảnh.</li>
-  </ol>
-  <div class="status">Bảo mật: Không commit file .env. Không đặt API key trong index.html, GitHub Pages, localStorage hoặc mã JavaScript phía trình duyệt.</div>
-  <p class="hint">Lưu ý chi phí: API tính phí riêng theo nhà cung cấp/model. “Cao nhất” được ánh xạ sang chế độ chất lượng tối đa mà model được cấu hình hỗ trợ; kích thước thực tế tùy model và tỷ lệ ảnh.</p>
+<section class="panel api-tools" hidden="">
+<h2>4. Kết quả (Generated Result)</h2>
+<p class="hint">Ảnh hiển thị bên dưới là kết quả trả về từ API. Nút tải về lưu dữ liệu ảnh gốc nhận được, không phải ảnh chụp màn hình hay ảnh thu nhỏ.</p>
+<div class="drop" id="empty" style="padding:45px 15px"><strong>Chưa có ảnh</strong><p class="hint">Sau khi tạo ảnh thành công, ảnh sẽ xuất hiện ở đây.</p></div>
+<img alt="Ảnh AI đã tạo" hidden="" id="resultImage"/>
+<div class="muted" id="resultMeta"></div>
+<div class="actions"><button disabled="" id="download">⬇ Tải ảnh gốc (Download Original)</button><button class="secondary" disabled="" id="openOriginal">Mở ảnh gốc (Open Original)</button></div>
+<hr class="sectionline"/>
+<h2>5. Thiết lập backend (Backend Setup)</h2>
+<ol class="hint" style="padding-left:20px;line-height:1.8">
+<li>Triển khai thư mục <code>backend</code> lên dịch vụ Node.js riêng như Render.</li>
+<li>Đặt <code>OPENAI_API_KEY</code> và/hoặc <code>GEMINI_API_KEY</code> trong phần Environment Variables của backend.</li>
+<li>Đặt <code>ALLOWED_ORIGINS</code> thành URL GitHub Pages của thím.</li>
+<li>Copy URL backend vào ô ở đầu trang, sau đó bấm kiểm tra bằng nút tạo ảnh.</li>
+</ol>
+<div class="status">Bảo mật: Không commit file .env. Không đặt API key trong index.html, GitHub Pages, localStorage hoặc mã JavaScript phía trình duyệt.</div>
+<p class="hint">Lưu ý chi phí: API tính phí riêng theo nhà cung cấp/model. “Cao nhất” được ánh xạ sang chế độ chất lượng tối đa mà model được cấu hình hỗ trợ; kích thước thực tế tùy model và tỷ lệ ảnh.</p>
 </section>
 </main>
 <footer>AI Image Studio V6.8 · Mặc định tạo prompt, không gọi API · Công cụ OpenAI/Gemini được thu gọn · API key chỉ ở backend.</footer>
